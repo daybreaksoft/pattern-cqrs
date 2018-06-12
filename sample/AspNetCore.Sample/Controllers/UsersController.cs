@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using AspNetCore.Sample.Commands;
 using AspNetCore.Sample.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using AspNetCore.Sample.Models;
@@ -12,6 +11,7 @@ using AspNetCore.Sample.ViewModels;
 using Daybreaksoft.Extensions.Functions;
 using Daybreaksoft.Pattern.CQRS;
 using Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore;
+using AspNetCore.Sample.Command.User;
 
 namespace AspNetCore.Sample.Controllers
 {

@@ -6,13 +6,13 @@ using AspNetCore.Sample.Domain.Models;
 using Daybreaksoft.Extensions.Functions;
 using Daybreaksoft.Pattern.CQRS;
 
-namespace AspNetCore.Sample.Commands.User
+namespace AspNetCore.Sample.Command.User
 {
-    public class UpdateUserCommandExecutor : ICommandExecutor<SubmitUserCommand>
+    public class CreateUserCommandExecutor : ICommandExecutor<SubmitUserCommand>
     {
         protected readonly IRepository<Repository.Entities.User> UserRepository;
 
-        public UpdateUserCommandExecutor(IRepository<Repository.Entities.User> userRepository)
+        public CreateUserCommandExecutor(IRepository<Repository.Entities.User> userRepository)
         {
             UserRepository = userRepository;
         }

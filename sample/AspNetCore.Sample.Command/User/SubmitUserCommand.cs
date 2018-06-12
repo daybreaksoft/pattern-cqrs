@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Daybreaksoft.Pattern.CQRS;
 
-namespace AspNetCore.Sample.Commands
+namespace AspNetCore.Sample.Command.User
 {
     public class SubmitUserCommand : ICommand
     {
