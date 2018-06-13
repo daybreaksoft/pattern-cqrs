@@ -1,32 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using AspNetCore.Sample.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
-using AspNetCore.Sample.Models;
 using AspNetCore.Sample.Repository.Entities;
 using AspNetCore.Sample.ViewModels;
 using Daybreaksoft.Extensions.Functions;
 using Daybreaksoft.Pattern.CQRS;
-using Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore;
 using AspNetCore.Sample.Command.User;
 
 namespace AspNetCore.Sample.Controllers
 {
     public class UsersController : Controller
     {
-        //protected readonly IDependencyInjection DI;
-
-        //protected  readonly IServiceProvider
-
         protected readonly IRepository<User> UserRepository;
         protected readonly ICommandBus CommandBus;
 
         public UsersController(IServiceProvider serviceProvider, IRepository<User> userRepository, ICommandBus commandBus)
         {
-            //DI = di;
             UserRepository = userRepository;
             CommandBus = commandBus;
         }
@@ -36,7 +26,7 @@ namespace AspNetCore.Sample.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Edit([FromQuery]int? id)
+        public async Task<IActionResult> Edit([FromRoute]int? id)
         {
             UserViewModel viewModel = null;
 
@@ -51,42 +41,23 @@ namespace AspNetCore.Sample.Controllers
                 userModel.CopyValueTo(viewModel);
             }
 
+            ViewBag.IsCreate = !id.HasValue;
+            ViewBag.UserId = id;
+
             return View(viewModel);
         }
 
-        public async Task<IActionResult> Save([FromQuery]int? id, SubmitUserCommand command)
+        public async Task<IActionResult> CreateCommand(CreateUserCommand command)
         {
-            if (id.HasValue)
-            {
-                #region Update
+            await CommandBus.SendAsync(command);
 
-                // Load user
-                var userModel = new UserModel(id, UserRepository);
-                await userModel.LoadAsync();
+            return RedirectToAction("Index");
+        }
 
-                // Copy value to model
-                command.CopyValueTo(userModel);
-
-                // Update user
-                await userModel.UpdateAsync();
-
-                #endregion
-            }
-            else
-            {
-                #region Create
-
-                //// Create user model via command values
-                //var userModel = new UserModel(UserRepository);
-                //command.CopyValueTo(userModel);
-
-                //// Insert user
-                //await userModel.AddAsync();
-
-                await CommandBus.SendAsync(command);
-
-                #endregion
-            }
+        public async Task<IActionResult> UpdateCommand([FromRoute]int id, UpdateUserCommand command)
+        {
+            command.UserId = id;
+            await CommandBus.SendAsync(command);
 
             return RedirectToAction("Index");
         }

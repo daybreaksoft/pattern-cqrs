@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AspNetCore.Sample.Domain.Models;
 using Daybreaksoft.Extensions.Functions;
 using Daybreaksoft.Pattern.CQRS;
 
 namespace AspNetCore.Sample.Command.User
 {
-    public class UpdateUserCommandExecutor : ICommandExecutor<SubmitUserCommand>
+    public class UpdateUserCommandExecutor : ICommandExecutor<UpdateUserCommand>
     {
         protected readonly IRepository<Repository.Entities.User> UserRepository;
 
@@ -17,14 +14,17 @@ namespace AspNetCore.Sample.Command.User
             UserRepository = userRepository;
         }
 
-        public async Task ExecuteAsync(SubmitUserCommand command)
+        public async Task ExecuteAsync(UpdateUserCommand command)
         {
-            // Create user model via command values
-            var userModel = new UserModel(UserRepository);
+            // Load user
+            var userModel = new UserModel(command.UserId, UserRepository);
+            await userModel.LoadAsync();
+
+            // Copy value to model
             command.CopyValueTo(userModel);
 
-            // Insert user
-            await userModel.AddAsync();
+            // Update user
+            await userModel.UpdateAsync();
         }
     }
 }

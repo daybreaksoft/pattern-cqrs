@@ -1,9 +1,6 @@
 ﻿using Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
 
 namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
 {

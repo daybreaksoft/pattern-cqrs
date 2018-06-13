@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AspNetCore.Sample.Domain.Models;
 using Daybreaksoft.Extensions.Functions;
 using Daybreaksoft.Pattern.CQRS;
 
 namespace AspNetCore.Sample.Command.User
 {
-    public class CreateUserCommandExecutor : ICommandExecutor<SubmitUserCommand>
+    public class CreateUserCommandExecutor : ICommandExecutor<CreateUserCommand>
     {
         protected readonly IRepository<Repository.Entities.User> UserRepository;
 
@@ -17,7 +14,7 @@ namespace AspNetCore.Sample.Command.User
             UserRepository = userRepository;
         }
 
-        public async Task ExecuteAsync(SubmitUserCommand command)
+        public async Task ExecuteAsync(CreateUserCommand command)
         {
             // Create user model via command values
             var userModel = new UserModel(UserRepository);

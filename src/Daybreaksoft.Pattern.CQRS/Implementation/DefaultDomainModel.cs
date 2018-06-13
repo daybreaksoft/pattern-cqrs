@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Daybreaksoft.Extensions.Functions;
 
@@ -32,9 +34,15 @@ namespace Daybreaksoft.Pattern.CQRS
         /// <summary>
         /// Load object
         /// </summary>
+        /// <exception cref="ArgumentNullException">The key of Model cannot be null.</exception>
+        /// <exception cref="KeyNotFoundException">Cannot load model with key.</exception>
         public virtual async Task LoadAsync()
         {
+            if(Id == null) throw new ArgumentNullException($"The key of {this.GetType().Name} cannot be null.");
+
             var entity = await Repository.FindAsync(Id);
+
+            if(entity == null) throw new KeyNotFoundException($"Cannot load {this.GetType().Name} with key {Id}");
 
             entity.CopyValueTo(this);
         }

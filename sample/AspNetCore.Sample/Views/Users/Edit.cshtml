@@ -2,9 +2,9 @@
 @{
     ViewData["Title"] = "Users";
 }
-<h2>User Edit</h2>
+<h2>@(ViewBag.IsCreate ? "Create" : "Update") User</h2>
 <hr />
-<form asp-controller="Users" asp-action="Save">
+<form asp-controller="Users" asp-action="@(ViewBag.IsCreate ? "CreateCommand" : $"UpdateCommand")"  asp-route-id="@ViewBag.UserId">
     <div class="form-group">
         <label>Username</label>
         <input class="form-control" placeholder="Username" asp-for="Username" />

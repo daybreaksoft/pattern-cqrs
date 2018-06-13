@@ -1,22 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 using AspNetCore.Sample.Command.User;
 using AspNetCore.Sample.Repository;
-using Daybreaksoft.Pattern.CQRS;
 using Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore;
-using Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore;
-using Daybreaksoft.Pattern.CQRS.Implementation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace AspNetCore.Sample
 {
@@ -34,10 +25,6 @@ namespace AspNetCore.Sample
         {
             services.AddDbContext<SampleDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            //var cqrsBuilder = new CQRSEntityFrameworkOptionBuilder();
-            //cqrsBuilder.ForDbContext<SampleDbContext>();
-            //cqrsBuilder.ForCommandExecutor(typeof(CreateUserCommandExecutor).GetTypeInfo().Assembly);
-
             services.AddCQRSWithEntityFramework(builder =>
             {
                 builder.ForDbContext<SampleDbContext>();
@@ -45,8 +32,6 @@ namespace AspNetCore.Sample
             });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
