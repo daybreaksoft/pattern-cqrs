@@ -43,10 +43,10 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
         {
             if (entity == null) throw new ArgumentNullException(nameof(entity));
 
-            // insert entity
+            // Insert entity
             await Db.Set<T>().AddAsync(entity);
 
-            // submit changes
+            // Submit changes
             await Db.SaveChangesAsync();
         }
 
@@ -57,11 +57,11 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
         {
             if (entity == null) throw new ArgumentNullException(nameof(entity));
 
-            // change entity state to modified
+            // Change entity state to modified
             var entityEntry = Db.Entry(entity);
             entityEntry.State = EntityState.Modified;
 
-            // submite changes
+            // Submit changes
             await Db.SaveChangesAsync();
         }
 
@@ -70,20 +70,20 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
         /// </summary>
         public async Task DeleteAsync(object id)
         {
-            // generate new entity
+            // Generate new entity
             var entity = new T();
 
-            // find key property
+            // Find key property
             var keyProperty = typeof(T).FindProperty<KeyAttribute>();
 
             // Set key property value
             keyProperty.SetValue(entity, id);
 
-            // change entity state to delted
+            // Change entity state to delted
             var entityEntry = Db.Entry(entity);
             entityEntry.State = EntityState.Deleted;
 
-            // submit changes
+            // Submit changes
             await Db.SaveChangesAsync();
         }
     }
