@@ -51,6 +51,16 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
         /// </summary>
         public Assembly DomainModelAssembly { get; protected set; }
 
+        /// <summary>
+        /// Action that add query implemented class
+        /// </summary>
+        public Action<IServiceCollection> AddQueryAction { get; protected set; }
+
+        /// <summary>
+        /// The assembly where the implemented type of query belong to
+        /// </summary>
+        public Assembly QueryAssembly { get; protected set; }
+
         #endregion
 
         /// <summary>
@@ -123,6 +133,26 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
             DomainModelAssembly = assembly;
 
             AddDomainModelAction = null;
+        }
+
+        /// <summary>
+        /// Set custom DI action for query
+        /// </summary>
+        public void ForQuery(Action<IServiceCollection> action)
+        {
+            AddQueryAction = action;
+
+            QueryAssembly = null;
+        }
+
+        /// <summary>
+        /// Set the assemble where the implemented type of query is belong to
+        /// </summary>
+        public void ForQuery(Assembly assembly)
+        {
+            QueryAssembly = assembly;
+
+            AddQueryAction = null;
         }
     }
 }

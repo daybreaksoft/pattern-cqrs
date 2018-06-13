@@ -8,14 +8,13 @@ using Microsoft.EntityFrameworkCore;
 namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
 {
     /// <summary>
-    /// Default repository with EntityFrameworkCore
+    /// Default implemention of IQuery with EntityFrameworkCore
     /// </summary>
-    /// <typeparam name="T"></typeparam>
     public class DefaultRepository<T> : IRepository<T> where T : class, IEntity, new()
     {
-        protected readonly IDbContext Db;
+        protected readonly DbContext Db;
 
-        public DefaultRepository(IDbContext db)
+        public DefaultRepository(DbContext db)
         {
             Db = db;
         }

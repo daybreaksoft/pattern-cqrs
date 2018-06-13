@@ -3,4 +3,30 @@
 }
 <h2>Users</h2>
 <hr />
-<a class="btn btn-default" asp-area="" asp-controller="Users" asp-action="Edit">Create</a>
+<section>
+    <a class="btn btn-default" asp-controller="Users" asp-action="Edit">Create</a>
+</section>
+<section>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Point</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in ViewBag.Users)
+            {
+                <tr>
+                    <td>@user.Username</td>
+                    <td>@user.Point</td>
+                    <td>
+                        <a class="btn btn-default btn-sm" asp-controller="Users" asp-action="Edit" asp-route-id="@user.UserId">Edit</a>
+                        <a class="btn btn-danger btn-sm" asp-controller="Users" asp-action="DeleteCommand" asp-route-id="@user.UserId">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</section>

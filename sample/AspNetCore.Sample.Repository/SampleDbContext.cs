@@ -7,7 +7,7 @@ using Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore;
 
 namespace AspNetCore.Sample.Repository
 {
-    public class SampleDbContext : DbContext, IDbContext
+    public class SampleDbContext : DbContext
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Vehicle> Vehicles { get; set; }

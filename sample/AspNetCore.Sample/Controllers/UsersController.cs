@@ -2,27 +2,26 @@
 using System.Threading.Tasks;
 using AspNetCore.Sample.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
-using AspNetCore.Sample.Repository.Entities;
-using AspNetCore.Sample.ViewModels;
 using Daybreaksoft.Extensions.Functions;
 using Daybreaksoft.Pattern.CQRS;
 using AspNetCore.Sample.Command.User;
+using AspNetCore.Sample.Query.User;
 
 namespace AspNetCore.Sample.Controllers
 {
     public class UsersController : Controller
     {
-        protected readonly IRepository<User> UserRepository;
         protected readonly ICommandBus CommandBus;
 
-        public UsersController(IServiceProvider serviceProvider, IRepository<User> userRepository, ICommandBus commandBus)
+        public UsersController(ICommandBus commandBus)
         {
-            UserRepository = userRepository;
             CommandBus = commandBus;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index([FromServices]UserQuery userQuery)
         {
+            ViewBag.Users = await userQuery.GetUsers();
+
             return View();
         }
 
@@ -33,8 +32,7 @@ namespace AspNetCore.Sample.Controllers
             if (id.HasValue)
             {
                 // Load user
-                var userModel = new UserModel(UserRepository);
-                userModel.Id = id;
+                var userModel = modelBuilder.BuildModel<UserModel>(id);
                 await userModel.LoadAsync();
 
                 // Build view model
@@ -59,6 +57,13 @@ namespace AspNetCore.Sample.Controllers
         {
             command.UserId = id;
             await CommandBus.SendAsync(command);
+
+            return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> DeleteCommand([FromRoute]int id)
+        {
+            await CommandBus.SendAsync(new DeleteUserCommand { UserId = id});
 
             return RedirectToAction("Index");
         }

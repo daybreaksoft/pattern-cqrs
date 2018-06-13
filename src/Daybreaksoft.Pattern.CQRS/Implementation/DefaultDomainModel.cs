@@ -7,7 +7,7 @@ using Daybreaksoft.Extensions.Functions;
 namespace Daybreaksoft.Pattern.CQRS
 {
     /// <summary>
-    /// Domain model
+    /// Default implemention of IDomainModel
     /// </summary>
     public abstract class DefaultDomainModel<TEntity> : IDomainModel
         where TEntity : IEntity, new()

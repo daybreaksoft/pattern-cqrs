@@ -1,4 +1,5 @@
 ﻿using Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
@@ -22,7 +23,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
         /// <summary>
         /// Set the type of implemented class of IDbContext
         /// </summary>
-        public void ForDbContext<TDbContext>() where TDbContext : class, IDbContext
+        public void ForDbContext<TDbContext>() where TDbContext : DbContext
         {
             DbContextType = typeof(TDbContext);
 

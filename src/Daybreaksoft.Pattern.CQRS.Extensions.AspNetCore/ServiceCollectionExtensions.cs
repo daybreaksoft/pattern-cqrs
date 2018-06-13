@@ -1,6 +1,5 @@
 ﻿using Daybreaksoft.Pattern.CQRS.Implementation;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,49 +31,91 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
                 throw new ArgumentNullException($"{nameof(builder.AddDomainModelAction)} and {builder.DomainModelAssembly} can't all be null");
             }
 
-            // Execute custom DI action
-            builder.AddRepositoryAction?.Invoke(services);
+            AddRepositoryImplemention(services, builder);
 
-            // Add DefaultDependencyInjection as IDependencyInjection if don't have custom DI action
+            AddDependencyInjectionImplemention(services, builder);
+
+            AddCommandBusImplemention(services, builder);
+
+            AddCommandExecutorImplemention(services, builder);
+
+            AddDomainModelBuilderImplemention(services, builder);
+
+            AddModelImplemention(services, builder);
+
+            AddQueryImplemention(services, builder);
+
+            return services;
+        }
+
+        /// <summary>
+        /// Execute custom DI action
+        /// </summary>
+        private static void AddRepositoryImplemention(IServiceCollection services, CQRSOptionBuilder builder)
+        {
+            builder.AddRepositoryAction?.Invoke(services);
+        }
+
+        /// <summary>
+        /// Add DefaultDependencyInjection as IDependencyInjection if don't have custom DI action
+        /// </summary>
+        private static void AddDependencyInjectionImplemention(IServiceCollection services, CQRSOptionBuilder builder)
+        {
             if (builder.AddDependencyInjectionAction == null)
             {
-                services.TryAddScoped<IDependencyInjection, DefaultDependencyInjection>();
+                services.AddScoped<IDependencyInjection, DefaultDependencyInjection>();
             }
             else
             {
                 builder.AddRepositoryAction(services);
             }
+        }
 
-            // Add DefaultCommandBus as ICommandBus if don't have custom DI action
+        /// <summary>
+        /// Add DefaultCommandBus as ICommandBus if don't have custom DI action
+        /// </summary>
+        private static void AddCommandBusImplemention(IServiceCollection services, CQRSOptionBuilder builder)
+        {
             if (builder.AddCommandBusAction == null)
             {
-                services.TryAddScoped<ICommandBus, DefaultCommandBus>();
+                services.AddScoped<ICommandBus, DefaultCommandBus>();
             }
             else
             {
                 builder.AddCommandBusAction(services);
             }
+        }
 
-            // Default to add all CommandExecutor that implements ICommandExecutor<> if don't have custom DI action
+        /// <summary>
+        /// Default to add all CommandExecutor that implements ICommandExecutor<> if don't have custom DI action
+        /// </summary>
+        private static void AddCommandExecutorImplemention(IServiceCollection services, CQRSOptionBuilder builder)
+        {
             if (builder.AddCommandExecutorAction == null)
             {
-                var baseInterfaceName = typeof(ICommandExecutor<>).Name;
-                var registeredInterface = new List<Type>();
-
-                foreach (var implementationType in builder.CommandExecutorAssembly.GetExportedTypes())
+                if (builder.CommandExecutorAssembly != null)
                 {
-                    var targetInterface = implementationType.GetInterfaces().SingleOrDefault(p => p.Name == baseInterfaceName);
+                    var baseInterfaceName = typeof(ICommandExecutor<>).Name;
+                    var registeredInterface = new List<Type>();
 
-                    if (targetInterface != null)
+                    // Find all exported types
+                    foreach (var implementationType in builder.CommandExecutorAssembly.GetExportedTypes())
                     {
-                        if (registeredInterface.Any(p => p == targetInterface))
+                        // Find interface that base of ICommandExecutor<>
+                        var targetInterface = implementationType.GetInterfaces().SingleOrDefault(p => p.IsGenericType && p.Name == baseInterfaceName);
+
+                        if (targetInterface != null)
                         {
-                            throw new InvalidOperationException($"{targetInterface.FullName} cannot be registered twice.");
-                        }
-                        else
-                        {
-                            services.TryAddTransient(targetInterface, implementationType);
-                            registeredInterface.Add(targetInterface);
+                            // One command only can be used by one command executor
+                            if (registeredInterface.Any(p => p == targetInterface))
+                            {
+                                throw new InvalidOperationException($"{targetInterface.FullName} cannot be registered twice.");
+                            }
+                            else
+                            {
+                                services.AddTransient(targetInterface, implementationType);
+                                registeredInterface.Add(targetInterface);
+                            }
                         }
                     }
                 }
@@ -83,20 +124,21 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
             {
                 builder.AddCommandExecutorAction(services);
             }
+        }
 
-            // Add DefaultDomainModelBuilder as IDomainModelBuilder if don't have custom DI action
+        /// <summary>
+        /// Add DefaultDomainModelBuilder as IDomainModelBuilder if don't have custom DI action
+        /// </summary>
+        private static void AddDomainModelBuilderImplemention(IServiceCollection services, CQRSOptionBuilder builder)
+        {
             if (builder.AddDomainModelBuilderAction == null)
             {
-                services.TryAddScoped<IDomainModelBuilder, DefaultDomainModelBuilder>();
+                services.AddScoped<IDomainModelBuilder, DefaultDomainModelBuilder>();
             }
             else
             {
                 builder.AddDomainModelBuilderAction(services);
             }
-
-            AddModelImplemention(services, builder);
-
-            return services;
         }
 
         /// <summary>
@@ -106,21 +148,54 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
         {
             if (builder.AddDomainModelAction == null)
             {
-                var baseInterface = typeof(IDomainModel);
-
-                foreach (var implementationType in builder.DomainModelAssembly.GetExportedTypes())
+                if (builder.DomainModelAssembly != null)
                 {
-                    var targetInterface = implementationType.GetInterfaces().SingleOrDefault(p => p == baseInterface);
+                    var baseDomainModelType = typeof(IDomainModel);
 
-                    if (targetInterface != null)
+                    // Find all exported types
+                    foreach (var implementationType in builder.DomainModelAssembly.GetExportedTypes())
                     {
-                        services.TryAddTransient(targetInterface, implementationType);
+                        // Find implementation type that base of IDomainModel
+                        var targentInterface = implementationType.GetInterfaces().SingleOrDefault(p => p == baseDomainModelType);
+                        if (targentInterface != null)
+                        {
+                            services.AddTransient(implementationType);
+                        }
                     }
                 }
             }
             else
             {
                 builder.AddDomainModelAction(services);
+            }
+        }
+
+        /// <summary>
+        /// Default to add all Query implement class if don't have custom DI action
+        /// </summary>
+        private static void AddQueryImplemention(IServiceCollection services, CQRSOptionBuilder builder)
+        {
+            if (builder.AddQueryAction == null)
+            {
+                if (builder.QueryAssembly != null)
+                {
+                    var baseQueryType = typeof(IQuery);
+
+                    // Find all exported types
+                    foreach (var implementationType in builder.QueryAssembly.GetExportedTypes())
+                    {
+                        // Find implementation type that base of IQuery
+                        var targentInterface = implementationType.GetInterfaces().SingleOrDefault(p => p == baseQueryType);
+                        if (targentInterface != null)
+                        {
+                            services.AddScoped(implementationType);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                builder.AddQueryAction(services);
             }
         }
     }

@@ -5,26 +5,22 @@ using Daybreaksoft.Pattern.CQRS;
 
 namespace AspNetCore.Sample.Command.User
 {
-    public class UpdateUserCommandExecutor : ICommandExecutor<UpdateUserCommand>
+    public class DeleteUserCommandExecutor : ICommandExecutor<DeleteUserCommand>
     {
         protected readonly IDomainModelBuilder DomainModelBuilder;
 
-        public UpdateUserCommandExecutor(IDomainModelBuilder domainModelBuilder)
+        public DeleteUserCommandExecutor(IDomainModelBuilder domainModelBuilder)
         {
             DomainModelBuilder = domainModelBuilder;
         }
 
-        public async Task ExecuteAsync(UpdateUserCommand command)
+        public async Task ExecuteAsync(DeleteUserCommand command)
         {
-            // Load user
+            // Build user
             var userModel = DomainModelBuilder.BuildModel<UserModel>(command.UserId);
-            await userModel.LoadAsync();
 
-            // Copy value to model
-            command.CopyValueTo(userModel);
-
-            // Update user
-            await userModel.UpdateAsync();
+            // Remove user
+            await userModel.RemoveAsync();
         }
     }
 }

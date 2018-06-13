@@ -1,7 +1,7 @@
 ﻿using Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore;
 using Daybreaksoft.Pattern.CQRS.Implementation;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
 
 namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
@@ -19,7 +19,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
             // Add TDbContext as IDbContext if don't have custom DI action
             if (builder.AddDbContextAction == null)
             {
-                services.TryAddScoped(typeof(IDbContext), builder.DbContextType);
+                services.AddScoped(typeof(DbContext), builder.DbContextType);
             }
             else
             {
@@ -29,7 +29,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
             // Add DefaultRepository<> as IRepository<> if don't have custom DI action
             if (builder.AddRepositoryAction == null)
             {
-                services.TryAddScoped(typeof(IRepository<>), typeof(DefaultRepository<>));
+                services.AddScoped(typeof(IRepository<>), typeof(DefaultRepository<>));
             }
 
             services.AddCQRS(builder);

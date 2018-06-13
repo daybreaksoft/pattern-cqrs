@@ -1,4 +1,8 @@
-﻿namespace AspNetCore.Sample.ViewModels
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace AspNetCore.Sample.Query.User
 {
     public class UserViewModel
     {
