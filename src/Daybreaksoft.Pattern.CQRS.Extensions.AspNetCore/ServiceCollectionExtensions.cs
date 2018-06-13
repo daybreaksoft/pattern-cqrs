@@ -27,6 +27,11 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
                 throw new ArgumentNullException($"{nameof(builder.AddCommandExecutorAction)} and {builder.CommandExecutorAssembly} can't all be null");
             }
 
+            if (builder.AddDomainModelAction == null && builder.DomainModelAssembly == null)
+            {
+                throw new ArgumentNullException($"{nameof(builder.AddDomainModelAction)} and {builder.DomainModelAssembly} can't all be null");
+            }
+
             // Execute custom DI action
             builder.AddRepositoryAction?.Invoke(services);
 
@@ -71,7 +76,6 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
                             services.TryAddTransient(targetInterface, implementationType);
                             registeredInterface.Add(targetInterface);
                         }
-
                     }
                 }
             }
@@ -80,7 +84,44 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
                 builder.AddCommandExecutorAction(services);
             }
 
+            // Add DefaultDomainModelBuilder as IDomainModelBuilder if don't have custom DI action
+            if (builder.AddDomainModelBuilderAction == null)
+            {
+                services.TryAddScoped<IDomainModelBuilder, DefaultDomainModelBuilder>();
+            }
+            else
+            {
+                builder.AddDomainModelBuilderAction(services);
+            }
+
+            AddModelImplemention(services, builder);
+
             return services;
+        }
+
+        /// <summary>
+        /// Default to add all Model implement class if don't have custom DI action
+        /// </summary>
+        private static void AddModelImplemention(IServiceCollection services, CQRSOptionBuilder builder)
+        {
+            if (builder.AddDomainModelAction == null)
+            {
+                var baseInterface = typeof(IDomainModel);
+
+                foreach (var implementationType in builder.DomainModelAssembly.GetExportedTypes())
+                {
+                    var targetInterface = implementationType.GetInterfaces().SingleOrDefault(p => p == baseInterface);
+
+                    if (targetInterface != null)
+                    {
+                        services.TryAddTransient(targetInterface, implementationType);
+                    }
+                }
+            }
+            else
+            {
+                builder.AddDomainModelAction(services);
+            }
         }
     }
 }

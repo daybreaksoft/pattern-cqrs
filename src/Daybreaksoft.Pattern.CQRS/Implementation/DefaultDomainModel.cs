@@ -19,12 +19,6 @@ namespace Daybreaksoft.Pattern.CQRS
             Repository = repository;
         }
 
-        protected DefaultDomainModel(object id, IRepository<TEntity> repository)
-        {
-            Id = id;
-            Repository = repository;
-        }
-
         /// <summary>
         /// The key of the model
         /// </summary>

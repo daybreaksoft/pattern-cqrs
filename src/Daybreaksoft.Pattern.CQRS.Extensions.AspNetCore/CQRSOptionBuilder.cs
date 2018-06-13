@@ -9,6 +9,8 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
     /// </summary>
     public class CQRSOptionBuilder
     {
+        #region Properties
+
         /// <summary>
         /// Action that add repository implemented class
         /// </summary>
@@ -33,6 +35,23 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
         /// The assembly where the implemented type of command executor belong to
         /// </summary>
         public Assembly CommandExecutorAssembly { get; protected set; }
+
+        /// <summary>
+        /// Action that add domain model buidler implemented class
+        /// </summary>
+        public Action<IServiceCollection> AddDomainModelBuilderAction { get; protected set; }
+
+        /// <summary>
+        /// Action that add model implemented class
+        /// </summary>
+        public Action<IServiceCollection> AddDomainModelAction { get; protected set; }
+
+        /// <summary>
+        /// The assembly where the implemented type of domain model belong to
+        /// </summary>
+        public Assembly DomainModelAssembly { get; protected set; }
+
+        #endregion
 
         /// <summary>
         /// Set custom DI action for repository
@@ -76,6 +95,34 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
             CommandExecutorAssembly = assembly;
 
             AddCommandExecutorAction = null;
+        }
+
+        /// <summary>
+        /// Set custom DI action for domain model builder
+        /// </summary>
+        public void ForDomainModelBuilder(Action<IServiceCollection> action)
+        {
+            AddDomainModelBuilderAction = action;
+        }
+
+        /// <summary>
+        /// Set custom DI action for domain model
+        /// </summary>
+        public void ForDomainModel(Action<IServiceCollection> action)
+        {
+            AddDomainModelAction = action;
+
+            DomainModelAssembly = null;
+        }
+
+        /// <summary>
+        /// Set the assemble where the implemented type of domain model is belong to
+        /// </summary>
+        public void ForDomainModel(Assembly assembly)
+        {
+            DomainModelAssembly = assembly;
+
+            AddDomainModelAction = null;
         }
     }
 }

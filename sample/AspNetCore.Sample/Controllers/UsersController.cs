@@ -26,14 +26,15 @@ namespace AspNetCore.Sample.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Edit([FromRoute]int? id)
+        public async Task<IActionResult> Edit([FromRoute]int? id, [FromServices]IDomainModelBuilder modelBuilder)
         {
             UserViewModel viewModel = null;
 
             if (id.HasValue)
             {
                 // Load user
-                var userModel = new UserModel(id, UserRepository);
+                var userModel = new UserModel(UserRepository);
+                userModel.Id = id;
                 await userModel.LoadAsync();
 
                 // Build view model

@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using AspNetCore.Sample.Command.User;
+using AspNetCore.Sample.Domain.Models;
 using AspNetCore.Sample.Repository;
 using Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore;
 using Microsoft.AspNetCore.Builder;
@@ -29,6 +30,7 @@ namespace AspNetCore.Sample
             {
                 builder.ForDbContext<SampleDbContext>();
                 builder.ForCommandExecutor(typeof(CreateUserCommandExecutor).GetTypeInfo().Assembly);
+                builder.ForDomainModel(typeof(UserModel).GetTypeInfo().Assembly);
             });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
