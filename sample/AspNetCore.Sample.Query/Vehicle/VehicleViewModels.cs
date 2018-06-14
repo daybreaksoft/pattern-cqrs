@@ -13,6 +13,13 @@ namespace AspNetCore.Sample.Query.Vehicle
         public int UserId { get; set; }
     }
 
+    public class VehicleSelectListItemViewModel
+    {
+        public int VehicleId { get; set; }
+
+        public string PlateNumber { get; set; }
+    }
+
     public class VehicleListItemViewModel
     {
         public int VehicleId { get; set; }

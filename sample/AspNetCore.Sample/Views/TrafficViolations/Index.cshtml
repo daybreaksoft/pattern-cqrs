@@ -1,0 +1,32 @@
+﻿@{
+    ViewData["Title"] = "Traffic Violations";
+}
+<h2>Traffic Violations</h2>
+<hr />
+<section>
+    <a class="btn btn-default" asp-action="Edit">Create</a>
+</section>
+<section>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Vehicle Plate Number</th>
+            <th>Deduct Point</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var trafficViolation in ViewBag.TrafficViolations)
+        {
+            <tr>
+                <td>@trafficViolation.VehiclePlateNumber</td>
+                <td>@trafficViolation.DeductPoint</td>
+                <td>
+                    <a class="btn btn-default btn-sm" asp-action="Edit" asp-route-id="@trafficViolation.TrafficViolationId">Edit</a>
+                    <a class="btn btn-danger btn-sm" asp-action="DeleteCommand" asp-route-id="@trafficViolation.TrafficViolationId">Delete</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</section>

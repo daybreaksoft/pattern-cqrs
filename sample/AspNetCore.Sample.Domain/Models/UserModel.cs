@@ -1,4 +1,5 @@
-﻿using AspNetCore.Sample.Repository.Entities;
+﻿using System.Threading.Tasks;
+using AspNetCore.Sample.Repository.Entities;
 using Daybreaksoft.Pattern.CQRS;
 
 namespace AspNetCore.Sample.Domain.Models
@@ -11,6 +12,17 @@ namespace AspNetCore.Sample.Domain.Models
 
         public string Username { get; set; }
 
-        public int Point { get; set; }
+        public int Point { get; private set; }
+
+        #region Behaviors
+
+        public async Task DeductPointAsync(int point)
+        {
+            this.Point = this.Point - point;
+
+            await this.UpdateAsync();
+        }
+
+        #endregion
     }
 }

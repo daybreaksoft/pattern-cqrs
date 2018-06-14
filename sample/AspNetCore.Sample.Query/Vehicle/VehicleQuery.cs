@@ -32,5 +32,19 @@ namespace AspNetCore.Sample.Query.Vehicle
 
             return vehicles;
         }
+
+        public async Task<IEnumerable<VehicleSelectListItemViewModel>> GetVehiclesAsSelectListItem()
+        {
+            var query = from v in Db.Vehicles
+                select new VehicleSelectListItemViewModel
+                {
+                    VehicleId = v.VehicleId,
+                    PlateNumber = v.PlateNumber
+                };
+
+            var vehicles = await query.ToListAsync();
+
+            return vehicles;
+        }
     }
 }

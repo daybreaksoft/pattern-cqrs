@@ -1,0 +1,17 @@
+﻿@model AspNetCore.Sample.Query.TrafficViolation.TrafficViolationViewModel
+@{
+    ViewData["Title"] = "Traffic Violations";
+}
+<h2>@(ViewBag.IsCreate ? "Create" : "Update") Traffic Violation</h2>
+<hr />
+<form asp-action="@(ViewBag.IsCreate ? "CreateCommand" : $"UpdateCommand")"  asp-route-id="@ViewBag.TrafficViolationId">
+    <div class="form-group">
+        <label>Vehicle</label>
+        <select class="form-control" asp-items="@ViewBag.VehicleListItems" asp-for="VehicleId"></select>
+    </div>
+    <div class="form-group">
+        <label>Deduct Point</label>
+        <input class="form-control" type="number" placeholder="Deduct Point" asp-for="DeductPoint" />
+    </div>
+    <button class="btn btn-default">Save</button>
+</form>

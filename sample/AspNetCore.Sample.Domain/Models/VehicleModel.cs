@@ -1,4 +1,5 @@
-﻿using AspNetCore.Sample.Repository.Entities;
+﻿using System.Threading.Tasks;
+using AspNetCore.Sample.Repository.Entities;
 using Daybreaksoft.Pattern.CQRS;
 
 namespace AspNetCore.Sample.Domain.Models
