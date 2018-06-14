@@ -22,7 +22,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
         /// <summary>
         /// Find an entity by id
         /// </summary>
-        public Task<T> FindAsync(object id)
+        public virtual Task<T> FindAsync(object id)
         {
             return Db.Set<T>().FindAsync(id);
         }
@@ -30,7 +30,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
         /// <summary>
         /// Find all entities
         /// </summary>
-        public Task<List<T>> FindAllAsync()
+        public virtual Task<List<T>> FindAllAsync()
         {
             return Db.Set<T>().ToListAsync();
         }
@@ -38,7 +38,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
         /// <summary>
         /// Insert an entity
         /// </summary>
-        public async Task InsertAsync(T entity)
+        public virtual async Task InsertAsync(T entity)
         {
             if (entity == null) throw new ArgumentNullException(nameof(entity));
 
@@ -52,7 +52,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
         /// <summary>
         /// Update an entity
         /// </summary>
-        public async Task UpdateAsync(T entity)
+        public virtual async Task UpdateAsync(T entity)
         {
             if (entity == null) throw new ArgumentNullException(nameof(entity));
 
@@ -67,7 +67,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
         /// <summary>
         /// Remove an entity by key
         /// </summary>
-        public async Task DeleteAsync(object id)
+        public virtual async Task DeleteAsync(object id)
         {
             // Generate new entity
             var entity = new T();

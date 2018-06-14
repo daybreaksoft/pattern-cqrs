@@ -21,7 +21,7 @@ namespace Daybreaksoft.Pattern.CQRS
         /// <summary>
         /// Build new model via DI
         /// </summary>
-        public TModel BuildModel<TModel>() where TModel : IDomainModel
+        public virtual TModel BuildModel<TModel>() where TModel : IDomainModel
         {
             return DI.GetService<TModel>();
         }
@@ -29,7 +29,7 @@ namespace Daybreaksoft.Pattern.CQRS
         /// <summary>
         /// Build new model via DI and set id
         /// </summary>
-        public TModel BuildModel<TModel>(object id) where TModel : IDomainModel
+        public virtual TModel BuildModel<TModel>(object id) where TModel : IDomainModel
         {
             var model = BuildModel<TModel>();
 

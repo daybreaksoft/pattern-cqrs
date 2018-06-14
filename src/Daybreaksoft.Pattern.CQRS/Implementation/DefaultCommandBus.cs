@@ -17,7 +17,7 @@ namespace Daybreaksoft.Pattern.CQRS.Implementation
         /// <summary>
         /// Call command exectuor that find it via DI with ICommand
         /// </summary>
-        public async Task SendAsync<TCommand>(TCommand command) where TCommand : ICommand
+        public virtual async Task SendAsync<TCommand>(TCommand command) where TCommand : ICommand
         {
             var executor = DI.GetService<ICommandExecutor<TCommand>>();
 
