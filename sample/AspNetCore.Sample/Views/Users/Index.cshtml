@@ -4,7 +4,7 @@
 <h2>Users</h2>
 <hr />
 <section>
-    <a class="btn btn-default" asp-controller="Users" asp-action="Edit">Create</a>
+    <a class="btn btn-default" asp-action="Edit">Create</a>
 </section>
 <section>
     <table class="table table-striped">
@@ -22,8 +22,8 @@
                     <td>@user.Username</td>
                     <td>@user.Point</td>
                     <td>
-                        <a class="btn btn-default btn-sm" asp-controller="Users" asp-action="Edit" asp-route-id="@user.UserId">Edit</a>
-                        <a class="btn btn-danger btn-sm" asp-controller="Users" asp-action="DeleteCommand" asp-route-id="@user.UserId">Delete</a>
+                        <a class="btn btn-default btn-sm" asp-action="Edit" asp-route-id="@user.UserId">Edit</a>
+                        <a class="btn btn-danger btn-sm" asp-action="DeleteCommand" asp-route-id="@user.UserId">Delete</a>
                     </td>
                 </tr>
             }

@@ -12,4 +12,13 @@ namespace AspNetCore.Sample.Query.User
 
         public int Point { get; set; }
     }
+
+    public class UserListItemViewModel
+    {
+        public int UserId { get; set; }
+
+        public string Username { get; set; }
+
+        public int Point { get; set; }
+    }
 }

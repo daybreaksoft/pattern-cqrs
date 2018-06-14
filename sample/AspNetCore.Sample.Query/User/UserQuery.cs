@@ -2,10 +2,8 @@
 using Daybreaksoft.Extensions.Functions;
 using Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace AspNetCore.Sample.Query.User
@@ -16,20 +14,24 @@ namespace AspNetCore.Sample.Query.User
         {
         }
 
-        public async Task<IList<UserViewModel>> GetUsers()
+        public async Task<IEnumerable<UserListItemViewModel>> GetUsers()
         {
             var users = await Db.Users.ToListAsync();
 
-            return users.Select(UserViewModelTransfer).ToList();
+            return users.Select(UserViewModelTransfer<UserListItemViewModel>);
         }
 
-        private UserViewModel UserViewModelTransfer(Repository.Entities.User user)
+        #region Private Helper
+
+        private T UserViewModelTransfer<T>(Repository.Entities.User user) where T : new()
         {
-            var userViewModel = new UserViewModel();
+            var userViewModel = new T();
 
             user.CopyValueTo(userViewModel);
 
             return userViewModel;
         }
+
+        #endregion
     }
 }

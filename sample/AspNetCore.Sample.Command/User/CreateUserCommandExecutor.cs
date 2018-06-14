@@ -7,17 +7,17 @@ namespace AspNetCore.Sample.Command.User
 {
     public class CreateUserCommandExecutor : ICommandExecutor<CreateUserCommand>
     {
-        protected readonly IRepository<Repository.Entities.User> UserRepository;
+        protected readonly IDomainModelBuilder DomainModelBuilder;
 
-        public CreateUserCommandExecutor(IRepository<Repository.Entities.User> userRepository)
+        public CreateUserCommandExecutor(IDomainModelBuilder domainModelBuilder)
         {
-            UserRepository = userRepository;
+            DomainModelBuilder = domainModelBuilder;
         }
 
         public async Task ExecuteAsync(CreateUserCommand command)
         {
             // Create user model via command values
-            var userModel = new UserModel(UserRepository);
+            var userModel = DomainModelBuilder.BuildModel<UserModel>();
             command.CopyValueTo(userModel);
 
             // Insert user
