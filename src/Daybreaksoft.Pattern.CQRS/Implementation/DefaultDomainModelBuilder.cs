@@ -21,21 +21,23 @@ namespace Daybreaksoft.Pattern.CQRS
         /// <summary>
         /// Build new model via DI
         /// </summary>
-        public virtual TModel BuildModel<TModel>() where TModel : IDomainModel
+        public virtual TModel BuildModel<TModel>() where TModel : IAggregateRoot
         {
-            return DI.GetService<TModel>();
+            throw new NotImplementedException();
+            //return DI.GetService<TModel>();
         }
 
         /// <summary>
         /// Build new model via DI and set id
         /// </summary>
-        public virtual TModel BuildModel<TModel>(object id) where TModel : IDomainModel
+        public virtual TModel BuildModel<TModel>(object id) where TModel : IAggregateRoot
         {
-            var model = BuildModel<TModel>();
+            throw new NotImplementedException();
+            //var model = BuildModel<TModel>();
 
-            model.Id = id;
+            //model.Id = id;
 
-            return model;
+            //return model;
         }
     }
 }

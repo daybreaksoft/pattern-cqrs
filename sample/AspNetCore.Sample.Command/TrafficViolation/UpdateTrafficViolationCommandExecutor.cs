@@ -16,15 +16,15 @@ namespace AspNetCore.Sample.Command.TrafficViolation
 
         public async Task ExecuteAsync(UpdateTrafficViolationCommand command)
         {
-            // Load traffic violation
-            var model = DomainModelBuilder.BuildModel<TrafficViolationModel>(command.VehicleId);
-            await model.LoadAsync();
+            //// Load traffic violation
+            //var model = DomainModelBuilder.BuildModel<Domain.Models.TrafficViolation>(command.VehicleId);
+            //await model.LoadAsync();
 
-            // Copy value to model
-            command.CopyValueTo(model);
+            //// Copy value to model
+            //command.CopyValueTo(model);
 
-            // Update traffic violation
-            await model.UpdateAsync();
+            //// Update traffic violation
+            //await model.UpdateAsync();
         }
     }
 }

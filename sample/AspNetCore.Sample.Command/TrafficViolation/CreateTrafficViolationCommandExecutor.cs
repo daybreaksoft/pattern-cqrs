@@ -16,12 +16,12 @@ namespace AspNetCore.Sample.Command.TrafficViolation
 
         public async Task ExecuteAsync(CreateTrafficViolationCommand command)
         {
-            // Create traffic violation model via command values
-            var model = DomainModelBuilder.BuildModel<TrafficViolationModel>();
-            command.CopyValueTo(model);
+            //// Create traffic violation model via command values
+            //var model = DomainModelBuilder.BuildModel<Domain.Models.TrafficViolation>();
+            //command.CopyValueTo(model);
 
-            // Insert traffic violation
-            await model.AddAsync();
+            //// Insert traffic violation
+            //await model.AddAsync();
         }
     }
 }

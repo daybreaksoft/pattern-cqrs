@@ -16,11 +16,11 @@ namespace AspNetCore.Sample.Command.Vehicle
 
         public async Task ExecuteAsync(DeleteVehicleCommand command)
         {
-            // Build vehicle
-            var vehicleModel = DomainModelBuilder.BuildModel<VehicleModel>(command.VehicleId);
+            //// Build vehicle
+            //var vehicleModel = DomainModelBuilder.BuildModel<Domain.Models.Vehicle>(command.VehicleId);
 
-            // Remove vehicle
-            await vehicleModel.RemoveAsync();
+            //// Remove vehicle
+            //await vehicleModel.RemoveAsync();
         }
     }
 }

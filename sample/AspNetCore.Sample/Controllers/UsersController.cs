@@ -11,13 +11,6 @@ namespace AspNetCore.Sample.Controllers
 {
     public class UsersController : Controller
     {
-        protected readonly ICommandBus CommandBus;
-
-        public UsersController(ICommandBus commandBus)
-        {
-            CommandBus = commandBus;
-        }
-
         public async Task<IActionResult> Index([FromServices]UserQuery userQuery)
         {
             ViewBag.Users = await userQuery.GetUsers();
@@ -29,16 +22,16 @@ namespace AspNetCore.Sample.Controllers
         {
             UserViewModel viewModel = null;
 
-            if (id.HasValue)
-            {
-                // Load user
-                var userModel = modelBuilder.BuildModel<UserModel>(id);
-                await userModel.LoadAsync();
+            //if (id.HasValue)
+            //{
+            //    // Load user
+            //    var userModel = modelBuilder.BuildModel<User>(id);
+            //    await userModel.LoadAsync();
 
-                // Build view model
-                viewModel = new UserViewModel();
-                userModel.CopyValueTo(viewModel);
-            }
+            //    // Build view model
+            //    viewModel = new UserViewModel();
+            //    userModel.CopyValueTo(viewModel);
+            //}
 
             ViewBag.IsCreate = !id.HasValue;
             ViewBag.UserId = id;
@@ -46,24 +39,24 @@ namespace AspNetCore.Sample.Controllers
             return View(viewModel);
         }
 
-        public async Task<IActionResult> CreateCommand(CreateUserCommand command)
+        public async Task<IActionResult> CreateCommand(CreateUserCommand command, [FromServices]ICommandBus commandBus)
         {
-            await CommandBus.SendAsync(command);
+            await commandBus.SendAsync(command);
 
             return RedirectToAction("Index");
         }
 
-        public async Task<IActionResult> UpdateCommand([FromRoute]int id, UpdateUserCommand command)
+        public async Task<IActionResult> UpdateCommand([FromRoute]int id, UpdateUserCommand command, [FromServices]ICommandBus commandBus)
         {
             command.UserId = id;
-            await CommandBus.SendAsync(command);
+            await commandBus.SendAsync(command);
 
             return RedirectToAction("Index");
         }
 
-        public async Task<IActionResult> DeleteCommand([FromRoute]int id)
+        public async Task<IActionResult> DeleteCommand([FromRoute]int id, [FromServices]ICommandBus commandBus)
         {
-            await CommandBus.SendAsync(new DeleteUserCommand { UserId = id});
+            await commandBus.SendAsync(new DeleteUserCommand { UserId = id });
 
             return RedirectToAction("Index");
         }

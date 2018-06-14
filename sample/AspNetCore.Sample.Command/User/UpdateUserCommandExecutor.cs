@@ -16,15 +16,15 @@ namespace AspNetCore.Sample.Command.User
 
         public async Task ExecuteAsync(UpdateUserCommand command)
         {
-            // Load user
-            var userModel = DomainModelBuilder.BuildModel<UserModel>(command.UserId);
-            await userModel.LoadAsync();
+            //// Load user
+            //var userModel = DomainModelBuilder.BuildModel<Domain.Models.User>(command.UserId);
+            //await userModel.LoadAsync();
 
-            // Copy value to model
-            command.CopyValueTo(userModel);
+            //// Copy value to model
+            //command.CopyValueTo(userModel);
 
-            // Update user
-            await userModel.UpdateAsync();
+            //// Update user
+            //await userModel.UpdateAsync();
         }
     }
 }

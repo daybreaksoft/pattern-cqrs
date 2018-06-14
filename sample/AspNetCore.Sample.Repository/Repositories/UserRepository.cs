@@ -7,10 +7,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AspNetCore.Sample.Repository.Repositories
 {
-    public class UserRepository : DefaultRepository<User>
-    {
-        public UserRepository(DbContext db) : base(db)
-        {
-        }
-    }
+    //public class UserRepository : DefaultRepository<User>
+    //{
+    //    public UserRepository(DbContext db) : base(db)
+    //    {
+    //    }
+    //}
 }

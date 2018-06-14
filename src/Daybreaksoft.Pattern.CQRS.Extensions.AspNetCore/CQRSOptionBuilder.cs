@@ -61,6 +61,11 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
         /// </summary>
         public Assembly QueryAssembly { get; protected set; }
 
+        /// <summary>
+        /// Action that add unit of work implemented class
+        /// </summary>
+        public Action<IServiceCollection> AddUnitOfWorkAction { get; protected set; }
+
         #endregion
 
         /// <summary>

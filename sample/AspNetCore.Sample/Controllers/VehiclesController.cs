@@ -37,16 +37,16 @@ namespace AspNetCore.Sample.Controllers
             // Load vehicle if edit
             VehicleViewModel viewModel = null;
 
-            if (id.HasValue)
-            {
-                // Load vehicle
-                var vehicleModel = modelBuilder.BuildModel<VehicleModel>(id);
-                await vehicleModel.LoadAsync();
+            //if (id.HasValue)
+            //{
+            //    // Load vehicle
+            //    var vehicleModel = modelBuilder.BuildModel<Vehicle>(id);
+            //    await vehicleModel.LoadAsync();
 
-                // Build view model
-                viewModel = new VehicleViewModel();
-                vehicleModel.CopyValueTo(viewModel);
-            }
+            //    // Build view model
+            //    viewModel = new VehicleViewModel();
+            //    vehicleModel.CopyValueTo(viewModel);
+            //}
 
             ViewBag.IsCreate = !id.HasValue;
             ViewBag.VehicleId = id;

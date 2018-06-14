@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace AspNetCore.Sample.Query.Vehicle
 {
-    public class VehicleQuery : QueryBase<SampleDbContext>
+    public class VehicleQuery : AbstractQuery<SampleDbContext>
     {
         public VehicleQuery(SampleDbContext db) : base(db)
         {
@@ -19,7 +19,7 @@ namespace AspNetCore.Sample.Query.Vehicle
         public async Task<IEnumerable<VehicleListItemViewModel>> GetVehicles()
         {
             var query = from v in Db.Vehicles
-                join u in Db.Users on v.UserId equals u.UserId
+                join u in Db.Users on v.UserId equals u.Id
                 select new VehicleListItemViewModel
                 {
                     VehicleId = v.VehicleId,

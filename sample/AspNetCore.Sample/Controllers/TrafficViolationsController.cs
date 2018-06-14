@@ -32,28 +32,28 @@ namespace AspNetCore.Sample.Controllers
 
         public async Task<IActionResult> Edit([FromRoute]int? id, [FromServices] VehicleQuery vehicleQuery, [FromServices]IDomainModelBuilder modelBuilder)
         {
-            // Get vehicles as selectitem
-            var vehicles = await vehicleQuery.GetVehiclesAsSelectListItem();
-            ViewBag.VehicleListItems = vehicles.Select(p => new SelectListItem(p.PlateNumber, p.VehicleId.ToString()));
+            //// Get vehicles as selectitem
+            //var vehicles = await vehicleQuery.GetVehiclesAsSelectListItem();
+            //ViewBag.VehicleListItems = vehicles.Select(p => new SelectListItem(p.PlateNumber, p.VehicleId.ToString()));
 
-            // Load traffic violation if edit
-            TrafficViolationViewModel viewModel = null;
+            //// Load traffic violation if edit
+            //TrafficViolationViewModel viewModel = null;
 
-            if (id.HasValue)
-            {
-                // Load traffic violation
-                var trafficViolationModel = modelBuilder.BuildModel<TrafficViolationModel>(id);
-                await trafficViolationModel.LoadAsync();
+            //if (id.HasValue)
+            //{
+            //    // Load traffic violation
+            //    var trafficViolationModel = modelBuilder.BuildModel<TrafficViolation>(id);
+            //    await trafficViolationModel.LoadAsync();
 
-                // Build view model
-                viewModel = new TrafficViolationViewModel();
-                trafficViolationModel.CopyValueTo(viewModel);
-            }
+            //    // Build view model
+            //    viewModel = new TrafficViolationViewModel();
+            //    trafficViolationModel.CopyValueTo(viewModel);
+            //}
 
-            ViewBag.IsCreate = !id.HasValue;
-            ViewBag.TrafficViolationId = id;
+            //ViewBag.IsCreate = !id.HasValue;
+            //ViewBag.TrafficViolationId = id;
 
-            return View(viewModel);
+            return View();
         }
 
         public async Task<IActionResult> CreateCommand(CreateTrafficViolationCommand command)

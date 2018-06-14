@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AspNetCore.Sample.Query.TrafficViolation
 {
-    public class TrafficViolationQuery : QueryBase<SampleDbContext>
+    public class TrafficViolationQuery : AbstractQuery<SampleDbContext>
     {
         public TrafficViolationQuery(SampleDbContext db) : base(db)
         {

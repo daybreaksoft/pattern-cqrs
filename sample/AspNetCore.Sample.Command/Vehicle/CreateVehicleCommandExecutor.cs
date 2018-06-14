@@ -16,12 +16,12 @@ namespace AspNetCore.Sample.Command.Vehicle
 
         public async Task ExecuteAsync(CreateVehicleCommand command)
         {
-            // Create vehicle model via command values
-            var vehicleModel = DomainModelBuilder.BuildModel<VehicleModel>();
-            command.CopyValueTo(vehicleModel);
+            //// Create vehicle model via command values
+            //var vehicleModel = DomainModelBuilder.BuildModel<Domain.Models.Vehicle>();
+            //command.CopyValueTo(vehicleModel);
 
-            // Insert vehicle
-            await vehicleModel.AddAsync();
+            //// Insert vehicle
+            //await vehicleModel.AddAsync();
         }
     }
 }

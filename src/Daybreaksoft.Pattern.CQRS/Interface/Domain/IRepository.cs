@@ -6,28 +6,28 @@ namespace Daybreaksoft.Pattern.CQRS
     /// <summary>
     /// Repository that is a data access layer.
     /// </summary>
-    public interface IRepository<TEntity>
-        where TEntity : IEntity
+    public interface IRepository<TAggregateRoot>
+        where TAggregateRoot : IAggregateRoot
     {
         /// <summary>
         /// Find an entity by id
         /// </summary>
-        Task<TEntity> FindAsync(object id);
+        Task<TAggregateRoot> FindAsync(object id);
 
         /// <summary>
         /// Find all entities
         /// </summary>
-        Task<List<TEntity>> FindAllAsync();
+        Task<List<TAggregateRoot>> FindAllAsync();
 
         /// <summary>
         /// Insert an new entity
         /// </summary>
-        Task InsertAsync(TEntity entity);
+        Task InsertAsync(TAggregateRoot entity);
 
         /// <summary>
         /// Update an entity
         /// </summary>
-        Task UpdateAsync(TEntity entity);
+        Task UpdateAsync(TAggregateRoot entity);
 
         /// <summary>
         /// Delete an entity by id

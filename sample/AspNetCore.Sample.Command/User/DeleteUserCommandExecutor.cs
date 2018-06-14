@@ -7,20 +7,19 @@ namespace AspNetCore.Sample.Command.User
 {
     public class DeleteUserCommandExecutor : ICommandExecutor<DeleteUserCommand>
     {
-        protected readonly IDomainModelBuilder DomainModelBuilder;
+        protected readonly IUnitOfWork UnitOfWork;
 
-        public DeleteUserCommandExecutor(IDomainModelBuilder domainModelBuilder)
+        public DeleteUserCommandExecutor(IUnitOfWork unitOfWork)
         {
-            DomainModelBuilder = domainModelBuilder;
+            UnitOfWork = unitOfWork;
         }
 
         public async Task ExecuteAsync(DeleteUserCommand command)
         {
-            // Build user
-            var userModel = DomainModelBuilder.BuildModel<UserModel>(command.UserId);
-
-            // Remove user
-            await userModel.RemoveAsync();
+            var userModel = UnitOfWork.BuildAggregate<Domain.Models.User>();
+            userModel.UserId = command.UserId;
+            
+            userModel.Remove();
         }
     }
 }

@@ -31,7 +31,7 @@ namespace AspNetCore.Sample
             {
                 builder.ForDbContext<SampleDbContext>();
                 builder.ForCommandExecutor(typeof(CreateUserCommandExecutor).GetTypeInfo().Assembly);
-                builder.ForDomainModel(typeof(UserModel).GetTypeInfo().Assembly);
+                builder.ForDomainModel(typeof(User).GetTypeInfo().Assembly);
                 builder.ForQuery(typeof(UserQuery).GetTypeInfo().Assembly);
             });
 

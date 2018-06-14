@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace AspNetCore.Sample.Query.User
 {
-    public class UserQuery : QueryBase<SampleDbContext>
+    public class UserQuery : AbstractQuery<SampleDbContext>
     {
         public UserQuery(SampleDbContext db) : base(db)
         {
@@ -23,7 +23,7 @@ namespace AspNetCore.Sample.Query.User
 
         #region Private Helper
 
-        private T UserViewModelTransfer<T>(Repository.Entities.User user) where T : new()
+        private T UserViewModelTransfer<T>(Domain.Models.User user) where T : new()
         {
             var userViewModel = new T();
 

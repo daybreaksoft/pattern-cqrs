@@ -15,11 +15,11 @@ namespace AspNetCore.Sample.Command.TrafficViolation
 
         public async Task ExecuteAsync(DeleteTrafficViolationCommand command)
         {
-            // Build Traffic violation
-            var model = DomainModelBuilder.BuildModel<VehicleModel>(command.TrafficViolationId);
+            //// Build Traffic violation
+            //var model = DomainModelBuilder.BuildModel<Domain.Models.Vehicle>(command.TrafficViolationId);
 
-            // Remove Traffic violation
-            await model.RemoveAsync();
+            //// Remove Traffic violation
+            //await model.RemoveAsync();
         }
     }
 }

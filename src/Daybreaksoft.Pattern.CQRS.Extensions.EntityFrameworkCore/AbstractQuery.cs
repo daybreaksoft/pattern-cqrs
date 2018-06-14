@@ -7,11 +7,11 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
     /// <summary>
     /// The base type of IQuery
     /// </summary>
-    public abstract class QueryBase<TDbContext> : IQuery
+    public abstract class AbstractQuery<TDbContext> : IQuery
     {
         protected readonly TDbContext Db;
 
-        public QueryBase(TDbContext db)
+        public AbstractQuery(TDbContext db)
         {
             Db = db;
         }

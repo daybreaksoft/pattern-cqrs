@@ -7,10 +7,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AspNetCore.Sample.Repository.Repositories
 {
-    public class VehicleRepository : DefaultRepository<Vehicle>
-    {
-        public VehicleRepository(DbContext db) : base(db)
-        {
-        }
-    }
+    //public class VehicleRepository : DefaultRepository<Vehicle>
+    //{
+    //    public VehicleRepository(DbContext db) : base(db)
+    //    {
+    //    }
+    //}
 }

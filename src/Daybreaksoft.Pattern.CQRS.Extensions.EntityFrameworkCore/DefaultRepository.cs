@@ -10,7 +10,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
     /// <summary>
     /// Default implemention of IQuery with EntityFrameworkCore
     /// </summary>
-    public class DefaultRepository<T> : IRepository<T> where T : class, IEntity, new()
+    public class DefaultRepository<T> : IRepository<T> where T : class, IAggregateRoot, new()
     {
         protected readonly DbContext Db;
 

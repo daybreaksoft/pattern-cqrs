@@ -45,6 +45,8 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
 
             AddQueryImplemention(services, builder);
 
+            AddUnitOfWorkImplemention(services, builder);
+
             return services;
         }
 
@@ -150,7 +152,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
             {
                 if (builder.DomainModelAssembly != null)
                 {
-                    var baseDomainModelType = typeof(IDomainModel);
+                    var baseDomainModelType = typeof(IAggregateRoot);
 
                     // Find all exported types
                     foreach (var implementationType in builder.DomainModelAssembly.GetExportedTypes())
@@ -196,6 +198,21 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
             else
             {
                 builder.AddQueryAction(services);
+            }
+        }
+
+        /// <summary>
+        /// Add UnitOfWork as IUnitOfWork if don't have custom DI action
+        /// </summary>
+        private static void AddUnitOfWorkImplemention(IServiceCollection services, CQRSOptionBuilder builder)
+        {
+            if (builder.AddUnitOfWorkAction == null)
+            {
+                services.AddScoped<IUnitOfWork, DefaultUnitOfWork>();
+            }
+            else
+            {
+                builder.AddUnitOfWorkAction(services);
             }
         }
     }
