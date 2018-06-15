@@ -1,20 +1,36 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Daybreaksoft.Pattern.CQRS
 {
     /// <summary>
     /// Abstract AggregateRoot
     /// </summary>
-    public abstract class AggregateRoot : IAggregateRoot
+    public abstract class AggregateRoot : IAggregateRoot, IEventSource
     {
+        [NotMapped]
+        [JsonIgnore]
         public abstract object Id { get; }
 
-        [NotMapped]
-        public virtual bool Deleted { get; protected set; }
+        protected AggregateState _state;
 
-        public virtual void Remove()
+        [NotMapped]
+        [JsonIgnore]
+        public virtual AggregateState State => _state;
+
+        #region Events
+
+        protected EventStream _events = new EventStream();
+
+        [NotMapped]
+        [JsonIgnore]
+        EventStream IEventSource.Events => _events;
+
+        protected virtual void AppendEvent(IEvent evnt)
         {
-            Deleted = true;
+            _events.Append(evnt);
         }
+
+        #endregion
     }
 }

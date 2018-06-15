@@ -7,6 +7,6 @@
     {
         object Id { get; }
 
-        bool Deleted { get; }
+        AggregateState State { get; }
     }
 }

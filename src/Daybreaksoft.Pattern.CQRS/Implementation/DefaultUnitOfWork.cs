@@ -35,54 +35,19 @@ namespace Daybreaksoft.Pattern.CQRS
         {
             foreach (var aggreate in UnCommittedAggregate)
             {
-                if (HasKeyValue(aggreate.Id))
-                {
-                    if (!aggreate.Deleted)
-                    {
-                        await UpdateAggreateAsync(aggreate);
-                    }
-                    else
-                    {
-                        await RemoveAggreateAsync(aggreate);
-                    }
-                }
-                else
+                if (aggreate.State == AggregateState.Added)
                 {
                     await InsertAggreateAsync(aggreate);
                 }
-            }
-        }
-
-        protected virtual bool HasKeyValue(object key)
-        {
-            if (key is string)
-            {
-                return !string.IsNullOrEmpty(key.ToString());
-            }
-            else if (key is int)
-            {
-
-                if (int.TryParse(key.ToString(), out int result))
+                else if (aggreate.State == AggregateState.Modified)
                 {
-                    return result > 0;
+                    await UpdateAggreateAsync(aggreate);
                 }
-                else
+                else if (aggreate.State == AggregateState.Deleted)
                 {
-                    return false;
+                    await RemoveAggreateAsync(aggreate);
                 }
             }
-
-            return false;
-        }
-
-        protected virtual Type GetRepositoryType(IAggregateRoot aggregate)
-        {
-            return GetRepositoryType(aggregate.GetType());
-        }
-
-        protected virtual Type GetRepositoryType(Type type)
-        {
-            return typeof(IRepository<>).MakeGenericType(type);
         }
 
         protected virtual async Task InsertAggreateAsync(IAggregateRoot aggregate)

@@ -37,6 +37,11 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
         public Assembly CommandExecutorAssembly { get; protected set; }
 
         /// <summary>
+        /// Action that add implementation class of IEventBus
+        /// </summary>
+        public Action<IServiceCollection> AddEventBusAction { get; protected set; }
+
+        /// <summary>
         /// Action that add aggregate builder implemented class
         /// </summary>
         public Action<IServiceCollection> AddAggregateBuilderAction { get; protected set; }
@@ -105,6 +110,14 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
             CommandExecutorAssembly = assembly;
 
             AddCommandExecutorAction = null;
+        }
+
+        /// <summary>
+        /// Set custom DI action for IEventBus
+        /// </summary>
+        public void ForEventBus(Action<IServiceCollection> action)
+        {
+            AddEventBusAction = action;
         }
 
         /// <summary>

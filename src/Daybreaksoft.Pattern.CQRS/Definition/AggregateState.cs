@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace Daybreaksoft.Pattern.CQRS
 {
-    public interface IPostCommitEventHandler<in TEvent>
-        where TEvent : IEvent
+    public enum AggregateState
     {
-        Task HandleAsync(TEvent evnt);
+        Unchanged,
+        Added,
+        Modified,
+        Deleted
     }
 }

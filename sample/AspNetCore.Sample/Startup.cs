@@ -35,7 +35,6 @@ namespace AspNetCore.Sample
                 builder.ForCommandExecutor(typeof(CreateUserCommandExecutor).GetTypeInfo().Assembly);
                 builder.ForQuery(typeof(UserQuery).GetTypeInfo().Assembly);
             });
-            services.AddScoped<IRepository<User>, UserRepository>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

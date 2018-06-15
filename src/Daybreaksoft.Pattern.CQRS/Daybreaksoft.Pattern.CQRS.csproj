@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="Daybreaksoft.Extensions.Functions" Version="1.1.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
   
   <ItemGroup Condition=" '$(TargetFramework)' == 'net451' ">

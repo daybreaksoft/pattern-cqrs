@@ -35,6 +35,8 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
 
             AddCommandExecutorImplemention(services, builder);
 
+            AddEventBusImplemention(services, builder);
+
             AddAggregateBuilderImplemention(services, builder);
 
             AddDynamicRepositoryFactoryImplemention(services, builder);
@@ -121,6 +123,21 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
             else
             {
                 builder.AddCommandExecutorAction(services);
+            }
+        }
+
+        /// <summary>
+        /// Add DefaultEventBus as IEventBus if don't have custom DI action
+        /// </summary>
+        private static void AddEventBusImplemention(IServiceCollection services, CQRSOptionBuilder builder)
+        {
+            if (builder.AddEventBusAction == null)
+            {
+                services.AddScoped<IEventBus, DefaultEventBus>();
+            }
+            else
+            {
+                builder.AddEventBusAction(services);
             }
         }
 

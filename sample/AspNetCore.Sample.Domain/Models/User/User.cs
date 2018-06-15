@@ -3,7 +3,7 @@ using Daybreaksoft.Pattern.CQRS;
 
 namespace AspNetCore.Sample.Domain.Models
 {
-    public partial class User : AggregateRoot
+    public partial class User : DefaultAggregateRoot
     {
         [NotMapped]
         public override object Id => UserId;
