@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Threading.Tasks;
-using AspNetCore.Sample.Repository.Entities;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using Daybreaksoft.Pattern.CQRS;
 
 namespace AspNetCore.Sample.Domain.Models
@@ -9,7 +6,7 @@ namespace AspNetCore.Sample.Domain.Models
     public partial class User : AggregateRoot
     {
         [NotMapped]
-        public override object Id { get { return UserId; } }
+        public override object Id => UserId;
 
         #region Behaviors
 

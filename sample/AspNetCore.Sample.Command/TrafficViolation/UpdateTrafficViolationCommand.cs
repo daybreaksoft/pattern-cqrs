@@ -1,4 +1,4 @@
-﻿namespace AspNetCore.Sample.Command.TrafficViolation
+﻿namespace AspNetCore.Sample.Command
 {
     public class UpdateTrafficViolationCommand : CreateTrafficViolationCommand
     {

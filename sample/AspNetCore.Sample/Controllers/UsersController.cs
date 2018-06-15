@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
+using AspNetCore.Sample.Command;
 using AspNetCore.Sample.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using Daybreaksoft.Extensions.Functions;
 using Daybreaksoft.Pattern.CQRS;
-using AspNetCore.Sample.Command.User;
 using AspNetCore.Sample.Query.User;
 
 namespace AspNetCore.Sample.Controllers
@@ -18,20 +18,19 @@ namespace AspNetCore.Sample.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Edit([FromRoute]int? id, [FromServices]IDomainModelBuilder modelBuilder)
+        public async Task<IActionResult> Edit([FromRoute]int? id, [FromServices] IAggregateBuilder aggregateBuilder)
         {
             UserViewModel viewModel = null;
 
-            //if (id.HasValue)
-            //{
-            //    // Load user
-            //    var userModel = modelBuilder.BuildModel<User>(id);
-            //    await userModel.LoadAsync();
+            if (id.HasValue)
+            {
+                // Load user
+                var userModel = await aggregateBuilder.GetAggregate<User>(id);
 
-            //    // Build view model
-            //    viewModel = new UserViewModel();
-            //    userModel.CopyValueTo(viewModel);
-            //}
+                // Build view model
+                viewModel = new UserViewModel();
+                userModel.CopyValueTo(viewModel);
+            }
 
             ViewBag.IsCreate = !id.HasValue;
             ViewBag.UserId = id;

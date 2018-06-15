@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
+using Daybreaksoft.Extensions.Functions;
+using Daybreaksoft.Pattern.CQRS.Interface.Domain;
 
 namespace Daybreaksoft.Pattern.CQRS
 {
     public class DefaultUnitOfWork : IUnitOfWork
     {
-        protected readonly IDependencyInjection DI;
+        protected readonly IAggregateBuilder AggregateBuilder;
+        protected readonly IDynamicRepositoryFactory DynamicRepositoryFactory;
 
-        public DefaultUnitOfWork(IDependencyInjection di)
+        public DefaultUnitOfWork(IAggregateBuilder aggregateBuilder, IDynamicRepositoryFactory dynamicRepositoryFactory)
         {
-            DI = di;
+            AggregateBuilder = aggregateBuilder;
+            DynamicRepositoryFactory = dynamicRepositoryFactory;
         }
 
         public List<IAggregateRoot> UnCommittedAggregate { get; protected set; } = new List<IAggregateRoot>();
@@ -76,54 +77,43 @@ namespace Daybreaksoft.Pattern.CQRS
 
         protected virtual Type GetRepositoryType(IAggregateRoot aggregate)
         {
-            return typeof(IRepository<>).MakeGenericType(aggregate.GetType());
+            return GetRepositoryType(aggregate.GetType());
+        }
+
+        protected virtual Type GetRepositoryType(Type type)
+        {
+            return typeof(IRepository<>).MakeGenericType(type);
         }
 
         protected virtual async Task InsertAggreateAsync(IAggregateRoot aggregate)
         {
-            var repositoryType = GetRepositoryType(aggregate);
-
-            var repository = DI.GetService(repositoryType);
-
-            var method = repositoryType.GetMethod("InsertAsync");
-
-            await (Task)method.Invoke(repository, new[] { aggregate });
+            await DynamicRepositoryFactory.InvokeInsertAsync(aggregate);
         }
 
         protected virtual async Task UpdateAggreateAsync(IAggregateRoot aggregate)
         {
-            //var repository = GetRepository(aggregate);
-
-            //await repository.UpdateAsync(aggregate);
+            await DynamicRepositoryFactory.InvokeUpdateAsync(aggregate);
         }
 
         protected virtual async Task RemoveAggreateAsync(IAggregateRoot aggregate)
         {
-            var repositoryType = GetRepositoryType(aggregate);
-
-            var repository = DI.GetService(repositoryType);
-
-            var method = repositoryType.GetMethod("DeleteAsync");
-
-            await (Task)method.Invoke(repository, new[] { aggregate.Id });
+            await DynamicRepositoryFactory.InvokeRemoveAsync(aggregate.GetType(), aggregate.Id);
         }
 
         #endregion
 
         public virtual TAggregateRoot BuildAggregate<TAggregateRoot>(bool addToUnCommitted = true) where TAggregateRoot : IAggregateRoot, new()
         {
-            var aggregate = new TAggregateRoot();
+            var aggregate = AggregateBuilder.BuildAggregate<TAggregateRoot>();
 
             if (addToUnCommitted) UnCommittedAggregate.Add(aggregate);
 
             return aggregate;
         }
 
-        public virtual TAggregateRoot GetAggregate<TAggregateRoot>(object id, bool addToUnCommitted = true) where TAggregateRoot : IAggregateRoot, new()
+        public virtual async Task<TAggregateRoot> GetAggregate<TAggregateRoot>(object id, bool addToUnCommitted = true) where TAggregateRoot : IAggregateRoot, new()
         {
-            //var aggregate = DI.GetService<IRepository<TAggregateRoot>>();
-
-            var aggregate = new TAggregateRoot();
+            var aggregate = await AggregateBuilder.GetAggregate<TAggregateRoot>(id);
 
             if (addToUnCommitted) UnCommittedAggregate.Add(aggregate);
 

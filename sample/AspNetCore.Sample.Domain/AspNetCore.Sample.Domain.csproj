@@ -5,8 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\src\Daybreaksoft.Pattern.CQRS\Daybreaksoft.Pattern.CQRS.csproj" />
-    <ProjectReference Include="..\AspNetCore.Sample.Repository\AspNetCore.Sample.Repository.csproj" />
   </ItemGroup>
 
 </Project>

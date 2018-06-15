@@ -1,11 +1,8 @@
-﻿using AspNetCore.Sample.Repository.Entities;
-using Daybreaksoft.Pattern.CQRS;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace AspNetCore.Sample.Domain.Models
 {
-    public partial class TrafficViolation : AggregateRoot
+    public partial class TrafficViolation
     {
         [Key]
         public int TrafficViolationId { get; set; }

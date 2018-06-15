@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 using AspNetCore.Sample.Domain.Models;
-using Daybreaksoft.Extensions.Functions;
 using Daybreaksoft.Pattern.CQRS;
 
-namespace AspNetCore.Sample.Command.User
+namespace AspNetCore.Sample.Command
 {
     public class DeleteUserCommandExecutor : ICommandExecutor<DeleteUserCommand>
     {
@@ -16,10 +15,12 @@ namespace AspNetCore.Sample.Command.User
 
         public async Task ExecuteAsync(DeleteUserCommand command)
         {
-            var userModel = UnitOfWork.BuildAggregate<Domain.Models.User>();
-            userModel.UserId = command.UserId;
-            
-            userModel.Remove();
+            var model = UnitOfWork.BuildAggregate<User>();
+            model.UserId = command.UserId;
+
+            model.Remove();
+
+            await Task.CompletedTask;
         }
     }
 }

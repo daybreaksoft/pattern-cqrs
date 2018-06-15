@@ -1,6 +1,6 @@
 ﻿using Daybreaksoft.Pattern.CQRS;
 
-namespace AspNetCore.Sample.Command.TrafficViolation
+namespace AspNetCore.Sample.Command
 {
     public class DeleteTrafficViolationCommand : ICommand
     {

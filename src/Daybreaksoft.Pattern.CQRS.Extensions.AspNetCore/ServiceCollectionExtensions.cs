@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Daybreaksoft.Pattern.CQRS.Interface.Domain;
 
 namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
 {
@@ -26,11 +27,6 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
                 throw new ArgumentNullException($"{nameof(builder.AddCommandExecutorAction)} and {builder.CommandExecutorAssembly} can't all be null");
             }
 
-            if (builder.AddDomainModelAction == null && builder.DomainModelAssembly == null)
-            {
-                throw new ArgumentNullException($"{nameof(builder.AddDomainModelAction)} and {builder.DomainModelAssembly} can't all be null");
-            }
-
             AddRepositoryImplemention(services, builder);
 
             AddDependencyInjectionImplemention(services, builder);
@@ -39,9 +35,9 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
 
             AddCommandExecutorImplemention(services, builder);
 
-            AddDomainModelBuilderImplemention(services, builder);
+            AddAggregateBuilderImplemention(services, builder);
 
-            AddModelImplemention(services, builder);
+            AddDynamicRepositoryFactoryImplemention(services, builder);
 
             AddQueryImplemention(services, builder);
 
@@ -129,46 +125,32 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
         }
 
         /// <summary>
-        /// Add DefaultDomainModelBuilder as IDomainModelBuilder if don't have custom DI action
+        /// Add DefaultAggregateBuilder as IAggregateBuilder if don't have custom DI action
         /// </summary>
-        private static void AddDomainModelBuilderImplemention(IServiceCollection services, CQRSOptionBuilder builder)
+        private static void AddAggregateBuilderImplemention(IServiceCollection services, CQRSOptionBuilder builder)
         {
-            if (builder.AddDomainModelBuilderAction == null)
+            if (builder.AddAggregateBuilderAction == null)
             {
-                services.AddScoped<IDomainModelBuilder, DefaultDomainModelBuilder>();
+                services.AddScoped<IAggregateBuilder, DefaultAggregateBuilder>();
             }
             else
             {
-                builder.AddDomainModelBuilderAction(services);
+                builder.AddAggregateBuilderAction(services);
             }
         }
 
         /// <summary>
-        /// Default to add all Model implement class if don't have custom DI action
+        /// Add DefaultAggregateBuilder as IDynamicRepositoryFactory if don't have custom DI action
         /// </summary>
-        private static void AddModelImplemention(IServiceCollection services, CQRSOptionBuilder builder)
+        private static void AddDynamicRepositoryFactoryImplemention(IServiceCollection services, CQRSOptionBuilder builder)
         {
-            if (builder.AddDomainModelAction == null)
+            if (builder.AddDynamicRepositoryFactoryAction == null)
             {
-                if (builder.DomainModelAssembly != null)
-                {
-                    var baseDomainModelType = typeof(IAggregateRoot);
-
-                    // Find all exported types
-                    foreach (var implementationType in builder.DomainModelAssembly.GetExportedTypes())
-                    {
-                        // Find implementation type that base of IDomainModel
-                        var targentInterface = implementationType.GetInterfaces().SingleOrDefault(p => p == baseDomainModelType);
-                        if (targentInterface != null)
-                        {
-                            services.AddTransient(implementationType);
-                        }
-                    }
-                }
+                services.AddScoped<IDynamicRepositoryFactory, DefaultDynamicRepositoryFactory>();
             }
             else
             {
-                builder.AddDomainModelAction(services);
+                builder.AddDynamicRepositoryFactoryAction(services);
             }
         }
 

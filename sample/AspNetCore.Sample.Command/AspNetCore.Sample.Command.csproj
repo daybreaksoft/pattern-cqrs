@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AspNetCore.Sample.Domain\AspNetCore.Sample.Domain.csproj" />
-    <ProjectReference Include="..\AspNetCore.Sample.Repository\AspNetCore.Sample.Repository.csproj" />
   </ItemGroup>
 
 </Project>

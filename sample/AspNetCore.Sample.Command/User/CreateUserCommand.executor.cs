@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
-using AspNetCore.Sample.Domain.Models;
 using Daybreaksoft.Extensions.Functions;
 using Daybreaksoft.Pattern.CQRS;
 
-namespace AspNetCore.Sample.Command.User
+namespace AspNetCore.Sample.Command
 {
     public class CreateUserCommandExecutor : ICommandExecutor<CreateUserCommand>
     {
@@ -16,14 +15,10 @@ namespace AspNetCore.Sample.Command.User
 
         public async Task ExecuteAsync(CreateUserCommand command)
         {
-            var newUserModel = UnitOfWork.BuildAggregate<Domain.Models.User>();
-            command.CopyValueTo(newUserModel);
-            //// Create user model via command values
-            //var userModel = DomainModelBuilder.BuildModel<Domain.Models.User>();
-            //command.CopyValueTo(userModel);
+            var newModel = UnitOfWork.BuildAggregate<Domain.Models.User>();
+            command.CopyValueTo(newModel);
 
-            //// Insert user
-            //await userModel.AddAsync();
+            await Task.CompletedTask;
         }
     }
 }

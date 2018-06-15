@@ -1,4 +1,4 @@
-﻿namespace AspNetCore.Sample.Command.Vehicle
+﻿namespace AspNetCore.Sample.Command
 {
     public class UpdateVehicleCommand : CreateVehicleCommand
     {

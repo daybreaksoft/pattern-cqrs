@@ -1,4 +1,4 @@
-﻿namespace AspNetCore.Sample.Command.User
+﻿namespace AspNetCore.Sample.Command
 {
     public class UpdateUserCommand : CreateUserCommand
     {

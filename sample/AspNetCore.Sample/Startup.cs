@@ -1,8 +1,7 @@
 ﻿using System.Reflection;
-using AspNetCore.Sample.Command.User;
-using AspNetCore.Sample.Domain.Models;
+using AspNetCore.Sample.Command;
+using AspNetCore.Sample.Domain;
 using AspNetCore.Sample.Query.User;
-using AspNetCore.Sample.Repository;
 using Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -31,7 +30,6 @@ namespace AspNetCore.Sample
             {
                 builder.ForDbContext<SampleDbContext>();
                 builder.ForCommandExecutor(typeof(CreateUserCommandExecutor).GetTypeInfo().Assembly);
-                builder.ForDomainModel(typeof(User).GetTypeInfo().Assembly);
                 builder.ForQuery(typeof(UserQuery).GetTypeInfo().Assembly);
             });
 

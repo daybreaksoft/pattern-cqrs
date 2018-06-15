@@ -37,19 +37,14 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
         public Assembly CommandExecutorAssembly { get; protected set; }
 
         /// <summary>
-        /// Action that add domain model buidler implemented class
+        /// Action that add aggregate builder implemented class
         /// </summary>
-        public Action<IServiceCollection> AddDomainModelBuilderAction { get; protected set; }
+        public Action<IServiceCollection> AddAggregateBuilderAction { get; protected set; }
 
         /// <summary>
-        /// Action that add model implemented class
+        /// Action that add IDynamicRepositoryFactory implemented class
         /// </summary>
-        public Action<IServiceCollection> AddDomainModelAction { get; protected set; }
-
-        /// <summary>
-        /// The assembly where the implemented type of domain model belong to
-        /// </summary>
-        public Assembly DomainModelAssembly { get; protected set; }
+        public Action<IServiceCollection> AddDynamicRepositoryFactoryAction { get; protected set; }
 
         /// <summary>
         /// Action that add query implemented class
@@ -113,31 +108,19 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
         }
 
         /// <summary>
-        /// Set custom DI action for domain model builder
+        /// Set custom DI action for aggregate builder
         /// </summary>
-        public void ForDomainModelBuilder(Action<IServiceCollection> action)
+        public void ForAggregateBuilder(Action<IServiceCollection> action)
         {
-            AddDomainModelBuilderAction = action;
+            AddAggregateBuilderAction = action;
         }
 
         /// <summary>
-        /// Set custom DI action for domain model
+        /// Set custom DI action for dynamic repository factory
         /// </summary>
-        public void ForDomainModel(Action<IServiceCollection> action)
+        public void ForDynamicRepositoryFactory(Action<IServiceCollection> action)
         {
-            AddDomainModelAction = action;
-
-            DomainModelAssembly = null;
-        }
-
-        /// <summary>
-        /// Set the assemble where the implemented type of domain model is belong to
-        /// </summary>
-        public void ForDomainModel(Assembly assembly)
-        {
-            DomainModelAssembly = assembly;
-
-            AddDomainModelAction = null;
+            AddDynamicRepositoryFactoryAction = action;
         }
 
         /// <summary>

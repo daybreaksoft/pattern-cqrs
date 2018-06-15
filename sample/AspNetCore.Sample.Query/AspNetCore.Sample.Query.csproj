@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Daybreaksoft.Extensions.Functions" Version="1.0.0" />
+    <PackageReference Include="Daybreaksoft.Extensions.Functions" Version="1.1.0" />
   </ItemGroup>
 
   <ItemGroup>

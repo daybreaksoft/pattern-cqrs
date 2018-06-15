@@ -1,6 +1,4 @@
-﻿using AspNetCore.Sample.Repository.Entities;
-using Daybreaksoft.Pattern.CQRS;
-using System.ComponentModel.DataAnnotations;
+﻿using Daybreaksoft.Pattern.CQRS;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AspNetCore.Sample.Domain.Models
@@ -8,6 +6,6 @@ namespace AspNetCore.Sample.Domain.Models
     public partial class TrafficViolation : AggregateRoot
     {
         [NotMapped]
-        public override object Id { get { return TrafficViolationId; } }
+        public override object Id => TrafficViolationId;
     }
 }

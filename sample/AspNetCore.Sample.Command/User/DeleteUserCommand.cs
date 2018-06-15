@@ -1,6 +1,6 @@
 ﻿using Daybreaksoft.Pattern.CQRS;
 
-namespace AspNetCore.Sample.Command.User
+namespace AspNetCore.Sample.Command
 {
     public class DeleteUserCommand : ICommand
     {

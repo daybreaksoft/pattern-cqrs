@@ -1,6 +1,6 @@
 ﻿using Daybreaksoft.Pattern.CQRS;
 
-namespace AspNetCore.Sample.Command.Vehicle
+namespace AspNetCore.Sample.Command
 {
     public class DeleteVehicleCommand : ICommand
     {

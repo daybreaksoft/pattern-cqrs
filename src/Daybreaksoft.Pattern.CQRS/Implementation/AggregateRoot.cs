@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Threading.Tasks;
-using Daybreaksoft.Extensions.Functions;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Daybreaksoft.Pattern.CQRS
 {
@@ -15,7 +10,7 @@ namespace Daybreaksoft.Pattern.CQRS
         public abstract object Id { get; }
 
         [NotMapped]
-        public virtual bool Deleted { get; protected set; } = false;
+        public virtual bool Deleted { get; protected set; }
 
         public virtual void Remove()
         {

@@ -67,7 +67,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
         /// <summary>
         /// Remove an entity by key
         /// </summary>
-        public virtual async Task DeleteAsync(object id)
+        public virtual async Task RemoveAsync(object id)
         {
             // Generate new entity
             var entity = new T();

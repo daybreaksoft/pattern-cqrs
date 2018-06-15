@@ -32,6 +32,6 @@ namespace Daybreaksoft.Pattern.CQRS
         /// <summary>
         /// Delete an entity by id
         /// </summary>
-        Task DeleteAsync(object id);
+        Task RemoveAsync(object id);
     }
 }

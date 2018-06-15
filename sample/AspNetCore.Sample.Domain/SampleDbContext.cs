@@ -1,12 +1,7 @@
-﻿
+﻿using AspNetCore.Sample.Domain.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore;
-using AspNetCore.Sample.Domain.Models;
 
-namespace AspNetCore.Sample.Repository
+namespace AspNetCore.Sample.Domain
 {
     public class SampleDbContext : DbContext
     {

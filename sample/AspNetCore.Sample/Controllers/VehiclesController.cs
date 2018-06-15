@@ -1,11 +1,10 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
+using AspNetCore.Sample.Command;
 using AspNetCore.Sample.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using Daybreaksoft.Extensions.Functions;
 using Daybreaksoft.Pattern.CQRS;
-using AspNetCore.Sample.Command.Vehicle;
 using AspNetCore.Sample.Query.User;
 using AspNetCore.Sample.Query.Vehicle;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -28,7 +27,7 @@ namespace AspNetCore.Sample.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Edit([FromRoute]int? id, [FromServices] UserQuery userQuery, [FromServices]IDomainModelBuilder modelBuilder)
+        public async Task<IActionResult> Edit([FromRoute]int? id, [FromServices] UserQuery userQuery, [FromServices] IAggregateBuilder aggregateBuilder)
         {
             // Get users as selectitem
             var users = await userQuery.GetUsers();
@@ -37,16 +36,15 @@ namespace AspNetCore.Sample.Controllers
             // Load vehicle if edit
             VehicleViewModel viewModel = null;
 
-            //if (id.HasValue)
-            //{
-            //    // Load vehicle
-            //    var vehicleModel = modelBuilder.BuildModel<Vehicle>(id);
-            //    await vehicleModel.LoadAsync();
+            if (id.HasValue)
+            {
+                // Load vehicle
+                var vehicleModel = await aggregateBuilder.GetAggregate<Vehicle>(id);
 
-            //    // Build view model
-            //    viewModel = new VehicleViewModel();
-            //    vehicleModel.CopyValueTo(viewModel);
-            //}
+                // Build view model
+                viewModel = new VehicleViewModel();
+                vehicleModel.CopyValueTo(viewModel);
+            }
 
             ViewBag.IsCreate = !id.HasValue;
             ViewBag.VehicleId = id;

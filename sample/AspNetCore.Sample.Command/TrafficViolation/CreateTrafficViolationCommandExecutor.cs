@@ -3,25 +3,23 @@ using AspNetCore.Sample.Domain.Models;
 using Daybreaksoft.Extensions.Functions;
 using Daybreaksoft.Pattern.CQRS;
 
-namespace AspNetCore.Sample.Command.TrafficViolation
+namespace AspNetCore.Sample.Command
 {
     public class CreateTrafficViolationCommandExecutor : ICommandExecutor<CreateTrafficViolationCommand>
     {
-        protected readonly IDomainModelBuilder DomainModelBuilder;
+        protected readonly IUnitOfWork UnitOfWork;
 
-        public CreateTrafficViolationCommandExecutor(IDomainModelBuilder domainModelBuilder)
+        public CreateTrafficViolationCommandExecutor(IUnitOfWork unitOfWork)
         {
-            DomainModelBuilder = domainModelBuilder;
+            UnitOfWork = unitOfWork;
         }
 
         public async Task ExecuteAsync(CreateTrafficViolationCommand command)
         {
-            //// Create traffic violation model via command values
-            //var model = DomainModelBuilder.BuildModel<Domain.Models.TrafficViolation>();
-            //command.CopyValueTo(model);
+            var newModel = UnitOfWork.BuildAggregate<TrafficViolation>();
+            command.CopyValueTo(newModel);
 
-            //// Insert traffic violation
-            //await model.AddAsync();
+            await Task.CompletedTask;
         }
     }
 }

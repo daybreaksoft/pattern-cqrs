@@ -1,9 +1,11 @@
-﻿namespace Daybreaksoft.Pattern.CQRS
-{
-    public interface IDomainModelBuilder
-    {
-        TModel BuildModel<TModel>() where TModel : IAggregateRoot;
+﻿using System.Threading.Tasks;
 
-        TModel BuildModel<TModel>(object id) where TModel : IAggregateRoot;
+namespace Daybreaksoft.Pattern.CQRS
+{
+    public interface IAggregateBuilder
+    {
+        TAggregateRoot BuildAggregate<TAggregateRoot>() where TAggregateRoot : IAggregateRoot, new();
+
+        Task<TAggregateRoot> GetAggregate<TAggregateRoot>(object id) where TAggregateRoot : IAggregateRoot;
     }
 }

@@ -2,24 +2,25 @@
 using AspNetCore.Sample.Domain.Models;
 using Daybreaksoft.Pattern.CQRS;
 
-namespace AspNetCore.Sample.Command.TrafficViolation
+namespace AspNetCore.Sample.Command
 {
     public class DeleteTrafficViolationCommandExecutor : ICommandExecutor<DeleteTrafficViolationCommand>
     {
-        protected readonly IDomainModelBuilder DomainModelBuilder;
+        protected readonly IUnitOfWork UnitOfWork;
 
-        public DeleteTrafficViolationCommandExecutor(IDomainModelBuilder domainModelBuilder)
+        public DeleteTrafficViolationCommandExecutor(IUnitOfWork unitOfWork)
         {
-            DomainModelBuilder = domainModelBuilder;
+            UnitOfWork = unitOfWork;
         }
 
         public async Task ExecuteAsync(DeleteTrafficViolationCommand command)
         {
-            //// Build Traffic violation
-            //var model = DomainModelBuilder.BuildModel<Domain.Models.Vehicle>(command.TrafficViolationId);
+            var model = UnitOfWork.BuildAggregate<TrafficViolation>();
+            model.TrafficViolationId = command.TrafficViolationId;
 
-            //// Remove Traffic violation
-            //await model.RemoveAsync();
+            model.Remove();
+
+            await Task.CompletedTask;
         }
     }
 }
