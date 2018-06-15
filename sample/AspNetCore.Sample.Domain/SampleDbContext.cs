@@ -6,6 +6,7 @@ namespace AspNetCore.Sample.Domain
     public class SampleDbContext : DbContext
     {
         public DbSet<User> Users { get; set; }
+        public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<TrafficViolation> TrafficViolations { get; set; }
 

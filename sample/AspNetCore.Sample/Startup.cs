@@ -1,7 +1,10 @@
 ﻿using System.Reflection;
 using AspNetCore.Sample.Command;
 using AspNetCore.Sample.Domain;
+using AspNetCore.Sample.Domain.Models;
+using AspNetCore.Sample.Domain.Repository;
 using AspNetCore.Sample.Query.User;
+using Daybreaksoft.Pattern.CQRS;
 using Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -32,6 +35,7 @@ namespace AspNetCore.Sample
                 builder.ForCommandExecutor(typeof(CreateUserCommandExecutor).GetTypeInfo().Assembly);
                 builder.ForQuery(typeof(UserQuery).GetTypeInfo().Assembly);
             });
+            services.AddScoped<IRepository<User>, UserRepository>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

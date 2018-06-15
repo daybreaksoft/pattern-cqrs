@@ -8,6 +8,8 @@ namespace AspNetCore.Sample.Domain.Models
         [NotMapped]
         public override object Id => UserId;
 
+        public virtual UserRole[] Roles { get; set; }
+
         #region Behaviors
 
         public void DeductPoint(int point)
