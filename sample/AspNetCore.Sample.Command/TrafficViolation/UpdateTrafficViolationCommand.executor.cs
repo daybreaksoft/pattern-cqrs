@@ -18,6 +18,8 @@ namespace AspNetCore.Sample.Command
             var model = await UnitOfWork.GetAggregate<Domain.Models.TrafficViolation>(command.TrafficViolationId);
 
             command.CopyValueTo(model);
+
+            model.Modify();
         }
     }
 }

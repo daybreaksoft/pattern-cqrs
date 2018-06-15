@@ -17,6 +17,8 @@ namespace AspNetCore.Sample.Command
         {
             var model = await UnitOfWork.GetAggregate<Domain.Models.Vehicle>(command.VehicleId);
 
+            model.Modify();
+
             command.CopyValueTo(model);
         }
     }

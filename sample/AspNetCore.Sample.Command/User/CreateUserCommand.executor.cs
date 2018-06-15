@@ -16,7 +16,10 @@ namespace AspNetCore.Sample.Command
         public async Task ExecuteAsync(CreateUserCommand command)
         {
             var newModel = UnitOfWork.BuildAggregate<Domain.Models.User>();
+
             command.CopyValueTo(newModel);
+
+            newModel.Add();
 
             await Task.CompletedTask;
         }

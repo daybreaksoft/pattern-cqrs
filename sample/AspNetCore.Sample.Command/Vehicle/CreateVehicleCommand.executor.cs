@@ -16,7 +16,10 @@ namespace AspNetCore.Sample.Command.Vehicle
         public async Task ExecuteAsync(CreateVehicleCommand command)
         {
             var newModel = UnitOfWork.BuildAggregate<Domain.Models.Vehicle>();
+
             command.CopyValueTo(newModel);
+
+            newModel.Add();
 
             await Task.CompletedTask;
         }

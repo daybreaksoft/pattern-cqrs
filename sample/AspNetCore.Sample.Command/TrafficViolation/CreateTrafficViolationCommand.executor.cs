@@ -17,7 +17,10 @@ namespace AspNetCore.Sample.Command
         public async Task ExecuteAsync(CreateTrafficViolationCommand command)
         {
             var newModel = UnitOfWork.BuildAggregate<TrafficViolation>();
+
             command.CopyValueTo(newModel);
+
+            newModel.Add();
 
             await Task.CompletedTask;
         }
