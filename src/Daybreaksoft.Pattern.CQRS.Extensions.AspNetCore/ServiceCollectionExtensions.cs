@@ -6,211 +6,132 @@ using System.Linq;
 
 namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
 {
+    /// <summary>
+    /// Extension methods for setting up CQRS related services in an Microsoft.Extensions.DependencyInjection.IServiceCollection.
+    /// </summary>
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddCQRS(this IServiceCollection services, Action<CQRSOptionBuilder> builderAction)
+        /// <summary>
+        /// Adds CQRS services to the specified Microsoft.Extensions.DependencyInjection.IServiceCollection.
+        /// </summary>
+        /// <param name="services">The Microsoft.Extensions.DependencyInjection.IServiceCollection to add services to.</param>
+        /// <param name="optionsAction">An System.Action`1 to configure the provided CQRSOptions.</param>
+        /// <returns>An Microsoft.Extensions.DependencyInjection.IMvcBuilder that can be used to further configure the CQRS services.</returns>
+        public static IServiceCollection AddCQRS(this IServiceCollection services, Action<CQRSOptions> optionsAction)
         {
-            var builder = new CQRSOptionBuilder();
+            if (optionsAction == null) throw new ArgumentNullException(nameof(optionsAction));
 
-            builderAction?.Invoke(builder);
+            var options = new CQRSOptions();
 
-            return services.AddCQRS(builder);
+            optionsAction.Invoke(options);
+
+            return services.AddCQRS(options);
         }
 
-        public static IServiceCollection AddCQRS(this IServiceCollection services, CQRSOptionBuilder builder)
+        public static IServiceCollection AddCQRS(this IServiceCollection services, CQRSOptions options)
         {
-            if (builder == null) throw new ArgumentNullException(nameof(builder));
+            if (options == null) throw new ArgumentNullException(nameof(options));
+            
+            // Add an service that implemented IDependencyInjection.
+            AddService(services, options, typeof(IDependencyInjection), typeof(DefaultDependencyInjection));
 
-            if (builder.RegisterCommandExecutorImplementationAction == null && builder.CommandExecutorAssembly == null)
+            // Add an service that implemented IAggregateBuilder.
+            AddService(services, options, typeof(IAggregateBuilder), typeof(DefaultAggregateBuilder));
+
+            // Add an service that implemented IUnitOfWork.
+            AddService(services, options, typeof(IUnitOfWork), typeof(DefaultUnitOfWork));
+
+            // Add services that implemeted IRepository<>.
+            if (!options.RegisterImplementationActions.ContainsKey(typeof(IRepository<>).Name))
             {
-                throw new ArgumentNullException($"{nameof(builder.RegisterCommandExecutorImplementationAction)} and {builder.CommandExecutorAssembly} can't all be null");
+                throw new NullReferenceException("Must provide the action that sets up IRepository<> services.");
+            }
+            else
+            {
+                options.RegisterImplementationActions[typeof(IRepository<>).Name].Invoke(services);
             }
 
-            AddRepositoryImplemention(services, builder);
+            // Add an service that implemented IDynamicRepositoryFactory.
+            AddService(services, options, typeof(IDynamicRepositoryFactory), typeof(DefaultDynamicRepositoryFactory));
 
-            AddDependencyInjectionImplemention(services, builder);
+            // Add services that implemented ICommandExecutor<>
+            AddServices(services, options, typeof(ICommandExecutor<>));
 
-            AddCommandBusImplemention(services, builder);
+            // Add an service that implemented ICommandBus.
+            AddService(services, options, typeof(ICommandBus), typeof(DefaultCommandBus));
 
-            AddCommandExecutorImplemention(services, builder);
+            // Add an service that implemented IEventBus.
+            AddService(services, options, typeof(IEventBus), typeof(DefaultEventBus));
 
-            AddEventBusImplemention(services, builder);
+            // Add services that implemented IEventHandler<>
+            AddServices(services, options, typeof(IEventHandler<>));
 
-            AddAggregateBuilderImplemention(services, builder);
+            // Add services that implemented IPostCommitEventHandler<>
+            AddServices(services, options, typeof(IPostCommitEventHandler<>));
 
-            AddDynamicRepositoryFactoryImplemention(services, builder);
-
-            AddQueryImplemention(services, builder);
-
-            AddUnitOfWorkImplemention(services, builder);
+            // Add services that implemented IQuery
+            AddServices(services, options, typeof(IQuery));
 
             return services;
         }
 
         /// <summary>
-        /// Execute custom DI action
+        /// Add an signle service using provided programmatic configuration of options.
+        /// It will use an default implementation as service if not find an action in optins via interface name.
         /// </summary>
-        private static void AddRepositoryImplemention(IServiceCollection services, CQRSOptionBuilder builder)
+        /// <param name="services">The Microsoft.Extensions.DependencyInjection.IServiceCollection to add services to.</param>
+        /// <param name="options">Provides programmatic configuration for the CQRS framework.</param>
+        /// <param name="serviceType">The type of the service to register.</param>
+        /// <param name="defaultImplementationType">The implementation type of the service.</param>
+        public static void AddService(IServiceCollection services, CQRSOptions options, Type serviceType, Type defaultImplementationType)
         {
-            builder.RegisterRepositoryImplementationAction?.Invoke(services);
-        }
+            if (options == null) throw new ArgumentNullException(nameof(options));
 
-        /// <summary>
-        /// Add DefaultDependencyInjection as IDependencyInjection if don't have custom DI action
-        /// </summary>
-        private static void AddDependencyInjectionImplemention(IServiceCollection services, CQRSOptionBuilder builder)
-        {
-            if (builder.RegisterDependencyInjectionImplementationAction == null)
+            if (serviceType == null) throw new ArgumentNullException(nameof(serviceType));
+
+            if (defaultImplementationType == null) throw new ArgumentNullException(nameof(defaultImplementationType));
+
+            var serviceTypeName = serviceType.Name;
+
+            if (options.RegisterImplementationActions.ContainsKey(serviceTypeName))
             {
-                services.AddScoped<IDependencyInjection, DefaultDependencyInjection>();
+                options.RegisterImplementationActions[serviceTypeName].Invoke(services);
             }
             else
             {
-                builder.RegisterRepositoryImplementationAction(services);
+                services.AddScoped(serviceType, defaultImplementationType);
             }
         }
 
-        /// <summary>
-        /// Add DefaultCommandBus as ICommandBus if don't have custom DI action
-        /// </summary>
-        private static void AddCommandBusImplemention(IServiceCollection services, CQRSOptionBuilder builder)
+        public static void AddServices(IServiceCollection services, CQRSOptions options, Type serviceType)
         {
-            if (builder.RegisterCommandBusImplementationAction == null)
+            var serviceTypeName = serviceType.Name;
+
+            if (options.RegisterImplementationActions.ContainsKey(serviceTypeName))
             {
-                services.AddScoped<ICommandBus, DefaultCommandBus>();
+                options.RegisterImplementationActions[serviceTypeName].Invoke(services);
             }
             else
             {
-                builder.RegisterCommandBusImplementationAction(services);
-            }
-        }
+                if (!options.ImplementationSources.ContainsKey(serviceTypeName))
+                    throw new Exception($"Cannot found implementation souce via {serviceTypeName}");
 
-        /// <summary>
-        /// Default to add all CommandExecutor that implements ICommandExecutor<> if don't have custom DI action
-        /// </summary>
-        private static void AddCommandExecutorImplemention(IServiceCollection services, CQRSOptionBuilder builder)
-        {
-            if (builder.RegisterCommandExecutorImplementationAction == null)
-            {
-                if (builder.CommandExecutorAssembly != null)
+                var implementationSouce = options.ImplementationSources[serviceTypeName];
+
+                var exportedTypes = implementationSouce.Assembly.GetExportedTypes();
+
+                if (!string.IsNullOrEmpty(implementationSouce.UnderNamespace))
                 {
-                    var baseInterfaceName = typeof(ICommandExecutor<>).Name;
-                    var registeredInterface = new List<Type>();
+                    exportedTypes = exportedTypes.Where(p => p.Namespace.Contains(implementationSouce.UnderNamespace)).ToArray();
+                }
 
-                    // Find all exported types
-                    foreach (var implementationType in builder.CommandExecutorAssembly.GetExportedTypes())
+                foreach (var exportedType in exportedTypes)
+                {
+                    if (exportedType.GetInterfaces().Any(p => p.Name == serviceTypeName))
                     {
-                        // Find interface that base of ICommandExecutor<>
-                        var targetInterface = implementationType.GetInterfaces().SingleOrDefault(p => p.IsGenericType && p.Name == baseInterfaceName);
-
-                        if (targetInterface != null)
-                        {
-                            // One command only can be used by one command executor
-                            if (registeredInterface.Any(p => p == targetInterface))
-                            {
-                                throw new InvalidOperationException($"{targetInterface.FullName} cannot be registered twice.");
-                            }
-                            else
-                            {
-                                services.AddTransient(targetInterface, implementationType);
-                                registeredInterface.Add(targetInterface);
-                            }
-                        }
+                        services.AddScoped(exportedType);
                     }
                 }
-            }
-            else
-            {
-                builder.RegisterCommandExecutorImplementationAction(services);
-            }
-        }
-
-        /// <summary>
-        /// Add DefaultEventBus as IEventBus if don't have custom DI action
-        /// </summary>
-        private static void AddEventBusImplemention(IServiceCollection services, CQRSOptionBuilder builder)
-        {
-            if (builder.RegisterEventBusImplementationAction == null)
-            {
-                services.AddScoped<IEventBus, DefaultEventBus>();
-            }
-            else
-            {
-                builder.RegisterEventBusImplementationAction(services);
-            }
-        }
-
-        /// <summary>
-        /// Add DefaultAggregateBuilder as IAggregateBuilder if don't have custom DI action
-        /// </summary>
-        private static void AddAggregateBuilderImplemention(IServiceCollection services, CQRSOptionBuilder builder)
-        {
-            if (builder.RegisterAggregateBuilderImplementationAction == null)
-            {
-                services.AddScoped<IAggregateBuilder, DefaultAggregateBuilder>();
-            }
-            else
-            {
-                builder.RegisterAggregateBuilderImplementationAction(services);
-            }
-        }
-
-        /// <summary>
-        /// Add DefaultAggregateBuilder as IDynamicRepositoryFactory if don't have custom DI action
-        /// </summary>
-        private static void AddDynamicRepositoryFactoryImplemention(IServiceCollection services, CQRSOptionBuilder builder)
-        {
-            if (builder.AddDynamicRepositoryFactoryAction == null)
-            {
-                services.AddScoped<IDynamicRepositoryFactory, DefaultDynamicRepositoryFactory>();
-            }
-            else
-            {
-                builder.AddDynamicRepositoryFactoryAction(services);
-            }
-        }
-
-        /// <summary>
-        /// Default to add all Query implement class if don't have custom DI action
-        /// </summary>
-        private static void AddQueryImplemention(IServiceCollection services, CQRSOptionBuilder builder)
-        {
-            if (builder.AddQueryAction == null)
-            {
-                if (builder.QueryAssembly != null)
-                {
-                    var baseQueryType = typeof(IQuery);
-
-                    // Find all exported types
-                    foreach (var implementationType in builder.QueryAssembly.GetExportedTypes())
-                    {
-                        // Find implementation type that base of IQuery
-                        var targentInterface = implementationType.GetInterfaces().SingleOrDefault(p => p == baseQueryType);
-                        if (targentInterface != null)
-                        {
-                            services.AddScoped(implementationType);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                builder.AddQueryAction(services);
-            }
-        }
-
-        /// <summary>
-        /// Add UnitOfWork as IUnitOfWork if don't have custom DI action
-        /// </summary>
-        private static void AddUnitOfWorkImplemention(IServiceCollection services, CQRSOptionBuilder builder)
-        {
-            if (builder.AddUnitOfWorkAction == null)
-            {
-                services.AddScoped<IUnitOfWork, DefaultUnitOfWork>();
-            }
-            else
-            {
-                builder.AddUnitOfWorkAction(services);
             }
         }
     }

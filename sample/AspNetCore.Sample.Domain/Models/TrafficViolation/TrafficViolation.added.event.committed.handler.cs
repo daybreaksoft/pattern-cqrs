@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AspNetCore.Sample.Domain.Models
 {
-    public class TrafficViolationAddedEventCommittedHandler : IEventCommittedHandler<TrafficViolationAddedEvent>
+    public class TrafficViolationAddedEventCommittedHandler : IPostCommitEventHandler<TrafficViolationAddedEvent>
     {
         public Task HandleAsync(TrafficViolationAddedEvent evnt)
         {

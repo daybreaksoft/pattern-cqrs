@@ -1,27 +1,27 @@
 ﻿using System.Reflection;
 
-namespace Daybreaksoft.Pattern.CQRS.Extensions
+namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
 {
     /// <summary>
     /// Specifies the assemblies and namespace which the implementation of the interface is executed.
     /// </summary>
     public class ImplementationSource
     {
-        public ImplementationSource(Assembly[] assemblies, string[] underNamespaces = null)
+        public ImplementationSource(Assembly assembly, string underNamespace = "")
         {
-            Assemblies = assemblies;
+            Assembly = assembly;
 
-            UnderNamespaces = underNamespaces;
+            UnderNamespace = underNamespace;
         }
 
         /// <summary>
         /// Specifies the assemblies which the implementation of the interface is executed.
         /// </summary>
-        public Assembly[] Assemblies { get; set; }
+        public Assembly Assembly { get; set; }
 
         /// <summary>
         /// Specifies the namespaces which the implementation of the interface is executed.
         /// </summary>
-        public string[] UnderNamespaces { get; set; }
+        public string UnderNamespace { get; set; }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Daybreaksoft.Pattern.CQRS
 {
-    public interface IEventCommittedHandler<in TEvent>
+    public interface IPostCommitEventHandler<in TEvent>
         where TEvent : IEvent
     {
         Task HandleAsync(TEvent evnt);

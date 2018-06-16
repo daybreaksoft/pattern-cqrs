@@ -1,38 +1,33 @@
-﻿using Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore;
+﻿using Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore;
+using Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore;
 using Daybreaksoft.Pattern.CQRS.Implementation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
-namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
+namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddCQRSWithEntityFramework(this IServiceCollection services, Action<CQRSEntityFrameworkOptionBuilder> builderAction)
+        public static IServiceCollection AddCQRSWithEntityFramework(this IServiceCollection services, Action<CQRSEntityFrameworkOptions> optionsAction)
         {
-            if (builderAction == null) throw new ArgumentNullException(nameof(builderAction));
+            if (optionsAction == null) throw new ArgumentNullException(nameof(optionsAction));
 
-            var builder = new CQRSEntityFrameworkOptionBuilder();
+            var options = new CQRSEntityFrameworkOptions();
 
-            builderAction(builder);
+            optionsAction(options);
 
-            // Add TDbContext as IDbContext if don't have custom DI action
-            if (builder.AddDbContextAction == null)
-            {
-                services.AddScoped(typeof(DbContext), builder.DbContextType);
-            }
-            else
-            {
-                builder.AddDbContextAction(services);
-            }
+            // Add an service that implemented ICommandBus.
+            AspNetCore.ServiceCollectionExtensions.AddService(services, options, typeof(DbContext), options.DbContextType);
+
 
             // Add DefaultRepository<> as IRepository<> if don't have custom DI action
-            if (builder.RegisterRepositoryImplementationAction == null)
-            {
-                services.AddScoped(typeof(IRepository<>), typeof(DefaultRepository<>));
-            }
+            //if (options.RegisterRepositoryImplementationAction == null)
+            //{
+            //    services.AddScoped(typeof(IRepository<>), typeof(DefaultRepository<>));
+            //}
 
-            services.AddCQRS(builder);
+            services.AddCQRS(options);
 
             return services;
         }

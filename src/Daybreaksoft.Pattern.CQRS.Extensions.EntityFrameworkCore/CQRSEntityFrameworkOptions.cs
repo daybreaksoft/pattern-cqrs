@@ -8,7 +8,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
     /// <summary>
     /// CQRS options of entity frmework builder
     /// </summary>
-    public class CQRSEntityFrameworkOptionBuilder : CQRSOptionBuilder
+    public class CQRSEntityFrameworkOptions : CQRSOptions
     {
         /// <summary>
         /// The type of implemented class of IDbContext

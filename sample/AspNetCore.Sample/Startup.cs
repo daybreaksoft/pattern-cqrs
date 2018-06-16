@@ -5,7 +5,7 @@ using AspNetCore.Sample.Domain.Models;
 using AspNetCore.Sample.Domain.Repository;
 using AspNetCore.Sample.Query.User;
 using Daybreaksoft.Pattern.CQRS;
-using Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore;
+using Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
