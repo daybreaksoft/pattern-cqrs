@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
@@ -9,27 +10,38 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
     /// </summary>
     public class CQRSOptionBuilder
     {
+        public CQRSOptionBuilder()
+        {
+            RegisterImplementationActions = new Dictionary<string, Action<IServiceCollection>>();
+        }
+
+        /// <summary>
+        /// A collection that encapsulates a method that registers the implementation of interface as a service.
+        /// Uses the name of interface as key.
+        /// </summary>
+        public Dictionary<string, Action<IServiceCollection>> RegisterImplementationActions { get; protected set; }
+
         #region Properties
 
         /// <summary>
-        /// Action that add repository implemented class
+        /// Encapsulates a method that registers the implementation of IRepository<> as a service.
         /// </summary>
-        public Action<IServiceCollection> AddRepositoryAction { get; protected set; }
+        public Action<IServiceCollection> RegisterRepositoryImplementationAction { get; protected set; }
 
         /// <summary>
-        /// Action that add dependency injection implemented class
+        /// Encapsulates a method that registers the implementation of IDependencyInjection as a service.
         /// </summary>
-        public Action<IServiceCollection> AddDependencyInjectionAction { get; protected set; }
+        public Action<IServiceCollection> RegisterDependencyInjectionImplementationAction { get; protected set; }
 
         /// <summary>
-        /// Action that add command bus implemented class
+        /// Encapsulates a method that registers the implementation of ICommandBus as a service.
         /// </summary>
-        public Action<IServiceCollection> AddCommandBusAction { get; protected set; }
+        public Action<IServiceCollection> RegisterCommandBusImplementationAction { get; protected set; }
 
         /// <summary>
-        /// Action that add command executor implemented class
+        /// Encapsulates a method that registers the implementation of ICommandExecute as a service.
         /// </summary>
-        public Action<IServiceCollection> AddCommandExecutorAction { get; protected set; }
+        public Action<IServiceCollection> RegisterCommandExecutorImplementationAction { get; protected set; }
 
         /// <summary>
         /// The assembly where the implemented type of command executor belong to
@@ -37,14 +49,14 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
         public Assembly CommandExecutorAssembly { get; protected set; }
 
         /// <summary>
-        /// Action that add implementation class of IEventBus
+        /// Encapsulates a method that registers the implementation of IEventBus as a service.
         /// </summary>
-        public Action<IServiceCollection> AddEventBusAction { get; protected set; }
+        public Action<IServiceCollection> RegisterEventBusImplementationAction { get; protected set; }
 
         /// <summary>
-        /// Action that add aggregate builder implemented class
+        /// Encapsulates a method that registers the implementation of IAggregateBuilder as a service.
         /// </summary>
-        public Action<IServiceCollection> AddAggregateBuilderAction { get; protected set; }
+        public Action<IServiceCollection> RegisterAggregateBuilderImplementationAction { get; protected set; }
 
         /// <summary>
         /// Action that add IDynamicRepositoryFactory implemented class
@@ -69,81 +81,93 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
         #endregion
 
         /// <summary>
-        /// Set custom DI action for repository
+        /// Adds a method that registers the implementation of IRepository<> as a service
         /// </summary>
         public void ForRepository(Action<IServiceCollection> action)
         {
-            AddRepositoryAction = action;
+            if (action == null) throw new ArgumentNullException(nameof(action));
+
+            RegisterImplementationActions.Add(typeof(IRepository<>).Name, action);
         }
 
         /// <summary>
-        /// Set custom DI action for dependency injection
+        /// Adds a method that registers the implementation of IDependencyInjection as a service
         /// </summary>
         public void ForDependencyInjection(Action<IServiceCollection> action)
         {
-            AddDependencyInjectionAction = action;
+            if (action == null) throw new ArgumentNullException(nameof(action));
+
+            RegisterImplementationActions.Add(typeof(IDependencyInjection).Name, action);
         }
 
         /// <summary>
-        /// Set custom DI action for command bus
+        /// Adds a method that registers the implementation of ICommandBus as a service
         /// </summary>
         public void ForCommandBus(Action<IServiceCollection> action)
         {
-            AddCommandBusAction = action;
+            if (action == null) throw new ArgumentNullException(nameof(action));
+
+            RegisterImplementationActions.Add(typeof(ICommandBus).Name, action);
         }
 
         /// <summary>
-        /// Set custom DI action for command executor
+        /// Adds a method that registers the implementation of ICommandExecutor<> as a service
         /// </summary>
         public void ForCommandExecutor(Action<IServiceCollection> action)
         {
-            AddCommandExecutorAction = action;
+            if (action == null) throw new ArgumentNullException(nameof(action));
 
-            CommandExecutorAssembly = null;
+            RegisterImplementationActions.Add(typeof(ICommandExecutor<>).Name, action);
         }
 
         /// <summary>
         /// Set the assemble where the implemented type of command executor is belong to
         /// </summary>
-        public void ForCommandExecutor(Assembly  assembly)
+        public void ForCommandExecutor(Assembly assembly)
         {
             CommandExecutorAssembly = assembly;
 
-            AddCommandExecutorAction = null;
+            RegisterCommandExecutorImplementationAction = null;
         }
 
         /// <summary>
-        /// Set custom DI action for IEventBus
+        /// Adds a method that registers the implementation of IEventBus as a service
         /// </summary>
         public void ForEventBus(Action<IServiceCollection> action)
         {
-            AddEventBusAction = action;
+            if (action == null) throw new ArgumentNullException(nameof(action));
+
+            RegisterImplementationActions.Add(typeof(IEventBus).Name, action);
         }
 
         /// <summary>
-        /// Set custom DI action for aggregate builder
+        /// Adds a method that registers the implementation of IAggregateBuilder as a service
         /// </summary>
         public void ForAggregateBuilder(Action<IServiceCollection> action)
         {
-            AddAggregateBuilderAction = action;
+            if (action == null) throw new ArgumentNullException(nameof(action));
+
+            RegisterImplementationActions.Add(typeof(IAggregateBuilder).Name, action);
         }
 
         /// <summary>
-        /// Set custom DI action for dynamic repository factory
+        /// Adds a method that registers the implementation of IDynamicRepositoryFactory as a service
         /// </summary>
         public void ForDynamicRepositoryFactory(Action<IServiceCollection> action)
         {
-            AddDynamicRepositoryFactoryAction = action;
+            if (action == null) throw new ArgumentNullException(nameof(action));
+
+            RegisterImplementationActions.Add(typeof(IDynamicRepositoryFactory).Name, action);
         }
 
         /// <summary>
-        /// Set custom DI action for query
+        /// Adds a method that registers the implementation of IQuery as a service
         /// </summary>
         public void ForQuery(Action<IServiceCollection> action)
         {
-            AddQueryAction = action;
+            if (action == null) throw new ArgumentNullException(nameof(action));
 
-            QueryAssembly = null;
+            RegisterImplementationActions.Add(typeof(IQuery).Name, action);
         }
 
         /// <summary>

@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Daybreaksoft.Extensions.Functions;
-using Daybreaksoft.Pattern.CQRS.Interface.Domain;
 
 namespace Daybreaksoft.Pattern.CQRS
 {
@@ -27,6 +25,8 @@ namespace Daybreaksoft.Pattern.CQRS
         public virtual async Task CommitAsync()
         {
             await StoreAggreateAsync();
+
+            await PublishEventsAsync();
         }
 
         #region Store Aggreate
@@ -63,6 +63,30 @@ namespace Daybreaksoft.Pattern.CQRS
         protected virtual async Task RemoveAggreateAsync(IAggregateRoot aggregate)
         {
             await DynamicRepositoryFactory.InvokeRemoveAsync(aggregate.GetType(), aggregate.Id);
+        }
+
+        #endregion
+
+        #region Publish Events
+
+        protected virtual async Task PublishEventsAsync()
+        {
+            foreach (var aggreate in UnCommittedAggregate.Where(p => p.State != AggregateState.Unchanged))
+            {
+                if (aggreate is IEventSource)
+                {
+                    var aggreateEvents = ((IEventSource)aggreate).Events;
+
+                    if (aggreateEvents.Any())
+                    {
+
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+            }
         }
 
         #endregion

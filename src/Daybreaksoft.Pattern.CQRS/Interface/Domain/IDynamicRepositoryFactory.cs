@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Daybreaksoft.Pattern.CQRS.Interface.Domain
+namespace Daybreaksoft.Pattern.CQRS
 {
     public interface IDynamicRepositoryFactory
     {

@@ -27,7 +27,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
             }
 
             // Add DefaultRepository<> as IRepository<> if don't have custom DI action
-            if (builder.AddRepositoryAction == null)
+            if (builder.RegisterRepositoryImplementationAction == null)
             {
                 services.AddScoped(typeof(IRepository<>), typeof(DefaultRepository<>));
             }

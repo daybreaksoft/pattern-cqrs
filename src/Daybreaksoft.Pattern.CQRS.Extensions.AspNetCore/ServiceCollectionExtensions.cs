@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Daybreaksoft.Pattern.CQRS.Interface.Domain;
 
 namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
 {
@@ -22,9 +21,9 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
         {
             if (builder == null) throw new ArgumentNullException(nameof(builder));
 
-            if (builder.AddCommandExecutorAction == null && builder.CommandExecutorAssembly == null)
+            if (builder.RegisterCommandExecutorImplementationAction == null && builder.CommandExecutorAssembly == null)
             {
-                throw new ArgumentNullException($"{nameof(builder.AddCommandExecutorAction)} and {builder.CommandExecutorAssembly} can't all be null");
+                throw new ArgumentNullException($"{nameof(builder.RegisterCommandExecutorImplementationAction)} and {builder.CommandExecutorAssembly} can't all be null");
             }
 
             AddRepositoryImplemention(services, builder);
@@ -53,7 +52,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
         /// </summary>
         private static void AddRepositoryImplemention(IServiceCollection services, CQRSOptionBuilder builder)
         {
-            builder.AddRepositoryAction?.Invoke(services);
+            builder.RegisterRepositoryImplementationAction?.Invoke(services);
         }
 
         /// <summary>
@@ -61,13 +60,13 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
         /// </summary>
         private static void AddDependencyInjectionImplemention(IServiceCollection services, CQRSOptionBuilder builder)
         {
-            if (builder.AddDependencyInjectionAction == null)
+            if (builder.RegisterDependencyInjectionImplementationAction == null)
             {
                 services.AddScoped<IDependencyInjection, DefaultDependencyInjection>();
             }
             else
             {
-                builder.AddRepositoryAction(services);
+                builder.RegisterRepositoryImplementationAction(services);
             }
         }
 
@@ -76,13 +75,13 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
         /// </summary>
         private static void AddCommandBusImplemention(IServiceCollection services, CQRSOptionBuilder builder)
         {
-            if (builder.AddCommandBusAction == null)
+            if (builder.RegisterCommandBusImplementationAction == null)
             {
                 services.AddScoped<ICommandBus, DefaultCommandBus>();
             }
             else
             {
-                builder.AddCommandBusAction(services);
+                builder.RegisterCommandBusImplementationAction(services);
             }
         }
 
@@ -91,7 +90,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
         /// </summary>
         private static void AddCommandExecutorImplemention(IServiceCollection services, CQRSOptionBuilder builder)
         {
-            if (builder.AddCommandExecutorAction == null)
+            if (builder.RegisterCommandExecutorImplementationAction == null)
             {
                 if (builder.CommandExecutorAssembly != null)
                 {
@@ -122,7 +121,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
             }
             else
             {
-                builder.AddCommandExecutorAction(services);
+                builder.RegisterCommandExecutorImplementationAction(services);
             }
         }
 
@@ -131,13 +130,13 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
         /// </summary>
         private static void AddEventBusImplemention(IServiceCollection services, CQRSOptionBuilder builder)
         {
-            if (builder.AddEventBusAction == null)
+            if (builder.RegisterEventBusImplementationAction == null)
             {
                 services.AddScoped<IEventBus, DefaultEventBus>();
             }
             else
             {
-                builder.AddEventBusAction(services);
+                builder.RegisterEventBusImplementationAction(services);
             }
         }
 
@@ -146,13 +145,13 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
         /// </summary>
         private static void AddAggregateBuilderImplemention(IServiceCollection services, CQRSOptionBuilder builder)
         {
-            if (builder.AddAggregateBuilderAction == null)
+            if (builder.RegisterAggregateBuilderImplementationAction == null)
             {
                 services.AddScoped<IAggregateBuilder, DefaultAggregateBuilder>();
             }
             else
             {
-                builder.AddAggregateBuilderAction(services);
+                builder.RegisterAggregateBuilderImplementationAction(services);
             }
         }
 

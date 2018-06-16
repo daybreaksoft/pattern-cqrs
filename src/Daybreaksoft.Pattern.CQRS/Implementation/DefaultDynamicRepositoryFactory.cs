@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Daybreaksoft.Extensions.Functions;
-using Daybreaksoft.Pattern.CQRS.Interface.Domain;
 
 namespace Daybreaksoft.Pattern.CQRS.Implementation
 {
