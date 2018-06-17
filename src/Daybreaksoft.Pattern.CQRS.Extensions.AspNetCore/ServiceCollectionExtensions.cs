@@ -31,7 +31,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
         public static IServiceCollection AddCQRS(this IServiceCollection services, CQRSOptions options)
         {
             if (options == null) throw new ArgumentNullException(nameof(options));
-            
+
             // Add an service that implemented IDependencyInjection.
             AddService(services, options, typeof(IDependencyInjection), typeof(DefaultDependencyInjection));
 
@@ -127,9 +127,18 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
 
                 foreach (var exportedType in exportedTypes)
                 {
-                    if (exportedType.GetInterfaces().Any(p => p.Name == serviceTypeName))
+                    var registersService = exportedType.GetInterfaces().SingleOrDefault(p => p.Name == serviceTypeName);
+
+                    if (registersService != null)
                     {
-                        services.AddScoped(exportedType);
+                        if (registersService.IsGenericType)
+                        {
+                            services.AddScoped(registersService, exportedType);
+                        }
+                        else
+                        {
+                            services.AddScoped(exportedType);
+                        }
                     }
                 }
             }

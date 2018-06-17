@@ -8,14 +8,16 @@ namespace Daybreaksoft.Pattern.CQRS
     {
         protected readonly IAggregateBuilder AggregateBuilder;
         protected readonly IDynamicRepositoryFactory DynamicRepositoryFactory;
+        protected readonly IEventBus EventBus;
 
-        public DefaultUnitOfWork(IAggregateBuilder aggregateBuilder, IDynamicRepositoryFactory dynamicRepositoryFactory)
+        public DefaultUnitOfWork(IAggregateBuilder aggregateBuilder, IDynamicRepositoryFactory dynamicRepositoryFactory, IEventBus eventBus)
         {
             AggregateBuilder = aggregateBuilder;
             DynamicRepositoryFactory = dynamicRepositoryFactory;
+            EventBus = eventBus;
         }
 
-        public List<IAggregateRoot> UnCommittedAggregate { get; protected set; } = new List<IAggregateRoot>();
+        public List<IAggregateRoot> UncommittedAggregate { get; protected set; } = new List<IAggregateRoot>();
 
         public virtual async Task OpenAsync()
         {
@@ -25,29 +27,34 @@ namespace Daybreaksoft.Pattern.CQRS
         public virtual async Task CommitAsync()
         {
             await StoreAggreateAsync();
-
-            await PublishEventsAsync();
         }
 
         #region Store Aggreate
 
         protected virtual async Task StoreAggreateAsync()
         {
-            foreach (var aggreate in UnCommittedAggregate)
+            foreach (var aggregate in UncommittedAggregate)
             {
-                if (aggreate.State == AggregateState.Added)
-                {
-                    await InsertAggreateAsync(aggreate);
-                }
-                else if (aggreate.State == AggregateState.Modified)
-                {
-                    await UpdateAggreateAsync(aggreate);
-                }
-                else if (aggreate.State == AggregateState.Deleted)
-                {
-                    await RemoveAggreateAsync(aggreate);
-                }
+                await ExecutStoreAsync(aggregate);
             }
+        }
+
+        protected virtual async Task ExecutStoreAsync(IAggregateRoot aggregate)
+        {
+            if (aggregate.State == AggregateState.Added)
+            {
+                await InsertAggreateAsync(aggregate);
+            }
+            else if (aggregate.State == AggregateState.Modified)
+            {
+                await UpdateAggreateAsync(aggregate);
+            }
+            else if (aggregate.State == AggregateState.Deleted)
+            {
+                await RemoveAggreateAsync(aggregate);
+            }
+
+            await PublishEventsAsync(aggregate);
         }
 
         protected virtual async Task InsertAggreateAsync(IAggregateRoot aggregate)
@@ -69,21 +76,17 @@ namespace Daybreaksoft.Pattern.CQRS
 
         #region Publish Events
 
-        protected virtual async Task PublishEventsAsync()
+        protected virtual async Task PublishEventsAsync(IAggregateRoot aggregate)
         {
-            foreach (var aggreate in UnCommittedAggregate.Where(p => p.State != AggregateState.Unchanged))
+            if (aggregate is IEventSource)
             {
-                if (aggreate is IEventSource)
+                var aggregateEvents = ((IEventSource)aggregate).Events;
+
+                if (aggregateEvents.Any())
                 {
-                    var aggreateEvents = ((IEventSource)aggreate).Events;
-
-                    if (aggreateEvents.Any())
+                    foreach (var evnt in aggregateEvents)
                     {
-
-                    }
-                    else
-                    {
-                        continue;
+                        await EventBus.PublishAsync(evnt);
                     }
                 }
             }
@@ -91,22 +94,30 @@ namespace Daybreaksoft.Pattern.CQRS
 
         #endregion
 
-        public virtual TAggregateRoot BuildAggregate<TAggregateRoot>(bool addToUnCommitted = true) where TAggregateRoot : IAggregateRoot, new()
+        public virtual TAggregateRoot BuildAggregate<TAggregateRoot>(bool addToUncommitted = true) where TAggregateRoot : IAggregateRoot, new()
         {
             var aggregate = AggregateBuilder.BuildAggregate<TAggregateRoot>();
 
-            if (addToUnCommitted) UnCommittedAggregate.Add(aggregate);
+            if (addToUncommitted) UncommittedAggregate.Add(aggregate);
 
             return aggregate;
         }
 
-        public virtual async Task<TAggregateRoot> GetAggregate<TAggregateRoot>(object id, bool addToUnCommitted = true) where TAggregateRoot : IAggregateRoot, new()
+        public virtual async Task<TAggregateRoot> GetAggregate<TAggregateRoot>(object id, bool addToUncommitted = true) where TAggregateRoot : IAggregateRoot, new()
         {
-            var aggregate = await AggregateBuilder.GetAggregate<TAggregateRoot>(id);
+            var existsAggregate = UncommittedAggregate.SingleOrDefault(p => p.Id == id);
 
-            if (addToUnCommitted) UnCommittedAggregate.Add(aggregate);
+            if (existsAggregate == null)
+            {
+                var aggregate = await AggregateBuilder.GetAggregate<TAggregateRoot>(id);
 
-            return aggregate;
+                if (addToUncommitted) UncommittedAggregate.Add(aggregate);
+
+                return aggregate;
+            }
+            else {
+                return (TAggregateRoot)existsAggregate;
+            }
         }
     }
 }

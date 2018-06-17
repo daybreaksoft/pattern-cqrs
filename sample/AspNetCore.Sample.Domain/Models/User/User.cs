@@ -15,6 +15,8 @@ namespace AspNetCore.Sample.Domain.Models
         public void DeductPoint(int point)
         {
             this.Point = this.Point - point;
+
+            this.Modify();
         }
 
         #endregion

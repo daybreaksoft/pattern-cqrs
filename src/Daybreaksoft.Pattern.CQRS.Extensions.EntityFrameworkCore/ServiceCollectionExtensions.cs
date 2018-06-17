@@ -16,20 +16,28 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
             var options = new CQRSEntityFrameworkOptions();
 
             optionsAction(options);
-
+            
             // Add an service that implemented ICommandBus.
             AspNetCore.ServiceCollectionExtensions.AddService(services, options, typeof(DbContext), options.DbContextType);
 
-
-            // Add DefaultRepository<> as IRepository<> if don't have custom DI action
-            //if (options.RegisterRepositoryImplementationAction == null)
-            //{
-            //    services.AddScoped(typeof(IRepository<>), typeof(DefaultRepository<>));
-            //}
+            AddRepositoryService(services, options);
 
             services.AddCQRS(options);
 
             return services;
+        }
+
+        private static void AddRepositoryService(IServiceCollection services, CQRSEntityFrameworkOptions options)
+        {
+            var serviceTypeName = typeof(IRepository<>).Name;
+
+            if (!options.RegisterImplementationActions.ContainsKey(serviceTypeName))
+            {
+                options.ForRepository((s) =>
+                {
+                    s.AddScoped(typeof(IRepository<>), typeof(DefaultRepository<>));
+                });
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using Daybreaksoft.Extensions.Functions;
+using System.Threading.Tasks;
 
 namespace Daybreaksoft.Pattern.CQRS.Implementation
 {
@@ -8,17 +9,20 @@ namespace Daybreaksoft.Pattern.CQRS.Implementation
     public class DefaultEventBus : IEventBus
     {
         protected readonly IDependencyInjection DI;
-        protected readonly IUnitOfWork UnitOfWork;
         
-        public DefaultEventBus(IDependencyInjection di, IUnitOfWork unitOfWork)
+        public DefaultEventBus(IDependencyInjection di)
         {
             DI = di;
-            UnitOfWork = unitOfWork;
         }
 
-        public Task PublishAsync<TEvent>(TEvent evnt) where TEvent : IEvent
+        public async Task PublishAsync(IEvent evnt)
         {
-            throw new System.NotImplementedException();
+            var handlerType = typeof(IEventHandler<>);
+            handlerType = handlerType.MakeGenericType(evnt.GetType());
+
+            var handler = DI.GetService(handlerType);
+
+            await (Task)handlerType.InvokeMethod("HandleAsync", handler, evnt);
         }
     }
 }

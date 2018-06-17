@@ -33,6 +33,8 @@ namespace AspNetCore.Sample
             {
                 builder.ForDbContext<SampleDbContext>();
                 builder.ForCommandExecutor(typeof(CreateUserCommandExecutor).GetTypeInfo().Assembly);
+                builder.ForEventHandler(typeof(TrafficViolationAddedEventHandler).GetTypeInfo().Assembly);
+                builder.ForPostCommitEventHandler(typeof(TrafficViolationAddedEventCommittedHandler).GetTypeInfo().Assembly);
                 builder.ForQuery(typeof(UserQuery).GetTypeInfo().Assembly);
             });
 

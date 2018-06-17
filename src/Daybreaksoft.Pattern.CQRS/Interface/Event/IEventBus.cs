@@ -4,6 +4,6 @@ namespace Daybreaksoft.Pattern.CQRS
 {
     public interface IEventBus
     {
-        Task PublishAsync<TEvent>(TEvent evnt) where TEvent : IEvent;
+        Task PublishAsync(IEvent evnt);
     }
 }

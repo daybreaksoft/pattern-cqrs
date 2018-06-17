@@ -16,6 +16,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
         public CQRSOptions()
         {
             RegisterImplementationActions = new Dictionary<string, Action<IServiceCollection>>();
+            ImplementationSources = new Dictionary<string, ImplementationSource>();
         }
 
         /// <summary>
