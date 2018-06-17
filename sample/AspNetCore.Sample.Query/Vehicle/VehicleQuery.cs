@@ -1,12 +1,9 @@
-﻿using Daybreaksoft.Extensions.Functions;
-using Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore;
+﻿using Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using AspNetCore.Sample.Domain;
+using AspNetCore.Sample.Data;
 
 namespace AspNetCore.Sample.Query.Vehicle
 {
@@ -19,7 +16,7 @@ namespace AspNetCore.Sample.Query.Vehicle
         public async Task<IEnumerable<VehicleListItemViewModel>> GetVehicles()
         {
             var query = from v in Db.Vehicles
-                join u in Db.Users on v.UserId equals u.Id
+                join u in Db.Users on v.UserId equals u.UserId
                 select new VehicleListItemViewModel
                 {
                     VehicleId = v.VehicleId,

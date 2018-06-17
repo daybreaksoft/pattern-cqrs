@@ -4,7 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AspNetCore.Sample.Domain;
+using AspNetCore.Sample.Data;
+using AspNetCore.Sample.Data.Entities;
 
 namespace AspNetCore.Sample.Query.User
 {
@@ -23,7 +24,7 @@ namespace AspNetCore.Sample.Query.User
 
         #region Private Helper
 
-        private T UserViewModelTransfer<T>(Domain.Models.User user) where T : new()
+        private T UserViewModelTransfer<T>(UserEntity user) where T : new()
         {
             var userViewModel = new T();
 

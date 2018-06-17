@@ -16,7 +16,7 @@ namespace AspNetCore.Sample.Command
         public async Task ExecuteAsync(DeleteUserCommand command)
         {
             var model = UnitOfWork.BuildAggregate<User>();
-            model.UserId = command.UserId;
+            model.Id = command.UserId;
 
             model.Remove();
 

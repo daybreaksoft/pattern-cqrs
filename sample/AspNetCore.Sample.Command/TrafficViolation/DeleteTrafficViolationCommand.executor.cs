@@ -16,7 +16,7 @@ namespace AspNetCore.Sample.Command
         public async Task ExecuteAsync(DeleteTrafficViolationCommand command)
         {
             var model = UnitOfWork.BuildAggregate<TrafficViolation>();
-            model.TrafficViolationId = command.TrafficViolationId;
+            model.Id = command.TrafficViolationId;
 
             model.Remove();
 

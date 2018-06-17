@@ -15,7 +15,7 @@ namespace AspNetCore.Sample.Command.Vehicle
         public async Task ExecuteAsync(DeleteVehicleCommand command)
         {
             var model = UnitOfWork.BuildAggregate<Domain.Models.Vehicle>();
-            model.VehicleId = command.VehicleId;
+            model.Id = command.VehicleId;
 
             model.Remove();
 

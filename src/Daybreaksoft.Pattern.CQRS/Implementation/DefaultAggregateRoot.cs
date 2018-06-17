@@ -1,7 +1,4 @@
-﻿using Newtonsoft.Json;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Daybreaksoft.Pattern.CQRS
+﻿namespace Daybreaksoft.Pattern.CQRS
 {
     /// <summary>
     /// Abstract AggregateRoot

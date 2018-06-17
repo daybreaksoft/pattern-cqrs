@@ -5,7 +5,7 @@
     /// </summary>
     public interface IAggregateRoot
     {
-        object Id { get; }
+        object Id { get; set; }
 
         AggregateState State { get; }
     }

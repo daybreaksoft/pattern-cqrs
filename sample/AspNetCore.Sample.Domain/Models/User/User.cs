@@ -1,14 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using Daybreaksoft.Pattern.CQRS;
+﻿using Daybreaksoft.Pattern.CQRS;
 
 namespace AspNetCore.Sample.Domain.Models
 {
-    public partial class User : DefaultAggregateRoot
+    public class User : DefaultAggregateRoot
     {
-        [NotMapped]
-        public override object Id => UserId;
+        public string Username { get; set; }
 
-        public virtual UserRole[] Roles { get; set; }
+        public int Point { get; set; }
+
+        //public virtual UserRole[] Roles { get; set; }
 
         #region Behaviors
 
