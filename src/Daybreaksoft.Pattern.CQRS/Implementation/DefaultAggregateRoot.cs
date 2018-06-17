@@ -5,6 +5,9 @@
     /// </summary>
     public abstract class DefaultAggregateRoot : AggregateRoot
     {
+        public DefaultAggregateRoot(IEventBus eventBus):base(eventBus)
+        {
+        }
 
         public virtual void Add()
         {

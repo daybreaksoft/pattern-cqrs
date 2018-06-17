@@ -8,18 +8,18 @@ namespace AspNetCore.Sample.Domain.Models
 {
     public class TrafficViolationAddedEventHandler : IEventHandler<TrafficViolationAddedEvent>
     {
-        protected readonly IUnitOfWork UnitOfWork;
+        protected readonly IAggregateBus AggregateBus;
 
-        public TrafficViolationAddedEventHandler(IUnitOfWork unitOfWork)
+        public TrafficViolationAddedEventHandler(IAggregateBus aggregateBus)
         {
-            UnitOfWork = unitOfWork;
+            AggregateBus = aggregateBus;
         }
 
         public async Task HandleAsync(TrafficViolationAddedEvent evnt)
         {
-            var vehicleModel = await UnitOfWork.GetAggregate<Vehicle>(evnt.VehicleId, false);
+            var vehicleModel = await AggregateBus.GetExsitsAggregate<Vehicle>(evnt.VehicleId);
 
-            var userModel = await UnitOfWork.GetAggregate<User>(vehicleModel.UserId);
+            var userModel = await AggregateBus.GetExsitsAggregate<User>(vehicleModel.UserId);
 
             userModel.DeductPoint(evnt.DeductPoint);
         }

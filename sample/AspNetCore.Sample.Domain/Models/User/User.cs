@@ -4,6 +4,10 @@ namespace AspNetCore.Sample.Domain.Models
 {
     public class User : DefaultAggregateRoot
     {
+        public User(IEventBus eventBus) : base(eventBus)
+        {
+        }
+
         public string Username { get; set; }
 
         public int Point { get; set; }

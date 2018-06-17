@@ -15,22 +15,17 @@ namespace Daybreaksoft.Pattern.CQRS
         Task<TAggregateRoot> FindAsync(object id);
 
         /// <summary>
-        /// Find all entities
+        /// Insert an new aggreagate
         /// </summary>
-        Task<List<TAggregateRoot>> FindAllAsync();
+        Task InsertAsync(TAggregateRoot aggreagate);
 
         /// <summary>
-        /// Insert an new entity
+        /// Update an aggreagate
         /// </summary>
-        Task InsertAsync(TAggregateRoot entity);
+        Task UpdateAsync(TAggregateRoot aggreagate);
 
         /// <summary>
-        /// Update an entity
-        /// </summary>
-        Task UpdateAsync(TAggregateRoot entity);
-
-        /// <summary>
-        /// Delete an entity by id
+        /// Delete an aggreagate by id
         /// </summary>
         Task RemoveAsync(object id);
     }

@@ -6,17 +6,16 @@ namespace AspNetCore.Sample.Command
 {
     public class DeleteUserCommandExecutor : ICommandExecutor<DeleteUserCommand>
     {
-        protected readonly IUnitOfWork UnitOfWork;
+        protected readonly IAggregateBus AggregateBus;
 
-        public DeleteUserCommandExecutor(IUnitOfWork unitOfWork)
+        public DeleteUserCommandExecutor(IAggregateBus aggregateBus)
         {
-            UnitOfWork = unitOfWork;
+            AggregateBus = aggregateBus;
         }
 
         public async Task ExecuteAsync(DeleteUserCommand command)
         {
-            var model = UnitOfWork.BuildAggregate<User>();
-            model.Id = command.UserId;
+            var model = AggregateBus.BuildAggregate<User>(command.UserId);
 
             model.Remove();
 

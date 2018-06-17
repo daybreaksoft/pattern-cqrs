@@ -6,17 +6,16 @@ namespace AspNetCore.Sample.Command
 {
     public class DeleteTrafficViolationCommandExecutor : ICommandExecutor<DeleteTrafficViolationCommand>
     {
-        protected readonly IUnitOfWork UnitOfWork;
+        protected readonly IAggregateBus AggregateBus;
 
-        public DeleteTrafficViolationCommandExecutor(IUnitOfWork unitOfWork)
+        public DeleteTrafficViolationCommandExecutor(IAggregateBus aggregateBus)
         {
-            UnitOfWork = unitOfWork;
+            AggregateBus = aggregateBus;
         }
 
         public async Task ExecuteAsync(DeleteTrafficViolationCommand command)
         {
-            var model = UnitOfWork.BuildAggregate<TrafficViolation>();
-            model.Id = command.TrafficViolationId;
+            var model = AggregateBus.BuildAggregate<TrafficViolation>(command.TrafficViolationId);
 
             model.Remove();
 

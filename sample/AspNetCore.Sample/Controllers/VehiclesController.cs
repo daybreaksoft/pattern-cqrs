@@ -27,11 +27,11 @@ namespace AspNetCore.Sample.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Edit([FromRoute]int? id, [FromServices] UserQuery userQuery, [FromServices] IAggregateBuilder aggregateBuilder)
+        public async Task<IActionResult> Edit([FromRoute]int? id, [FromServices] UserQuery userQuery, [FromServices] IAggregateBus aggregateBus)
         {
             // Get users as selectitem
             var users = await userQuery.GetUsers();
-            ViewBag.UserListItems = users.Select(p => new SelectListItem(p.Username, p.UserId.ToString()));
+            ViewBag.UserListItems = users.Select(p => new SelectListItem(p.Username, p.Id.ToString()));
 
             // Load vehicle if edit
             VehicleViewModel viewModel = null;
@@ -39,7 +39,7 @@ namespace AspNetCore.Sample.Controllers
             if (id.HasValue)
             {
                 // Load vehicle
-                var vehicleModel = await aggregateBuilder.GetAggregate<Vehicle>(id);
+                var vehicleModel = await aggregateBus.GetExsitsAggregate<Vehicle>(id);
 
                 // Build view model
                 viewModel = new VehicleViewModel();

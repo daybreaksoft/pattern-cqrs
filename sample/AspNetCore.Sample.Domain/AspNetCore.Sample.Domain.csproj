@@ -11,6 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore\Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\src\Daybreaksoft.Pattern.CQRS\Daybreaksoft.Pattern.CQRS.csproj" />
+    <ProjectReference Include="..\AspNetCore.Sample.Data\AspNetCore.Sample.Data.csproj" />
   </ItemGroup>
 
 </Project>

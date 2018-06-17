@@ -6,18 +6,16 @@ namespace Daybreaksoft.Pattern.CQRS
 {
     public class DefaultUnitOfWork : IUnitOfWork
     {
-        protected readonly IAggregateBuilder AggregateBuilder;
+        protected readonly IAggregateBus AggregateBus;
         protected readonly IDynamicRepositoryFactory DynamicRepositoryFactory;
         protected readonly IEventBus EventBus;
 
-        public DefaultUnitOfWork(IAggregateBuilder aggregateBuilder, IDynamicRepositoryFactory dynamicRepositoryFactory, IEventBus eventBus)
+        public DefaultUnitOfWork(IAggregateBus aggregateBus, IDynamicRepositoryFactory dynamicRepositoryFactory, IEventBus eventBus)
         {
-            AggregateBuilder = aggregateBuilder;
+            AggregateBus = aggregateBus;
             DynamicRepositoryFactory = dynamicRepositoryFactory;
             EventBus = eventBus;
         }
-
-        public List<IAggregateRoot> UncommittedAggregate { get; protected set; } = new List<IAggregateRoot>();
 
         public virtual async Task OpenAsync()
         {
@@ -33,7 +31,7 @@ namespace Daybreaksoft.Pattern.CQRS
 
         protected virtual async Task StoreAggreateAsync()
         {
-            foreach (var aggregate in UncommittedAggregate)
+            foreach (var aggregate in AggregateBus.Aggregates)
             {
                 await ExecutStoreAsync(aggregate);
             }
@@ -93,31 +91,5 @@ namespace Daybreaksoft.Pattern.CQRS
         }
 
         #endregion
-
-        public virtual TAggregateRoot BuildAggregate<TAggregateRoot>(bool addToUncommitted = true) where TAggregateRoot : IAggregateRoot, new()
-        {
-            var aggregate = AggregateBuilder.BuildAggregate<TAggregateRoot>();
-
-            if (addToUncommitted) UncommittedAggregate.Add(aggregate);
-
-            return aggregate;
-        }
-
-        public virtual async Task<TAggregateRoot> GetAggregate<TAggregateRoot>(object id, bool addToUncommitted = true) where TAggregateRoot : IAggregateRoot, new()
-        {
-            var existsAggregate = UncommittedAggregate.SingleOrDefault(p => p.Id == id);
-
-            if (existsAggregate == null)
-            {
-                var aggregate = await AggregateBuilder.GetAggregate<TAggregateRoot>(id);
-
-                if (addToUncommitted) UncommittedAggregate.Add(aggregate);
-
-                return aggregate;
-            }
-            else {
-                return (TAggregateRoot)existsAggregate;
-            }
-        }
     }
 }

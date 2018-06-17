@@ -9,7 +9,7 @@
 
     public class TrafficViolationListItemViewModel
     {
-        public int TrafficViolationId { get; set; }
+        public int Id { get; set; }
 
         public string VehiclePlateNumber { get; set; }
 

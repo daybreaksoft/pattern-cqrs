@@ -5,6 +5,13 @@
     /// </summary>
     public abstract class AggregateRoot : IAggregateRoot, IEventSource
     {
+        protected readonly IEventBus EventBus;
+
+        public AggregateRoot(IEventBus eventBus)
+        {
+            EventBus = eventBus;
+        }
+
         public object Id { get; set; }
 
         protected AggregateState _state;

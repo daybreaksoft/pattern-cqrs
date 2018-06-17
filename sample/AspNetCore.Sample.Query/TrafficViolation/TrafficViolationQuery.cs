@@ -16,10 +16,10 @@ namespace AspNetCore.Sample.Query.TrafficViolation
         public async Task<IEnumerable<TrafficViolationListItemViewModel>> GetTrafficViolations()
         {
             var query = from tv in Db.TrafficViolations
-                join v in Db.Vehicles on tv.VehicleId equals v.VehicleId
+                join v in Db.Vehicles on tv.VehicleId equals v.Id
                 select new TrafficViolationListItemViewModel
                 {
-                    TrafficViolationId = tv.TrafficViolationId,
+                    Id = tv.Id,
                     VehiclePlateNumber = v.PlateNumber,
                     DeductPoint = tv.DeductPoint,
                 };

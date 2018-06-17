@@ -8,7 +8,7 @@ namespace AspNetCore.Sample.Data.Entities
     public class TrafficViolationEntity : IEntity
     {
         [Key]
-        public int TrafficViolationId { get; set; }
+        public int Id { get; set; }
 
         [Required, ForeignKey("Vehicle")]
         public int VehicleId { get; set; }

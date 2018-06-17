@@ -5,6 +5,10 @@ namespace AspNetCore.Sample.Domain.Models
 {
     public class TrafficViolation : DefaultAggregateRoot
     {
+        public TrafficViolation(IEventBus eventBus) : base(eventBus)
+        {
+        }
+
         public int VehicleId { get; set; }
 
         public int DeductPoint { get; set; }

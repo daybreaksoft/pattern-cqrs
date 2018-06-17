@@ -16,10 +16,10 @@ namespace AspNetCore.Sample.Query.Vehicle
         public async Task<IEnumerable<VehicleListItemViewModel>> GetVehicles()
         {
             var query = from v in Db.Vehicles
-                join u in Db.Users on v.UserId equals u.UserId
+                join u in Db.Users on v.UserId equals u.Id
                 select new VehicleListItemViewModel
                 {
-                    VehicleId = v.VehicleId,
+                    Id = v.Id,
                     PlateNumber = v.PlateNumber,
                     Username = u.Username,
                     UserPoint = u.Point
@@ -35,7 +35,7 @@ namespace AspNetCore.Sample.Query.Vehicle
             var query = from v in Db.Vehicles
                 select new VehicleSelectListItemViewModel
                 {
-                    VehicleId = v.VehicleId,
+                    Id = v.Id,
                     PlateNumber = v.PlateNumber
                 };
 

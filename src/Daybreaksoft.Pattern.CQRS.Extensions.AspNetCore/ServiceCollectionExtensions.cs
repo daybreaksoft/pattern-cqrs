@@ -35,21 +35,14 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
             // Add an service that implemented IDependencyInjection.
             AddService(services, options, typeof(IDependencyInjection), typeof(DefaultDependencyInjection));
 
-            // Add an service that implemented IAggregateBuilder.
-            AddService(services, options, typeof(IAggregateBuilder), typeof(DefaultAggregateBuilder));
+            // Add an service that implemented IAggregateBus.
+            AddService(services, options, typeof(IAggregateBus), typeof(DefaultAggregateBus));
 
             // Add an service that implemented IUnitOfWork.
             AddService(services, options, typeof(IUnitOfWork), typeof(DefaultUnitOfWork));
 
-            // Add services that implemeted IRepository<>.
-            if (!options.RegisterImplementationActions.ContainsKey(typeof(IRepository<>).Name))
-            {
-                throw new NullReferenceException("Must provide the action that sets up IRepository<> services.");
-            }
-            else
-            {
-                options.RegisterImplementationActions[typeof(IRepository<>).Name].Invoke(services);
-            }
+            // Add services that implemented IRepository<>
+            AddServices(services, options, typeof(IRepository<>));
 
             // Add an service that implemented IDynamicRepositoryFactory.
             AddService(services, options, typeof(IDynamicRepositoryFactory), typeof(DefaultDynamicRepositoryFactory));
@@ -68,6 +61,9 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
 
             // Add services that implemented IPostCommitEventHandler<>
             AddServices(services, options, typeof(IPostCommitEventHandler<>));
+
+            // Add services that implemented IAggregateRoot
+            AddServices(services, options, typeof(IAggregateRoot));
 
             // Add services that implemented IQuery
             AddServices(services, options, typeof(IQuery));

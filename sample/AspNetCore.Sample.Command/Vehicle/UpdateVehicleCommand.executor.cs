@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using AspNetCore.Sample.Domain.Models;
 using Daybreaksoft.Extensions.Functions;
 using Daybreaksoft.Pattern.CQRS;
 
@@ -6,16 +7,16 @@ namespace AspNetCore.Sample.Command
 {
     public class UpdateVehicleCommandExecutor : ICommandExecutor<UpdateVehicleCommand>
     {
-        protected readonly IUnitOfWork UnitOfWork;
+        protected readonly IAggregateBus AggregateBus;
 
-        public UpdateVehicleCommandExecutor(IUnitOfWork unitOfWork)
+        public UpdateVehicleCommandExecutor(IAggregateBus aggregateBus)
         {
-            UnitOfWork = unitOfWork;
+            AggregateBus = aggregateBus;
         }
 
         public async Task ExecuteAsync(UpdateVehicleCommand command)
         {
-            var model = await UnitOfWork.GetAggregate<Domain.Models.Vehicle>(command.VehicleId);
+            var model = await AggregateBus.GetExsitsAggregate<Vehicle>(command.VehicleId);
 
             model.Modify();
 

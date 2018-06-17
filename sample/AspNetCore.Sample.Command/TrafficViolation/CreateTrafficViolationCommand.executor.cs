@@ -7,16 +7,16 @@ namespace AspNetCore.Sample.Command
 {
     public class CreateTrafficViolationCommandExecutor : ICommandExecutor<CreateTrafficViolationCommand>
     {
-        protected readonly IUnitOfWork UnitOfWork;
+        protected readonly IAggregateBus AggregateBus;
 
-        public CreateTrafficViolationCommandExecutor(IUnitOfWork unitOfWork)
+        public CreateTrafficViolationCommandExecutor(IAggregateBus aggregateBus)
         {
-            UnitOfWork = unitOfWork;
+            AggregateBus = aggregateBus;
         }
 
         public async Task ExecuteAsync(CreateTrafficViolationCommand command)
         {
-            var newModel = UnitOfWork.BuildAggregate<TrafficViolation>();
+            var newModel = AggregateBus.BuildAggregate<TrafficViolation>();
 
             command.CopyValueTo(newModel);
 

@@ -1,21 +1,22 @@
 ﻿using System.Threading.Tasks;
+using AspNetCore.Sample.Domain.Models;
 using Daybreaksoft.Extensions.Functions;
 using Daybreaksoft.Pattern.CQRS;
 
-namespace AspNetCore.Sample.Command.Vehicle
+namespace AspNetCore.Sample.Command
 {
     public class CreateVehicleCommandExecutor : ICommandExecutor<CreateVehicleCommand>
     {
-        protected readonly IUnitOfWork UnitOfWork;
+        protected readonly IAggregateBus AggregateBus;
 
-        public CreateVehicleCommandExecutor(IUnitOfWork unitOfWork)
+        public CreateVehicleCommandExecutor(IAggregateBus aggregateBus)
         {
-            UnitOfWork = unitOfWork;
+            AggregateBus = aggregateBus;
         }
 
         public async Task ExecuteAsync(CreateVehicleCommand command)
         {
-            var newModel = UnitOfWork.BuildAggregate<Domain.Models.Vehicle>();
+            var newModel = AggregateBus.BuildAggregate<Vehicle>();
 
             command.CopyValueTo(newModel);
 

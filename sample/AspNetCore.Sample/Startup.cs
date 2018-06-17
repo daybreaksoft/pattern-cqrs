@@ -29,10 +29,14 @@ namespace AspNetCore.Sample
 
             services.AddCQRSWithEntityFramework(builder =>
             {
+                var domainAssembly = typeof(User).GetTypeInfo().Assembly;
+
                 builder.ForDbContext<SampleDbContext>();
                 builder.ForCommandExecutor(typeof(CreateUserCommandExecutor).GetTypeInfo().Assembly);
-                builder.ForEventHandler(typeof(TrafficViolationAddedEventHandler).GetTypeInfo().Assembly);
-                builder.ForPostCommitEventHandler(typeof(TrafficViolationAddedEventCommittedHandler).GetTypeInfo().Assembly);
+                builder.ForRepository(domainAssembly, "AspNetCore.Sample.Domain.Models");
+                builder.ForAggregate(domainAssembly, "AspNetCore.Sample.Domain.Models");
+                builder.ForEventHandler(domainAssembly, "AspNetCore.Sample.Domain.Models");
+                builder.ForPostCommitEventHandler(domainAssembly, "AspNetCore.Sample.Domain.Models");
                 builder.ForQuery(typeof(UserQuery).GetTypeInfo().Assembly);
             });
 

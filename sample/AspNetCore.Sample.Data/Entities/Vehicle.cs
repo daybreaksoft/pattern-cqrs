@@ -9,7 +9,7 @@ namespace AspNetCore.Sample.Data.Entities
     public class VehicleEntity : IEntity
     {
         [Key]
-        public int VehicleId { get; set; }
+        public int Id { get; set; }
 
         [Required, ForeignKey("User")]
         public int UserId { get; set; }
@@ -18,7 +18,7 @@ namespace AspNetCore.Sample.Data.Entities
         [StringLength(50)]
         public string PlateNumber { get; set; }
 
-        public virtual UserEntity UserEntity { get; set; }
+        public virtual UserEntity User { get; set; }
 
         public virtual ICollection<TrafficViolationEntity> TrafficViolations { get; set; }
     }

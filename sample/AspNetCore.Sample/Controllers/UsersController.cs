@@ -18,14 +18,14 @@ namespace AspNetCore.Sample.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Edit([FromRoute]int? id, [FromServices] IAggregateBuilder aggregateBuilder)
+        public async Task<IActionResult> Edit([FromRoute]int? id, [FromServices] IAggregateBus aggregateBus)
         {
             UserViewModel viewModel = null;
 
             if (id.HasValue)
             {
                 // Load user
-                var userModel = await aggregateBuilder.GetAggregate<User>(id);
+                var userModel = await aggregateBus.GetExsitsAggregate<User>(id);
 
                 // Build view model
                 viewModel = new UserViewModel();

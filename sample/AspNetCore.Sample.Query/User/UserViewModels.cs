@@ -6,7 +6,7 @@ namespace AspNetCore.Sample.Query.User
 {
     public class UserViewModel
     {
-        public int UserId { get; set; }
+        public int Id { get; set; }
 
         public string Username { get; set; }
 
@@ -15,7 +15,7 @@ namespace AspNetCore.Sample.Query.User
 
     public class UserListItemViewModel
     {
-        public int UserId { get; set; }
+        public int Id { get; set; }
 
         public string Username { get; set; }
 

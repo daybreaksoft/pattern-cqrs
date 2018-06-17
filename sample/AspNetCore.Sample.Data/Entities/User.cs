@@ -9,7 +9,7 @@ namespace AspNetCore.Sample.Data.Entities
     public class UserEntity : IEntity
     {
         [Key]
-        public int UserId { get; set; }
+        public int Id { get; set; }
 
         [Required]
         [StringLength(50)]

@@ -41,6 +41,22 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
         }
 
         /// <summary>
+        /// Set the assemble where the implemented type of query is belong to
+        /// </summary>
+        public void ForRepository(Assembly assembly, string underNamespace = null)
+        {
+            if (assembly == null) throw new ArgumentNullException(nameof(assembly));
+
+            var serviceName = typeof(IRepository<>).Name;
+
+            // Add implementation souce
+            ImplementationSources.Add(serviceName, new ImplementationSource(assembly, underNamespace));
+
+            // Remove action via service name
+            RegisterImplementationActions.Remove(serviceName);
+        }
+
+        /// <summary>
         /// Adds a method that registers the implementation of IDependencyInjection as a service
         /// </summary>
         public void ForDependencyInjection(Action<IServiceCollection> action)
@@ -167,7 +183,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
         {
             if (action == null) throw new ArgumentNullException(nameof(action));
 
-            RegisterImplementationActions.Add(typeof(IAggregateBuilder).Name, action);
+            RegisterImplementationActions.Add(typeof(IAggregateBus).Name, action);
         }
 
         /// <summary>
@@ -178,6 +194,38 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
             if (action == null) throw new ArgumentNullException(nameof(action));
 
             RegisterImplementationActions.Add(typeof(IDynamicRepositoryFactory).Name, action);
+        }
+
+        /// <summary>
+        /// Adds a method that registers the implementation of IAggregateRoot as a service
+        /// </summary>
+        public void ForAggregate(Action<IServiceCollection> action)
+        {
+            if (action == null) throw new ArgumentNullException(nameof(action));
+
+            var serviceName = typeof(IAggregateRoot).Name;
+
+            // Add action
+            RegisterImplementationActions.Add(serviceName, action);
+
+            // Remove implementation souce via service name
+            ImplementationSources.Remove(serviceName);
+        }
+
+        /// <summary>
+        /// Set the assemble where the implemented type of query is belong to
+        /// </summary>
+        public void ForAggregate(Assembly assembly, string underNamespace = null)
+        {
+            if (assembly == null) throw new ArgumentNullException(nameof(assembly));
+
+            var serviceName = typeof(IAggregateRoot).Name;
+
+            // Add implementation souce
+            ImplementationSources.Add(serviceName, new ImplementationSource(assembly, underNamespace));
+
+            // Remove action via service name
+            RegisterImplementationActions.Remove(serviceName);
         }
 
         /// <summary>

@@ -6,9 +6,7 @@ using AspNetCore.Sample.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using Daybreaksoft.Extensions.Functions;
 using Daybreaksoft.Pattern.CQRS;
-using AspNetCore.Sample.Command.Vehicle;
 using AspNetCore.Sample.Query.TrafficViolation;
-using AspNetCore.Sample.Query.User;
 using AspNetCore.Sample.Query.Vehicle;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -30,11 +28,11 @@ namespace AspNetCore.Sample.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Edit([FromRoute]int? id, [FromServices] VehicleQuery vehicleQuery, [FromServices] IAggregateBuilder aggregateBuilder)
+        public async Task<IActionResult> Edit([FromRoute]int? id, [FromServices] VehicleQuery vehicleQuery, [FromServices] IAggregateBus aggregateBus)
         {
             // Get vehicles as selectitem
             var vehicles = await vehicleQuery.GetVehiclesAsSelectListItem();
-            ViewBag.VehicleListItems = vehicles.Select(p => new SelectListItem(p.PlateNumber, p.VehicleId.ToString()));
+            ViewBag.VehicleListItems = vehicles.Select(p => new SelectListItem(p.PlateNumber, p.Id.ToString()));
 
             // Load traffic violation if edit
             TrafficViolationViewModel viewModel = null;
@@ -42,7 +40,7 @@ namespace AspNetCore.Sample.Controllers
             if (id.HasValue)
             {
                 // Load traffic violation
-                var trafficViolationModel = await aggregateBuilder.GetAggregate<TrafficViolation>(id);
+                var trafficViolationModel = await aggregateBus.GetExsitsAggregate<TrafficViolation>(id);
 
                 // Build view model
                 viewModel = new TrafficViolationViewModel();

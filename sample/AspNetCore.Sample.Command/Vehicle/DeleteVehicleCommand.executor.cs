@@ -1,21 +1,21 @@
 ﻿using System.Threading.Tasks;
+using AspNetCore.Sample.Domain.Models;
 using Daybreaksoft.Pattern.CQRS;
 
-namespace AspNetCore.Sample.Command.Vehicle
+namespace AspNetCore.Sample.Command
 {
     public class DeleteVehicleCommandExecutor : ICommandExecutor<DeleteVehicleCommand>
     {
-        protected readonly IUnitOfWork UnitOfWork;
+        protected readonly IAggregateBus AggregateBus;
 
-        public DeleteVehicleCommandExecutor(IUnitOfWork unitOfWork)
+        public DeleteVehicleCommandExecutor(IAggregateBus aggregateBus)
         {
-            UnitOfWork = unitOfWork;
+            AggregateBus = aggregateBus;
         }
 
         public async Task ExecuteAsync(DeleteVehicleCommand command)
         {
-            var model = UnitOfWork.BuildAggregate<Domain.Models.Vehicle>();
-            model.Id = command.VehicleId;
+            var model = AggregateBus.BuildAggregate<Vehicle>(command.VehicleId);
 
             model.Remove();
 
