@@ -17,10 +17,17 @@ namespace Daybreaksoft.Pattern.CQRS
         {
             if (aggregate == null) throw new ArgumentNullException(nameof(aggregate));
 
-            if (!Aggregates.Any(p => p == aggregate))
+            if (Aggregates.Any(p => p == aggregate))
             {
-                Aggregates.Add(aggregate);
+                throw new Exception("Already added one aggregate, cannot add another same one.");
             }
+
+            if (Aggregates.Any(p => p.Id != null && p.Id == aggregate.Id))
+            {
+                throw new Exception($"Already added on aggregate that has key {aggregate.Id}, cannot add another one.");
+            }
+
+            Aggregates.Add(aggregate);
         }
 
         public IEnumerator<IAggregateRoot> GetEnumerator()

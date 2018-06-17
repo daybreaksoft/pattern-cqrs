@@ -47,8 +47,6 @@ namespace Daybreaksoft.Pattern.CQRS
             {
                 var aggregate = await DynamicRepositoryFactory.InvokeFindAsync<TAggregateRoot>(id);
 
-                Aggregates.Add(aggregate);
-
                 return aggregate;
             }
             else
