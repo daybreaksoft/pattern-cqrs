@@ -19,6 +19,8 @@ namespace AspNetCore.Sample.Domain.Models
         {
             var vehicleModel = await AggregateBus.GetExsitsAggregate<Vehicle>(evnt.VehicleId);
 
+            var vehicle1 = await AggregateBus.GetExsitsAggregate<Vehicle>(evnt.VehicleId);
+
             var userModel = await AggregateBus.GetExsitsAggregate<User>(vehicleModel.UserId);
 
             userModel.DeductPoint(evnt.DeductPoint);

@@ -20,9 +20,7 @@ namespace AspNetCore.Sample.Command
 
             command.CopyValueTo(newModel);
 
-            newModel.Add();
-
-            await Task.CompletedTask;
+            await newModel.AddAsync();
         }
     }
 }

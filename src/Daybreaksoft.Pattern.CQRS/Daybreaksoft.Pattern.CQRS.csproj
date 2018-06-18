@@ -8,5 +8,13 @@
   <ItemGroup>
     <PackageReference Include="Daybreaksoft.Extensions.Functions" Version="1.1.0" />
   </ItemGroup>
+  
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' ">
+    <DefineConstants>$(DefineConstants);NetStandard13</DefineConstants>
+  </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' ">
+    <DefineConstants>$(DefineConstants);NetStandard20</DefineConstants>
+  </PropertyGroup>
+  
 </Project>

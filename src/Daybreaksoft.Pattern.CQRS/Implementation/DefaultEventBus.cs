@@ -9,15 +9,19 @@ namespace Daybreaksoft.Pattern.CQRS.Implementation
     public class DefaultEventBus : IEventBus
     {
         protected readonly IDependencyInjection DI;
-        
+
         public DefaultEventBus(IDependencyInjection di)
         {
             DI = di;
         }
 
+        protected EventStream _events = new EventStream();
+        EventStream IEventBus.Events { get; }
+
         public async Task PublishAsync(IEvent evnt)
         {
             var handlerType = typeof(IEventHandler<>);
+
             handlerType = handlerType.MakeGenericType(evnt.GetType());
 
             var handler = DI.GetService(handlerType);

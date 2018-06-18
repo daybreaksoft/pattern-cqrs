@@ -33,40 +33,40 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
             if (options == null) throw new ArgumentNullException(nameof(options));
 
             // Add an service that implemented IDependencyInjection.
-            AddService(services, options, typeof(IDependencyInjection), typeof(DefaultDependencyInjection));
+            AddSignleService(services, options, typeof(IDependencyInjection), typeof(DefaultDependencyInjection));
 
             // Add an service that implemented IAggregateBus.
-            AddService(services, options, typeof(IAggregateBus), typeof(DefaultAggregateBus));
+            AddSignleService(services, options, typeof(IAggregateBus), typeof(DefaultAggregateBus));
 
             // Add an service that implemented IUnitOfWork.
-            AddService(services, options, typeof(IUnitOfWork), typeof(DefaultUnitOfWork));
+            AddSignleService(services, options, typeof(IUnitOfWork), typeof(DefaultUnitOfWork));
 
             // Add services that implemented IRepository<>
-            AddServices(services, options, typeof(IRepository<>));
+            AddMultipleServices(services, options, typeof(IRepository<>));
 
             // Add an service that implemented IDynamicRepositoryFactory.
-            AddService(services, options, typeof(IDynamicRepositoryFactory), typeof(DefaultDynamicRepositoryFactory));
+            AddSignleService(services, options, typeof(IDynamicRepositoryFactory), typeof(DefaultDynamicRepositoryFactory));
 
             // Add services that implemented ICommandExecutor<>
-            AddServices(services, options, typeof(ICommandExecutor<>));
+            AddMultipleServices(services, options, typeof(ICommandExecutor<>));
 
             // Add an service that implemented ICommandBus.
-            AddService(services, options, typeof(ICommandBus), typeof(DefaultCommandBus));
+            AddSignleService(services, options, typeof(ICommandBus), typeof(DefaultCommandBus));
 
             // Add an service that implemented IEventBus.
-            AddService(services, options, typeof(IEventBus), typeof(DefaultEventBus));
+            AddSignleService(services, options, typeof(IEventBus), typeof(DefaultEventBus));
 
             // Add services that implemented IEventHandler<>
-            AddServices(services, options, typeof(IEventHandler<>));
+            AddMultipleServices(services, options, typeof(IEventHandler<>));
 
             // Add services that implemented IPostCommitEventHandler<>
-            AddServices(services, options, typeof(IPostCommitEventHandler<>));
+            AddMultipleServices(services, options, typeof(IPostCommitEventHandler<>));
 
             // Add services that implemented IAggregateRoot
-            AddServices(services, options, typeof(IAggregateRoot));
+            AddMultipleServices(services, options, typeof(IAggregateRoot), ServiceLifetime.Transient);
 
             // Add services that implemented IQuery
-            AddServices(services, options, typeof(IQuery));
+            AddMultipleServices(services, options, typeof(IQuery));
 
             return services;
         }
@@ -79,7 +79,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
         /// <param name="options">Provides programmatic configuration for the CQRS framework.</param>
         /// <param name="serviceType">The type of the service to register.</param>
         /// <param name="defaultImplementationType">The implementation type of the service.</param>
-        public static void AddService(IServiceCollection services, CQRSOptions options, Type serviceType, Type defaultImplementationType)
+        public static void AddSignleService(IServiceCollection services, CQRSOptions options, Type serviceType, Type defaultImplementationType, ServiceLifetime lifetime = ServiceLifetime.Scoped)
         {
             if (options == null) throw new ArgumentNullException(nameof(options));
 
@@ -95,11 +95,11 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
             }
             else
             {
-                services.AddScoped(serviceType, defaultImplementationType);
+                services.Add(new ServiceDescriptor(serviceType, defaultImplementationType, lifetime));
             }
         }
 
-        public static void AddServices(IServiceCollection services, CQRSOptions options, Type serviceType)
+        public static void AddMultipleServices(IServiceCollection services, CQRSOptions options, Type serviceType, ServiceLifetime lifetime = ServiceLifetime.Scoped)
         {
             var serviceTypeName = serviceType.Name;
 
@@ -129,11 +129,23 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
                     {
                         if (registersService.IsGenericType)
                         {
-                            services.AddScoped(registersService, exportedType);
+                            services.Add(new ServiceDescriptor(registersService, exportedType, lifetime));
                         }
                         else
                         {
-                            services.AddScoped(exportedType);
+                            if (lifetime == ServiceLifetime.Scoped)
+                            {
+                                services.AddScoped(exportedType);
+                            }
+                            else if (lifetime == ServiceLifetime.Transient)
+                            {
+                                services.AddTransient(exportedType);
+                            }
+                            else if (lifetime == ServiceLifetime.Singleton)
+                            {
+                                services.AddSingleton(exportedType);
+                            }
+
                         }
                     }
                 }

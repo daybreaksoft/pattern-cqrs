@@ -1,4 +1,6 @@
-﻿namespace Daybreaksoft.Pattern.CQRS
+﻿using System.Threading.Tasks;
+
+namespace Daybreaksoft.Pattern.CQRS
 {
     /// <summary>
     /// Abstract AggregateRoot
@@ -9,20 +11,39 @@
         {
         }
 
-        public virtual void Add()
+        public virtual async Task AddAsync()
         {
             _state = AggregateState.Added;
+
+#if NetStandard20
+            await Task.CompletedTask;
+#else
+            await Task.FromResult(0);
+#endif
+
         }
 
 
-        public virtual void Modify()
+        public virtual async Task Modify()
         {
             _state = AggregateState.Modified;
+
+#if NetStandard20
+            await Task.CompletedTask;
+#else
+            await Task.FromResult(0);
+#endif
         }
 
-        public virtual void Remove()
+        public virtual async Task Remove()
         {
             _state = AggregateState.Deleted;
+
+#if NetStandard20
+            await Task.CompletedTask;
+#else
+            await Task.FromResult(0);
+#endif
         }
     }
 }

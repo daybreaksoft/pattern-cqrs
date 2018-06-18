@@ -1,5 +1,6 @@
 ﻿using Daybreaksoft.Pattern.CQRS;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Threading.Tasks;
 
 namespace AspNetCore.Sample.Domain.Models
 {
@@ -13,12 +14,12 @@ namespace AspNetCore.Sample.Domain.Models
 
         public int DeductPoint { get; set; }
 
-        public override void Add()
+        public override async Task AddAsync()
         {
-            base.Add();
+            await base.AddAsync();
 
             // Append traffice violation added event
-            AppendEvent(new TrafficViolationAddedEvent
+            await PublishEventAsync(new TrafficViolationAddedEvent
             {
                 VehicleId = this.VehicleId,
                 DeductPoint = this.DeductPoint

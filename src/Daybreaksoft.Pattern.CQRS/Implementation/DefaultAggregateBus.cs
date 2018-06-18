@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -41,7 +42,7 @@ namespace Daybreaksoft.Pattern.CQRS
 
         public async Task<TAggregateRoot> GetExsitsAggregate<TAggregateRoot>(object id) where TAggregateRoot : IAggregateRoot
         {
-            var existsAggregate = Aggregates.SingleOrDefault(p => p.Id == id);
+            var existsAggregate = Aggregates.SingleOrDefault(p => p is TAggregateRoot && p != null && p.Id.ToString() == id.ToString());
 
             if (existsAggregate == null)
             {

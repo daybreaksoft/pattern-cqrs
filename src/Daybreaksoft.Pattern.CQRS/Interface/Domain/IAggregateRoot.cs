@@ -1,4 +1,6 @@
-﻿namespace Daybreaksoft.Pattern.CQRS
+﻿using System.Threading.Tasks;
+
+namespace Daybreaksoft.Pattern.CQRS
 {
     /// <summary>
     /// Domain model

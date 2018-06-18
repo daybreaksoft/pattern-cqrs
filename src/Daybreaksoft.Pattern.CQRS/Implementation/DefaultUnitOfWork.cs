@@ -33,26 +33,19 @@ namespace Daybreaksoft.Pattern.CQRS
         {
             foreach (var aggregate in AggregateBus.Aggregates)
             {
-                await ExecutStoreAsync(aggregate);
+                if (aggregate.State == AggregateState.Added)
+                {
+                    await InsertAggreateAsync(aggregate);
+                }
+                else if (aggregate.State == AggregateState.Modified)
+                {
+                    await UpdateAggreateAsync(aggregate);
+                }
+                else if (aggregate.State == AggregateState.Deleted)
+                {
+                    await RemoveAggreateAsync(aggregate);
+                }
             }
-        }
-
-        protected virtual async Task ExecutStoreAsync(IAggregateRoot aggregate)
-        {
-            if (aggregate.State == AggregateState.Added)
-            {
-                await InsertAggreateAsync(aggregate);
-            }
-            else if (aggregate.State == AggregateState.Modified)
-            {
-                await UpdateAggreateAsync(aggregate);
-            }
-            else if (aggregate.State == AggregateState.Deleted)
-            {
-                await RemoveAggreateAsync(aggregate);
-            }
-
-            await PublishEventsAsync(aggregate);
         }
 
         protected virtual async Task InsertAggreateAsync(IAggregateRoot aggregate)
@@ -68,26 +61,6 @@ namespace Daybreaksoft.Pattern.CQRS
         protected virtual async Task RemoveAggreateAsync(IAggregateRoot aggregate)
         {
             await DynamicRepositoryFactory.InvokeRemoveAsync(aggregate.GetType(), aggregate.Id);
-        }
-
-        #endregion
-
-        #region Publish Events
-
-        protected virtual async Task PublishEventsAsync(IAggregateRoot aggregate)
-        {
-            if (aggregate is IEventSource)
-            {
-                var aggregateEvents = ((IEventSource)aggregate).Events;
-
-                if (aggregateEvents.Any())
-                {
-                    foreach (var evnt in aggregateEvents)
-                    {
-                        await EventBus.PublishAsync(evnt);
-                    }
-                }
-            }
         }
 
         #endregion

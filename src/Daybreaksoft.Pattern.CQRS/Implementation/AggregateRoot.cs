@@ -1,9 +1,11 @@
-﻿namespace Daybreaksoft.Pattern.CQRS
+﻿using System.Threading.Tasks;
+
+namespace Daybreaksoft.Pattern.CQRS
 {
     /// <summary>
     /// Abstract AggregateRoot
     /// </summary>
-    public abstract class AggregateRoot : IAggregateRoot, IEventSource
+    public abstract class AggregateRoot : IAggregateRoot
     {
         protected readonly IEventBus EventBus;
 
@@ -17,16 +19,9 @@
         protected AggregateState _state;
         public virtual AggregateState State => _state;
 
-        #region Events
-
-        protected EventStream _events = new EventStream();
-        EventStream IEventSource.Events => _events;
-
-        protected virtual void AppendEvent(IEvent evnt)
+        protected async virtual Task PublishEventAsync(IEvent evnt)
         {
-            _events.Append(evnt);
+            await EventBus.PublishAsync(evnt);
         }
-
-        #endregion
     }
 }
