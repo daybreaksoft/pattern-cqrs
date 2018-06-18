@@ -20,7 +20,6 @@ namespace Daybreaksoft.Pattern.CQRS
 #else
             await Task.FromResult(0);
 #endif
-
         }
 
 

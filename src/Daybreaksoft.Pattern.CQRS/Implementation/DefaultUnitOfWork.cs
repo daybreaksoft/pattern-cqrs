@@ -19,7 +19,11 @@ namespace Daybreaksoft.Pattern.CQRS
 
         public virtual async Task OpenAsync()
         {
-            //throw new NotImplementedException();
+#if NetStandard20
+            await Task.CompletedTask;
+#else
+            await Task.FromResult(0);
+#endif
         }
 
         public virtual async Task CommitAsync()
