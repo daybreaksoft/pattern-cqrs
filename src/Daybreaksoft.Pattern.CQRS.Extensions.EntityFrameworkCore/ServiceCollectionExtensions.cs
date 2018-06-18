@@ -16,9 +16,14 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
             var options = new CQRSEntityFrameworkOptions();
 
             optionsAction(options);
-            
+
             // Add an service that implemented ICommandBus.
             AspNetCore.ServiceCollectionExtensions.AddSignleService(services, options, typeof(DbContext), options.DbContextType);
+
+            if (!options.RegisterImplementationActions.ContainsKey(typeof(IUnitOfWork).Name))
+            {
+                options.ForUnitOfWork((s) => s.AddScoped<IUnitOfWork, DefaultUnitOfWork>());
+            }
 
             services.AddCQRS(options);
 

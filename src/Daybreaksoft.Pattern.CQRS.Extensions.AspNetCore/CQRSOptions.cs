@@ -67,6 +67,16 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
         }
 
         /// <summary>
+        /// Adds a method that registers the implementation of IUnitOfWork as a service
+        /// </summary>
+        public void ForUnitOfWork(Action<IServiceCollection> action)
+        {
+            if (action == null) throw new ArgumentNullException(nameof(action));
+
+            RegisterImplementationActions.Add(typeof(IUnitOfWork).Name, action);
+        }
+
+        /// <summary>
         /// Adds a method that registers the implementation of ICommandBus as a service
         /// </summary>
         public void ForCommandBus(Action<IServiceCollection> action)
