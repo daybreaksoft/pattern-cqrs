@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Daybreaksoft.Extensions.Functions" Version="1.1.0" />
+    <PackageReference Include="Daybreaksoft.Extensions.Functions" Version="1.2.0" />
   </ItemGroup>
   
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' ">

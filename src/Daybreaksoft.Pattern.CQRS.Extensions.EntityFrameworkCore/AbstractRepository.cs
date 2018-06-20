@@ -11,7 +11,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
     /// Default implemention of IQuery with EntityFrameworkCore
     /// </summary>
     public abstract class AbstractRepository<TAggregate, TEntity> : IRepository<TAggregate> 
-        where TAggregate : IAggregateRoot
+        where TAggregate : class, IAggregateRoot
         where TEntity : class, IEntity, new()
     {
         protected readonly DbContext Db;
@@ -84,6 +84,8 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
 
         protected virtual TEntity ConvertToEntity(TAggregate aggregate)
         {
+            if (aggregate == null) return null;
+
             var entity = new TEntity();
 
             aggregate.CopyValueTo(entity);
@@ -93,6 +95,8 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
 
         protected virtual TAggregate ConvertToAggregate(TEntity entity)
         {
+            if (entity == null) return null;
+
             var aggregate = Aggregates.BuildAggregate<TAggregate>();
 
             entity.CopyValueTo(aggregate);
