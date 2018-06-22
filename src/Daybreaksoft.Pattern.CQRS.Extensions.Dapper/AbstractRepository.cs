@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Threading.Tasks;
+using Dapper.Contrib.Extensions;
 using Daybreaksoft.Extensions.Functions;
-using Microsoft.EntityFrameworkCore;
 
 namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
 {
@@ -15,12 +14,12 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
         where TAggregate : IAggregateRoot
         where TEntity : class, IEntity, new()
     {
-        protected readonly DbContext Db;
+        protected readonly IDbConnection Connection;
         protected readonly IAggregateBus Aggregates;
 
-        public AbstractRepository(DbContext db, IAggregateBus aggregateBus)
+        public AbstractRepository(IDbConnection connection, IAggregateBus aggregateBus)
         {
-            Db = db;
+            Connection = connection;
             Aggregates = aggregateBus;
         }
 
@@ -29,7 +28,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
         /// </summary>
         public virtual async Task<TAggregate> FindAsync(object id, IDbTransaction transaction = null)
         {
-            return ConvertToAggregate(await Db.Set<TEntity>().FindAsync(id));
+            return ConvertToAggregate(await Connection.GetAsync<TEntity>(id, transaction));
         }
 
         /// <summary>
@@ -39,11 +38,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
         {
             if (aggregate == null) throw new ArgumentNullException(nameof(aggregate));
 
-            // Insert entity
-            await Db.Set<TEntity>().AddAsync(ConvertToEntity(aggregate));
-
-            // Submit changes
-            await Db.SaveChangesAsync();
+            await Connection.InsertAsync(ConvertToEntity(aggregate), transaction);
         }
 
         /// <summary>
@@ -53,12 +48,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
         {
             if (aggregate == null) throw new ArgumentNullException(nameof(aggregate));
 
-            var entity = await Db.Set<TEntity>().FindAsync(aggregate.Id);
-
-            aggregate.CopyValueTo(entity);
-
-            // Submit changes
-            await Db.SaveChangesAsync();
+            await Connection.UpdateAsync(ConvertToEntity(aggregate), transaction);
         }
 
         /// <summary>
@@ -66,21 +56,14 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
         /// </summary>
         public virtual async Task RemoveAsync(object id, IDbTransaction transaction = null)
         {
-            // Generate new entity
             var entity = new TEntity();
 
-            // Find key property
-            var keyProperty = typeof(TEntity).FindProperty<KeyAttribute>();
+            // Find key property and set id value to this property.
+            var entityType = typeof(TEntity);
+            var keyProperty = entityType.FindProperty<KeyAttribute>();
+            keyProperty.SetValue(keyProperty, id);
 
-            // Set key property value
-            keyProperty.SetValue(entity, id);
-
-            // Change entity state to delted
-            var entityEntry = Db.Entry(entity);
-            entityEntry.State = EntityState.Deleted;
-
-            // Submit changes
-            await Db.SaveChangesAsync();
+            await Connection.DeleteAsync(entity, transaction);
         }
 
         protected virtual TEntity ConvertToEntity(TAggregate aggregate)
