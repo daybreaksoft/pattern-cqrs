@@ -30,5 +30,15 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.Dapper
             //    }
             //}
         }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+
+            if (Connection != null)
+            {
+                Connection.Dispose();
+            }
+        }
     }
 }

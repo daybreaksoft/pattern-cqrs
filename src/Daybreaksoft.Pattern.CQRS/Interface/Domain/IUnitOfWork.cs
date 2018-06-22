@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Daybreaksoft.Pattern.CQRS
@@ -6,7 +7,7 @@ namespace Daybreaksoft.Pattern.CQRS
     /// <summary>
     /// Unit of work
     /// </summary>
-    public interface IUnitOfWork
+    public interface IUnitOfWork : IDisposable
     {
         Task OpenAsync();
 

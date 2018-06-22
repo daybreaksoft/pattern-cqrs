@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,7 +20,7 @@ namespace Daybreaksoft.Pattern.CQRS
 
         public virtual async Task OpenAsync()
         {
-#if NetStandard20
+#if !Net451
             await Task.CompletedTask;
 #else
             await Task.FromResult(0);
@@ -68,5 +69,9 @@ namespace Daybreaksoft.Pattern.CQRS
         }
 
         #endregion
+
+        public virtual void Dispose()
+        {
+        }
     }
 }

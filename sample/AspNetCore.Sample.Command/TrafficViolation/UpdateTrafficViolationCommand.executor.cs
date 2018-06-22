@@ -20,7 +20,7 @@ namespace AspNetCore.Sample.Command
 
             command.CopyValueTo(model);
 
-            model.Modify();
+            await model.ModifyAsync();
         }
     }
 }

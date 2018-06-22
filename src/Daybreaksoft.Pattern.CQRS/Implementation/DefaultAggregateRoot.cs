@@ -15,7 +15,7 @@ namespace Daybreaksoft.Pattern.CQRS
         {
             _state = AggregateState.Added;
 
-#if NetStandard20
+#if !Net451
             await Task.CompletedTask;
 #else
             await Task.FromResult(0);
@@ -23,22 +23,22 @@ namespace Daybreaksoft.Pattern.CQRS
         }
 
 
-        public virtual async Task Modify()
+        public virtual async Task ModifyAsync()
         {
             _state = AggregateState.Modified;
 
-#if NetStandard20
+#if !Net451
             await Task.CompletedTask;
 #else
             await Task.FromResult(0);
 #endif
         }
 
-        public virtual async Task Remove()
+        public virtual async Task RemoveAsync()
         {
             _state = AggregateState.Deleted;
 
-#if NetStandard20
+#if !Net451
             await Task.CompletedTask;
 #else
             await Task.FromResult(0);

@@ -17,7 +17,7 @@ namespace AspNetCore.Sample.Command
         {
             var model = AggregateBus.BuildAggregate<Vehicle>(command.VehicleId);
 
-            model.Remove();
+            await model.RemoveAsync();
 
             await Task.CompletedTask;
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Threading.Tasks;
 using Daybreaksoft.Extensions.Functions;
 
@@ -37,44 +38,44 @@ namespace Daybreaksoft.Pattern.CQRS.Implementation
 
         #region Invoke Methods
 
-        public async Task InvokeInsertAsync(IAggregateRoot aggregate)
+        public async Task InvokeInsertAsync(IAggregateRoot aggregate, IDbTransaction transaction = null)
         {
             var type = GetRepositoryType(aggregate);
             var respository = GetRepository(type);
 
-            await (Task)type.InvokeMethod("InsertAsync", respository, aggregate);
+            await (Task)type.InvokeMethod("InsertAsync", respository, aggregate, transaction);
         }
 
-        public async Task InvokeUpdateAsync(IAggregateRoot aggregate)
+        public async Task InvokeUpdateAsync(IAggregateRoot aggregate, IDbTransaction transaction = null)
         {
             var type = GetRepositoryType(aggregate);
             var respository = GetRepository(type);
 
-            await (Task)type.InvokeMethod("UpdateAsync", respository, aggregate);
+            await (Task)type.InvokeMethod("UpdateAsync", respository, aggregate, transaction);
         }
 
-        public async Task InvokeRemoveAsync<TAggregateRoot>(object id) where TAggregateRoot : IAggregateRoot
+        public async Task InvokeRemoveAsync<TAggregateRoot>(object id, IDbTransaction transaction = null) where TAggregateRoot : IAggregateRoot
         {
             var type = GetRepositoryType(typeof(TAggregateRoot));
             var respository = GetRepository(type);
 
-            await (Task)type.InvokeMethod("RemoveAsync", respository, id);
+            await (Task)type.InvokeMethod("RemoveAsync", respository, id, transaction);
         }
 
-        public async Task InvokeRemoveAsync(Type aggregateType, object id)
+        public async Task InvokeRemoveAsync(Type aggregateType, object id, IDbTransaction transaction = null)
         {
             var type = GetRepositoryType(aggregateType);
             var respository = GetRepository(type);
 
-            await(Task)type.InvokeMethod("RemoveAsync", respository, id);
+            await(Task)type.InvokeMethod("RemoveAsync", respository, id, transaction);
         }
 
-        public async Task<TAggregateRoot> InvokeFindAsync<TAggregateRoot>(object id) where TAggregateRoot : IAggregateRoot
+        public async Task<TAggregateRoot> InvokeFindAsync<TAggregateRoot>(object id, IDbTransaction transaction = null) where TAggregateRoot : IAggregateRoot
         {
             var type = GetRepositoryType(typeof(TAggregateRoot));
             var respository = GetRepository(type);
 
-            return await (Task<TAggregateRoot>)type.InvokeMethod("FindAsync", respository, id);
+            return await (Task<TAggregateRoot>)type.InvokeMethod("FindAsync", respository, id, transaction);
         }
 
         #endregion

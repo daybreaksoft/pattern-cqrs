@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,14 +17,14 @@ namespace Daybreaksoft.Pattern.CQRS
 
         object GetRepository(Type aggregateType);
 
-        Task InvokeInsertAsync(IAggregateRoot aggregate);
+        Task InvokeInsertAsync(IAggregateRoot aggregate, IDbTransaction transaction = null);
 
-        Task InvokeUpdateAsync(IAggregateRoot aggregate);
+        Task InvokeUpdateAsync(IAggregateRoot aggregate, IDbTransaction transaction = null);
 
-        Task InvokeRemoveAsync<TAggregateRoot>(object id) where TAggregateRoot : IAggregateRoot;
+        Task InvokeRemoveAsync<TAggregateRoot>(object id, IDbTransaction transaction = null) where TAggregateRoot : IAggregateRoot;
 
-        Task InvokeRemoveAsync(Type aggregateType, object id);
+        Task InvokeRemoveAsync(Type aggregateType, object id, IDbTransaction transaction = null);
 
-        Task<TAggregateRoot> InvokeFindAsync<TAggregateRoot>(object id) where TAggregateRoot : IAggregateRoot;
+        Task<TAggregateRoot> InvokeFindAsync<TAggregateRoot>(object id, IDbTransaction transaction = null) where TAggregateRoot : IAggregateRoot;
     }
 }

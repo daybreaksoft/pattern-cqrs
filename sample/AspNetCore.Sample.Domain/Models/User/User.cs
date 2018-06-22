@@ -20,7 +20,7 @@ namespace AspNetCore.Sample.Domain.Models
         {
             this.Point = this.Point - point;
 
-            this.Modify();
+            this.ModifyAsync();
         }
 
         #endregion
