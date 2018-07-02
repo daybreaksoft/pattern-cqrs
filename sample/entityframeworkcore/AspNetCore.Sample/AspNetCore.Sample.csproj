@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+    <AssemblyName>AspNetCore.Sample</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -9,10 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore\Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore.csproj" />
-    <ProjectReference Include="..\..\src\Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore\Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\AspNetCore.Sample.Command\AspNetCore.Sample.Command.csproj" />
-    <ProjectReference Include="..\AspNetCore.Sample.Domain\AspNetCore.Sample.Domain.csproj" />
     <ProjectReference Include="..\AspNetCore.Sample.Query\AspNetCore.Sample.Query.csproj" />
   </ItemGroup>
 

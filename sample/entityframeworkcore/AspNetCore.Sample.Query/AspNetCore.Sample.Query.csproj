@@ -9,9 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore\Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\AspNetCore.Sample.Data\AspNetCore.Sample.Data.csproj" />
-    <ProjectReference Include="..\AspNetCore.Sample.Domain\AspNetCore.Sample.Domain.csproj" />
   </ItemGroup>
 
 </Project>

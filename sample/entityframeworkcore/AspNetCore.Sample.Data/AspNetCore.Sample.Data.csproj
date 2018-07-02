@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Daybreaksoft.Pattern.CQRS\Daybreaksoft.Pattern.CQRS.csproj" />
+    <ProjectReference Include="..\..\..\src\Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore\Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore.csproj" />
   </ItemGroup>
 
 </Project>
