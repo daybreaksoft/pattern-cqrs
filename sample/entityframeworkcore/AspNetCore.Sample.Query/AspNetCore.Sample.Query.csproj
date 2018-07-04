@@ -5,10 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Daybreaksoft.Extensions.Functions" Version="1.2.1" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\AspNetCore.Sample.Data\AspNetCore.Sample.Data.csproj" />
   </ItemGroup>
 

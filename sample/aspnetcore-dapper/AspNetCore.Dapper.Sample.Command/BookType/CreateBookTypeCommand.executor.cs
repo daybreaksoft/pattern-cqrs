@@ -16,11 +16,11 @@ namespace AspNetCore.Dapper.Sample.Command.BookType
 
         public async Task ExecuteAsync(CreateBookTypeCommand command)
         {
-            var newModel = AggregateBus.BuildAggregate<BookTypeAggregate>();
+            var newAggregate = AggregateBus.BuildAggregate<BookTypeAggregate>();
 
-            command.CopyValueTo(newModel);
+            command.CopyValueTo(newAggregate);
 
-            await newModel.AddAsync();
+            await newAggregate.AddAsync();
         }
     }
 }

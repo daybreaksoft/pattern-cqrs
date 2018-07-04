@@ -9,14 +9,14 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.Dapper
     /// <summary>
     /// Default implemention of IQuery with EntityFrameworkCore
     /// </summary>
-    public abstract class AbstractRepository<TAggregate, TEntity> : IRepository<TAggregate> 
+    public abstract class AbstractRepository<TAggregate, TEntity> : IRepository<TAggregate>
         where TAggregate : IAggregateRoot
         where TEntity : class, IEntity, new()
     {
         protected readonly IDbConnection Connection;
         protected readonly IAggregateBus Aggregates;
 
-        public AbstractRepository(IDbConnection connection, IAggregateBus aggregateBus)
+        protected AbstractRepository(IDbConnection connection, IAggregateBus aggregateBus)
         {
             Connection = connection;
             Aggregates = aggregateBus;
@@ -69,7 +69,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.Dapper
         {
             var entity = new TEntity();
 
-            aggregate.CopyValueTo(entity);
+            aggregate.CopyValueTo(entity, forcePropertyNames: new[] { "Id" });
 
             return entity;
         }
