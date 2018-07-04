@@ -1,6 +1,7 @@
 ﻿using AspNetCore.Dapper.Sample.Data.Const;
-using Dapper.Contrib.Extensions;
 using Daybreaksoft.Pattern.CQRS;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AspNetCore.Dapper.Sample.Data.Entities
 {

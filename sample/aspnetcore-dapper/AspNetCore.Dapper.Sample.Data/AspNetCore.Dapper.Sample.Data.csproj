@@ -5,7 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore.Dapper\Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore.Dapper.csproj" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\src\Daybreaksoft.Pattern.CQRS\Daybreaksoft.Pattern.CQRS.csproj" />
   </ItemGroup>
 
