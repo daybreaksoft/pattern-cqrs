@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "Book Types";
+}
+<h2>Book Types</h2>
+<hr />
+<section>
+    <a class="btn btn-default" asp-action="Edit">Create</a>
+</section>
+<section>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Type</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var bookType in ViewBag.BookTypes)
+        {
+            <tr>
+                <td>@bookType.Type</td>
+                <td>
+                    <a class="btn btn-default btn-sm" asp-action="Edit" asp-route-id="@bookType.Id">Edit</a>
+                    <a class="btn btn-danger btn-sm" asp-action="DeleteCommand" asp-route-id="@bookType.Id">Delete</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</section>

@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore.Dapper\Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore.Dapper.csproj" />
+    <ProjectReference Include="..\AspNetCore.Dapper.Sample.Command\AspNetCore.Dapper.Sample.Command.csproj" />
+    <ProjectReference Include="..\AspNetCore.Dapper.Sample.Domain\AspNetCore.Dapper.Sample.Domain.csproj" />
+    <ProjectReference Include="..\AspNetCore.Dapper.Sample.Query\AspNetCore.Dapper.Sample.Query.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Views\BookTypes\Edit.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\BookTypes\Index.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+  </ItemGroup>
+
+</Project>

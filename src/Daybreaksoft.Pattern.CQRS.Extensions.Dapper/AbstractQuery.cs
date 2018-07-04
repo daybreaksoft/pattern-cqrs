@@ -14,7 +14,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.Dapper
     {
         protected readonly IDbConnection Connection;
 
-        public AbstractQuery(IDbConnection connection)
+        protected AbstractQuery(IDbConnection connection)
         {
             Connection = connection;
         }

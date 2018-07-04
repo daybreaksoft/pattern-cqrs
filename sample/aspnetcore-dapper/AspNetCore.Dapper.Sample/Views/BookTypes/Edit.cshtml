@@ -1,0 +1,13 @@
+﻿@model AspNetCore.Dapper.Sample.Query.BookTypeViewModel
+@{
+    ViewData["Title"] = "Book Types";
+}
+<h2>@(ViewBag.IsCreate ? "Create" : "Update") Book Type</h2>
+<hr />
+<form asp-action="@(ViewBag.IsCreate ? "CreateCommand" : $"UpdateCommand")" asp-route-id="@ViewBag.BookTypeId">
+    <div class="form-group">
+        <label>Type</label>
+        <input class="form-control" placeholder="Type" asp-for="Type" />
+    </div>
+    <button class="btn btn-default">Save</button>
+</form>

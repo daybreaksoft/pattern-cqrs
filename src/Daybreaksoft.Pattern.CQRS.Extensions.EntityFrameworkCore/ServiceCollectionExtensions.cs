@@ -1,6 +1,4 @@
 ﻿using Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore;
-using Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore;
-using Daybreaksoft.Pattern.CQRS.Implementation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -22,7 +20,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
 
             if (!options.RegisterImplementationActions.ContainsKey(typeof(IUnitOfWork).Name))
             {
-                options.ForUnitOfWork((s) => s.AddScoped<IUnitOfWork, DefaultUnitOfWork>());
+                options.ForUnitOfWork(s => s.AddScoped<IUnitOfWork, DefaultUnitOfWork>());
             }
 
             services.AddCQRS(options);

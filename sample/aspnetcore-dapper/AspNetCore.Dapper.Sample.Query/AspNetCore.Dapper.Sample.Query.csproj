@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\Daybreaksoft.Pattern.CQRS.Extensions.Dapper\Daybreaksoft.Pattern.CQRS.Extensions.Dapper.csproj" />
+    <ProjectReference Include="..\AspNetCore.Dapper.Sample.Data\AspNetCore.Dapper.Sample.Data.csproj" />
+  </ItemGroup>
+
+</Project>

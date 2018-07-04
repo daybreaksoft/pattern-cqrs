@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 using Dapper.Contrib.Extensions;
 using Daybreaksoft.Extensions.Functions;
 
-namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
+namespace Daybreaksoft.Pattern.CQRS.Extensions.Dapper
 {
     /// <summary>
     /// Default implemention of IQuery with EntityFrameworkCore

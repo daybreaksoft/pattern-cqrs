@@ -14,6 +14,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.Dapper
 
         public override async Task CommitAsync()
         {
+            await base.CommitAsync();
             //using (var transaction = Connection.Database.BeginTransaction())
             //{
             //    try
@@ -35,7 +36,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.Dapper
         {
             base.Dispose();
 
-            if (Connection != null)
+            if (Connection != null && Connection.State != ConnectionState.Closed)
             {
                 Connection.Dispose();
             }
