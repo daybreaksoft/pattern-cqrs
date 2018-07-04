@@ -60,7 +60,10 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.Dapper
             // Find key property and set id value to this property.
             var entityType = typeof(TEntity);
             var keyProperty = entityType.FindProperty<KeyAttribute>();
-            keyProperty.SetValue(keyProperty, id);
+            
+            if (keyProperty == null) throw new NullReferenceException($"Cannot found the property which has Dapper.Contrib.Extensions.KeyAttribute within entity type {entityType.Name}");
+
+            keyProperty.SetValue(entity, id);
 
             await Connection.DeleteAsync(entity, transaction);
         }

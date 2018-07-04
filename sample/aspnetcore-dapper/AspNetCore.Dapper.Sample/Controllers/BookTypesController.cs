@@ -55,7 +55,7 @@ namespace AspNetCore.Dapper.Sample.Controllers
 
         public async Task<IActionResult> DeleteCommand([FromRoute]int id, [FromServices]ICommandBus commandBus)
         {
-          //  await commandBus.SendAsync(new DeleteUserCommand { UserId = id });
+            await commandBus.SendAsync(new DeleteBookTypeCommand { Id = id });
 
             return RedirectToAction("Index");
         }
