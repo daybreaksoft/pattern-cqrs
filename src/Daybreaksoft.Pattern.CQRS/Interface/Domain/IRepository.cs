@@ -18,12 +18,12 @@ namespace Daybreaksoft.Pattern.CQRS
         /// <summary>
         /// Insert an new aggreagate
         /// </summary>
-        Task InsertAsync(TAggregateRoot aggreagate, IDbTransaction transaction = null);
+        Task InsertAsync(TAggregateRoot aggregate, IDbTransaction transaction = null);
 
         /// <summary>
         /// Update an aggreagate
         /// </summary>
-        Task UpdateAsync(TAggregateRoot aggreagate, IDbTransaction transaction = null);
+        Task UpdateAsync(TAggregateRoot aggregate, IDbTransaction transaction = null);
 
         /// <summary>
         /// Delete an aggreagate by id

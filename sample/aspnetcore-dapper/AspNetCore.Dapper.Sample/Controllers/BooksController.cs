@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace AspNetCore.Dapper.Sample.Controllers
 {
-    public class AuthorsController : Controller
+    public class BooksController : Controller
     {
         public async Task<IActionResult> Index([FromServices]AuthorQuery authorQuery)
         {
@@ -23,8 +23,6 @@ namespace AspNetCore.Dapper.Sample.Controllers
 
         public async Task<IActionResult> Edit([FromRoute]int? id, [FromServices] IAggregateBus aggregateBus, [FromServices] ConstQuery constQuery)
         {
-            var sexSelectItems = await constQuery.GetSelectItems(ConstCategoryConst.Sex);
-            ViewBag.SexSelectItems = sexSelectItems.Select(p => new SelectListItem(p.DisplayText, p.Id.ToString()));
 
             AuthorViewModel viewModel = null;
 
