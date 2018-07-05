@@ -1,0 +1,13 @@
+﻿@model AspNetCore.Dapper.Sample.Query.AuthorViewModel
+@{
+    ViewData["Title"] = "Authors";
+}
+<h2>@(ViewBag.IsCreate ? "Create" : "Update") Author</h2>
+<hr />
+<form asp-action="@(ViewBag.IsCreate ? "CreateCommand" : "UpdateCommand")" asp-route-id="@ViewBag.AuthorId">
+    <div class="form-group">
+        <label>Type</label>
+        <input class="form-control" placeholder="Name" asp-for="Name" />
+    </div>
+    <button class="btn btn-default">Save</button>
+</form>

@@ -1,6 +1,4 @@
-﻿using Daybreaksoft.Pattern.CQRS;
-
-namespace AspNetCore.Dapper.Sample.Command.BookType
+﻿namespace AspNetCore.Dapper.Sample.Command.BookType
 {
     public class UpdateBookTypeCommand : CreateBookTypeCommand
     {

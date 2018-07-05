@@ -1,13 +1,9 @@
-using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using AspNetCore.Dapper.Sample.Command.BookType;
 using AspNetCore.Dapper.Sample.Domain.Aggregates;
-using AspNetCore.Sample.Query;
+using AspNetCore.Dapper.Sample.Query;
 using Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore.Dapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

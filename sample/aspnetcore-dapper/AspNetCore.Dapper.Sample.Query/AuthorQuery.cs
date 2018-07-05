@@ -8,20 +8,20 @@ using Daybreaksoft.Pattern.CQRS.Extensions.Dapper;
 
 namespace AspNetCore.Dapper.Sample.Query
 {
-    public class BookTypeQuery : AbstractQuery
+    public class AuthorQuery : AbstractQuery
     {
-        public BookTypeQuery(IDbConnection connection) : base(connection)
+        public AuthorQuery(IDbConnection connection) : base(connection)
         {
         }
 
-        public async Task<IEnumerable<BookTypeListItemViewModel>> GetBookTypes()
+        public async Task<IEnumerable<AuthorListItemViewModel>> GetAuthors()
         {
-            var bookTypes = await Connection.GetAllAsync<BookTypeEntity>();
+            var collection = await Connection.GetAllAsync<AuthorEntity>();
 
-            return bookTypes.Select(p => new BookTypeListItemViewModel
+            return collection.Select(p => new AuthorListItemViewModel
             {
                 Id = p.Id,
-                Type = p.Type
+                Name = p.Name
             });
         }
     }
