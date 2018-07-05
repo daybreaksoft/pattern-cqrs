@@ -1,8 +1,7 @@
 ﻿namespace AspNetCore.Dapper.Sample.Data.Const
 {
-    public enum SexConst
+    public enum ConstCategoryConst
     {
-        Male = 1,
-        Female = 2
+        Sex = 1
     }
 }

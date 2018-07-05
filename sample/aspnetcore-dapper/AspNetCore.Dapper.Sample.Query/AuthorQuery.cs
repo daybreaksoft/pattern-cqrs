@@ -3,6 +3,8 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using AspNetCore.Dapper.Sample.Data.Entities;
+using AspNetCore.Dapper.Sample.Query.ViewModels;
+using Dapper;
 using Dapper.Contrib.Extensions;
 using Daybreaksoft.Pattern.CQRS.Extensions.Dapper;
 
@@ -16,12 +18,15 @@ namespace AspNetCore.Dapper.Sample.Query
 
         public async Task<IEnumerable<AuthorListItemViewModel>> GetAuthors()
         {
-            var collection = await Connection.GetAllAsync<AuthorEntity>();
+            var sql = @"SELECT a.Id, a.Name, c.DisplayText AS Sex FROM Authors a JOIN Const c ON c.Id = a.Sex";
+
+            var collection = await Connection.QueryAsync(sql);
 
             return collection.Select(p => new AuthorListItemViewModel
             {
                 Id = p.Id,
-                Name = p.Name
+                Name = p.Name,
+                Sex = p.Sex
             });
         }
     }

@@ -1,10 +1,14 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using AspNetCore.Dapper.Sample.Command.Author;
+using AspNetCore.Dapper.Sample.Data.Const;
 using AspNetCore.Dapper.Sample.Domain.Aggregates;
 using AspNetCore.Dapper.Sample.Query;
+using AspNetCore.Dapper.Sample.Query.ViewModels;
 using Daybreaksoft.Extensions.Functions;
 using Daybreaksoft.Pattern.CQRS;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace AspNetCore.Dapper.Sample.Controllers
 {
@@ -17,8 +21,11 @@ namespace AspNetCore.Dapper.Sample.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Edit([FromRoute]int? id, [FromServices] IAggregateBus aggregateBus)
+        public async Task<IActionResult> Edit([FromRoute]int? id, [FromServices] IAggregateBus aggregateBus, [FromServices] ConstQuery constQuery)
         {
+            var sexSelectItems = await constQuery.GetSelectItems(ConstCategoryConst.Sex);
+            ViewBag.SexSelectItems = sexSelectItems.Select(p => new SelectListItem(p.Text, p.Value));
+
             AuthorViewModel viewModel = null;
 
             if (id.HasValue)

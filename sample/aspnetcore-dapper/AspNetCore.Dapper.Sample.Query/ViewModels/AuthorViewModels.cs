@@ -1,6 +1,6 @@
 ﻿using AspNetCore.Dapper.Sample.Data.Const;
 
-namespace AspNetCore.Dapper.Sample.Query
+namespace AspNetCore.Dapper.Sample.Query.ViewModels
 {
     public class AuthorViewModel
     {

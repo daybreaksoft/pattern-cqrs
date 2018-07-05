@@ -1,4 +1,4 @@
-﻿namespace AspNetCore.Dapper.Sample.Query
+﻿namespace AspNetCore.Dapper.Sample.Query.ViewModels
 {
     public class BookTypeViewModel
     {

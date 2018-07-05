@@ -2,6 +2,7 @@
 using AspNetCore.Dapper.Sample.Command.BookType;
 using AspNetCore.Dapper.Sample.Domain.Aggregates;
 using AspNetCore.Dapper.Sample.Query;
+using AspNetCore.Dapper.Sample.Query.ViewModels;
 using Daybreaksoft.Extensions.Functions;
 using Daybreaksoft.Pattern.CQRS;
 using Microsoft.AspNetCore.Mvc;
