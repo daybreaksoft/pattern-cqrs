@@ -1,17 +1,16 @@
 ﻿namespace AspNetCore.Dapper.Sample.Query.ViewModels
 {
-    public class BookTypeViewModel
+    public class BookTypeListItemViewModel
     {
         public int Id { get; set; }
 
         public string Type { get; set; }
     }
 
-    public class BookTypeListItemViewModel : BookTypeViewModel
+    public class BookTypeSelectItemViewModel
     {
-    }
+        public int Id { get; set; }
 
-    public class BookTypeSelectItemViewModel : BookTypeViewModel
-    {
+        public string Type { get; set; }
     }
 }

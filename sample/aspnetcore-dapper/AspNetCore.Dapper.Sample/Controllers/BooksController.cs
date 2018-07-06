@@ -30,22 +30,18 @@ namespace AspNetCore.Dapper.Sample.Controllers
             var authors = await authorQuery.GetAuthorsAsSelectItems();
             ViewBag.AuthorSelectItems = authors.Select(p => new SelectListItem(p.Name, p.Id.ToString()));
 
-            BookViewModel viewModel = null;
+            BookAggregate aggregate = null;
 
             if (id.HasValue)
             {
-                // Load user
-                var aggregate = await aggregateBus.GetExsitsAggregate<BookAggregate>(id);
-
-                // Build view model
-                viewModel = new BookViewModel();
-                aggregate.CopyValueTo(viewModel, forcePropertyNames:new []{ "Id", "AuthorIds" });
+                // Load book aggregate
+                aggregate = await aggregateBus.GetExsitsAggregate<BookAggregate>(id);
             }
 
             ViewBag.IsCreate = !id.HasValue;
             ViewBag.AuthorId = id;
 
-            return View(viewModel);
+            return View(aggregate);
         }
 
         public async Task<IActionResult> CreateCommand(CreateBookCommand command, [FromServices]ICommandBus commandBus)

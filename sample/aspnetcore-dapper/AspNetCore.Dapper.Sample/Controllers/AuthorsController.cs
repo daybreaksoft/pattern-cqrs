@@ -26,22 +26,18 @@ namespace AspNetCore.Dapper.Sample.Controllers
             var sexSelectItems = await constQuery.GetSelectItems(ConstCategoryConst.Sex);
             ViewBag.SexSelectItems = sexSelectItems.Select(p => new SelectListItem(p.DisplayText, p.Id.ToString()));
 
-            AuthorViewModel viewModel = null;
+            AuthorAggregate aggregate = null;
 
             if (id.HasValue)
             {
-                // Load user
-                var aggregate = await aggregateBus.GetExsitsAggregate<AuthorAggregate>(id);
-
-                // Build view model
-                viewModel = new AuthorViewModel();
-                aggregate.CopyValueTo(viewModel);
+                // Load author aggregate
+                aggregate = await aggregateBus.GetExsitsAggregate<AuthorAggregate>(id);
             }
 
             ViewBag.IsCreate = !id.HasValue;
             ViewBag.AuthorId = id;
 
-            return View(viewModel);
+            return View(aggregate);
         }
 
         public async Task<IActionResult> CreateCommand(CreateAuthorCommand command, [FromServices]ICommandBus commandBus)

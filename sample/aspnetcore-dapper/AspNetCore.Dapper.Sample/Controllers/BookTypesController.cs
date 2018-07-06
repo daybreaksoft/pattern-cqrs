@@ -20,22 +20,18 @@ namespace AspNetCore.Dapper.Sample.Controllers
 
         public async Task<IActionResult> Edit([FromRoute]int? id, [FromServices] IAggregateBus aggregateBus)
         {
-            BookTypeViewModel viewModel = null;
+            BookTypeAggregate aggregate = null;
 
             if (id.HasValue)
             {
-                // Load user
-                var aggregate = await aggregateBus.GetExsitsAggregate<BookTypeAggregate>(id);
-
-                // Build view model
-                viewModel = new BookTypeViewModel();
-                aggregate.CopyValueTo(viewModel);
+                // Load book type
+                aggregate = await aggregateBus.GetExsitsAggregate<BookTypeAggregate>(id);
             }
 
             ViewBag.IsCreate = !id.HasValue;
             ViewBag.BookTypeId = id;
 
-            return View(viewModel);
+            return View(aggregate);
         }
 
         public async Task<IActionResult> CreateCommand(CreateBookTypeCommand command, [FromServices]ICommandBus commandBus)
