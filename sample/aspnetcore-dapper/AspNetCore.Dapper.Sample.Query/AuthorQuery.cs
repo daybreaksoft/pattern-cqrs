@@ -29,5 +29,16 @@ namespace AspNetCore.Dapper.Sample.Query
                 Sex = p.Sex
             });
         }
+
+        public async Task<IEnumerable<AuthorSelectItemViewModel>> GetAuthorsAsSelectItems()
+        {
+            var bookTypes = await Connection.GetAllAsync<AuthorEntity>();
+
+            return bookTypes.Select(p => new AuthorSelectItemViewModel
+            {
+                Id = p.Id,
+                Name = p.Name
+            });
+        }
     }
 }

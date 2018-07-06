@@ -1,17 +1,21 @@
-﻿@model AspNetCore.Dapper.Sample.Query.ViewModels.AuthorViewModel
+﻿@model AspNetCore.Dapper.Sample.Query.ViewModels.BookViewModel
 @{
-    ViewData["Title"] = "Authors";
+    ViewData["Title"] = "Books";
 }
-<h2>@(ViewBag.IsCreate ? "Create" : "Update") Author</h2>
+<h2>@(ViewBag.IsCreate ? "Create" : "Update") Book</h2>
 <hr />
-<form asp-action="@(ViewBag.IsCreate ? "CreateCommand" : "UpdateCommand")" asp-route-id="@ViewBag.AuthorId">
+<form asp-action="@(ViewBag.IsCreate ? "CreateCommand" : "UpdateCommand")" asp-route-id="@ViewBag.BookId">
     <div class="form-group">
-        <label>Type</label>
+        <label>Name</label>
         <input class="form-control" placeholder="Name" asp-for="Name" />
     </div>
     <div class="form-group">
-        <label>Sex</label>
-        <select class="form-control" asp-items="@ViewBag.SexSelectItems" asp-for="Sex"></select>
+        <label>Type</label>
+        <select class="form-control" asp-items="@ViewBag.BookTypeSelectItems" asp-for="BookTypeId"></select>
+    </div>
+    <div class="form-group">
+        <label>Authors</label>
+        <select class="form-control" asp-items="@ViewBag.AuthorSelectItems" asp-for="AuthorIds"></select>
     </div>
     <button class="btn btn-default">Save</button>
 </form>

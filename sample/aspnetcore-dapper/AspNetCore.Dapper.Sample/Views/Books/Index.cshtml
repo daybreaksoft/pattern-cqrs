@@ -11,22 +11,22 @@
         <thead>
         <tr>
             <th>Name</th>
-            <th>Sex</th>
+            <th>Type</th>
             <th></th>
         </tr>
         </thead>
         <tbody>
-        @*@foreach (var author in ViewBag.Authors)
+        @foreach (var book in ViewBag.Books)
         {
             <tr>
-                <td>@author.Name</td>
-                <td>@author.Sex</td>
+                <td>@book.Name</td>
+                <td>@book.Type</td>
                 <td>
-                    <a class="btn btn-default btn-sm" asp-action="Edit" asp-route-id="@author.Id">Edit</a>
-                    <a class="btn btn-danger btn-sm" asp-action="DeleteCommand" asp-route-id="@author.Id">Delete</a>
+                    <a class="btn btn-default btn-sm" asp-action="Edit" asp-route-id="@book.Id">Edit</a>
+                    <a class="btn btn-danger btn-sm" asp-action="DeleteCommand" asp-route-id="@book.Id">Delete</a>
                 </td>
             </tr>
-        }*@
+        }
         </tbody>
     </table>
 </section>

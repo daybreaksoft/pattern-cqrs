@@ -13,6 +13,6 @@ namespace AspNetCore.Dapper.Sample.Domain.Aggregates
 
         public int BookTypeId { get; set; }
 
-        public IReadOnlyCollection<int> AuthorIds { get; set; }
+        public ICollection<int> AuthorIds { get; set; }
     }
 }

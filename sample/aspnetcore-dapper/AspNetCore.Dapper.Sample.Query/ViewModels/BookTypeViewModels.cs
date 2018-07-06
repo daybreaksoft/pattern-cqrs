@@ -10,4 +10,8 @@
     public class BookTypeListItemViewModel : BookTypeViewModel
     {
     }
+
+    public class BookTypeSelectItemViewModel : BookTypeViewModel
+    {
+    }
 }

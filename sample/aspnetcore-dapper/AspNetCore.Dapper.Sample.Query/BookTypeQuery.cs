@@ -25,5 +25,16 @@ namespace AspNetCore.Dapper.Sample.Query
                 Type = p.Type
             });
         }
+
+        public async Task<IEnumerable<BookTypeSelectItemViewModel>> GetBookTypesAsSelectItems()
+        {
+            var bookTypes = await Connection.GetAllAsync<BookTypeEntity>();
+
+            return bookTypes.Select(p => new BookTypeSelectItemViewModel
+            {
+                Id = p.Id,
+                Type = p.Type
+            });
+        }
     }
 }
