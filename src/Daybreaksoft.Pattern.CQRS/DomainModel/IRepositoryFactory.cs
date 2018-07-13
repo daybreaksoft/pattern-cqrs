@@ -9,23 +9,9 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
         Type GetRepositoryType(IEntity entity);
 
         Type GetRepositoryType(Type entityType);
+        
+        object GetRepository(Type repositoryType);
 
-        object GetRepository(IEntity entity);
-
-        object GetRepository(Type entityType);
-
-        IRepository<TEntity> GetRepository<TEntity>() where TEntity:IEntity;
-
-        Task<TEntity> InvokeFindAsync<TEntity>(object id) where TEntity : IEntity;
-
-        Task<IEnumerable<TEntity>> InvokeFindAllAsync<TEntity>() where TEntity : IEntity;
-
-        Task InvokeInsertAsync(IEntity entity);
-
-        Task InvokeUpdateAsync(IEntity entity);
-
-        Task InvokeRemoveAsync<TEntity>(object id) where TEntity : IEntity;
-
-        Task InvokeRemoveAsync(Type entityType, object id);
+        IRepository<TEntity> GetRepository<TEntity>() where TEntity : IEntity;
     }
 }

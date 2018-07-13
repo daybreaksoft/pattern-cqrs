@@ -10,10 +10,6 @@
     <PackageReference Include="Daybreaksoft.Extensions.Functions" Version="1.2.2" />
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' ">
-    <PackageReference Include="System.Data.SqlClient" Version="4.4.0" />
-  </ItemGroup>
-
   <ItemGroup>
     <Folder Include="Interface\Command\" />
     <Folder Include="Interface\DI\" />

@@ -46,8 +46,11 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
             // Add services that implemented IRepository<>
             AddMultipleServices(services, options, typeof(IRepository<>));
 
-            // Add an service that implemented IDynamicRepositoryFactory.
+            // Add an service that implemented IRepositoryFactory.
             AddSignleService(services, options, typeof(IRepositoryFactory), typeof(DefaultRepositoryFactory));
+
+            // Add an service that implemented IRepositoryFactory.
+            AddSignleService(services, options, typeof(IRepositoryInvoker), typeof(DefaultRepositoryInvoker));
 
             // Add an service that implemented IDomainAppServiceFactory.
             AddSignleService(services, options, typeof(IDomainAppServiceFactory), typeof(DefaultDomainAppServiceFactory));

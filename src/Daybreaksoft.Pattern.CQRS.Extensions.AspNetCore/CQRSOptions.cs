@@ -59,6 +59,26 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
         }
 
         /// <summary>
+        /// Adds a method that registers the implementation of IRepositoryFactory as a service
+        /// </summary>
+        public void ForRepositoryFactory(Action<IServiceCollection> action)
+        {
+            if (action == null) throw new ArgumentNullException(nameof(action));
+
+            RegisterImplementationActions.Add(typeof(IRepositoryFactory).Name, action);
+        }
+
+        /// <summary>
+        /// Adds a method that registers the implementation of IRepositoryInvoker as a service
+        /// </summary>
+        public void ForRepositoryInvoker(Action<IServiceCollection> action)
+        {
+            if (action == null) throw new ArgumentNullException(nameof(action));
+
+            RegisterImplementationActions.Add(typeof(IRepositoryInvoker).Name, action);
+        }
+
+        /// <summary>
         /// Adds a method that registers the implementation of IDependencyInjection as a service
         /// </summary>
         public void ForDependencyInjection(Action<IServiceCollection> action)
@@ -222,16 +242,6 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
 
             // Remove action via service name
             RegisterImplementationActions.Remove(serviceName);
-        }
-
-        /// <summary>
-        /// Adds a method that registers the implementation of IDynamicRepositoryFactory as a service
-        /// </summary>
-        public void ForDynamicRepositoryFactory(Action<IServiceCollection> action)
-        {
-            if (action == null) throw new ArgumentNullException(nameof(action));
-
-            RegisterImplementationActions.Add(typeof(IRepositoryFactory).Name, action);
         }
 
         /// <summary>

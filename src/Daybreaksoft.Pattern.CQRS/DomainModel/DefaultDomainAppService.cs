@@ -10,10 +10,12 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
         where TAggregateRoot : IAggregateRoot
     {
         protected readonly IRepositoryFactory RepositoryFactory;
+        protected readonly IRepositoryInvoker RepositoryInvoker;
 
-        public DefaultDomainAppService(IRepositoryFactory repositoryFactory)
+        public DefaultDomainAppService(IRepositoryFactory repositoryFactory, IRepositoryInvoker repositoryInvoker)
         {
             RepositoryFactory = repositoryFactory;
+            RepositoryInvoker = repositoryInvoker;
         }
 
         public virtual Task<TAggregateRoot> FindAsync(object id)
@@ -30,17 +32,18 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
         {
             if (aggregate is IEntity)
             {
-                //await RepositoryFactory.InvokeInsertAsync((IEntity)aggregate);
-
                 var type = aggregate.GetType();
 
+                if (type.BaseType != null && type.BaseType != typeof(Object))
+                {
+                    type = type.BaseType;
+                }
 
-#if !NetStandar13
+                var repositoryType = RepositoryFactory.GetRepositoryType(type);
 
-                var interfaces = type.GetInterfaces();
+                var repository = RepositoryFactory.GetRepository(repositoryType);
 
-                await RepositoryFactory.InvokeInsertAsync((IEntity)type.BaseType);
-#endif
+                await RepositoryInvoker.InsertAsync(repository, repositoryType, (IEntity)aggregate);
             }
             else
             {

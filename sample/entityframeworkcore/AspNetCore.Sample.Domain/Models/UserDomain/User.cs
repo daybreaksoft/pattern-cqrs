@@ -5,10 +5,8 @@ namespace AspNetCore.Sample.Domain.Models.UserDomain
 {
     public class User : IAggregateRoot
     {
-        public User(string username, int point)
+        public User(string username, int point) : this(0, username, point)
         {
-            Username = username;
-            Point = point;
         }
 
         public User(int id, string username, int point)

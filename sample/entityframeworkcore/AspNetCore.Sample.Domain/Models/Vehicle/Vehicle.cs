@@ -6,10 +6,8 @@ namespace AspNetCore.Sample.Domain.Models
 {
     public class Vehicle : VehicleEntity, IAggregateRoot
     {
-        public Vehicle(int userId, string plateNumber)
+        public Vehicle(int userId, string plateNumber) : this(0, userId, plateNumber)
         {
-            UserId = userId;
-            PlateNumber = plateNumber;
         }
 
         public Vehicle(int id, int userId, string plateNumber)
