@@ -2,107 +2,115 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
 using Daybreaksoft.Extensions.Functions;
+using Daybreaksoft.Pattern.CQRS.DomainModel;
 using Microsoft.EntityFrameworkCore;
 
 namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
 {
     /// <summary>
-    /// Default implemention of IQuery with EntityFrameworkCore
+    /// Default implemention of IRepository with EntityFrameworkCore
     /// </summary>
-    public abstract class AbstractRepository<TAggregate, TEntity> : IRepository<TAggregate> 
-        where TAggregate : class, IAggregateRoot
+    public abstract class AbstractRepository<TEntity> : IRepository<TEntity>
         where TEntity : class, IEntity, new()
     {
         protected readonly DbContext Db;
-        protected readonly IAggregateBus Aggregates;
 
-        public AbstractRepository(DbContext db, IAggregateBus aggregateBus)
+        protected AbstractRepository(DbContext db)
         {
             Db = db;
-            Aggregates = aggregateBus;
         }
 
         /// <summary>
-        /// Find an entity by id
+        /// Get the queryable of entity.
         /// </summary>
-        public virtual async Task<TAggregate> FindAsync(object id, IDbTransaction transaction = null)
+        /// <returns></returns>
+        public virtual IQueryable<TEntity> GetQueryable()
         {
-            return ConvertToAggregate(await Db.Set<TEntity>().FindAsync(id));
+            return Db.Set<TEntity>().AsQueryable();
         }
 
         /// <summary>
-        /// Insert an entity
+        /// Find an entity via id
         /// </summary>
-        public virtual async Task InsertAsync(TAggregate aggregate, IDbTransaction transaction = null)
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public Task<TEntity> FindAsync(object id)
         {
-            if (aggregate == null) throw new ArgumentNullException(nameof(aggregate));
+            return Db.Set<TEntity>().FindAsync(id);
+        }
 
-            // Insert entity
-            await Db.Set<TEntity>().AddAsync(ConvertToEntity(aggregate));
+        /// <summary>
+        /// Find all entities
+        /// </summary>
+        /// <returns></returns>
+        public Task<IEnumerable<TEntity>> FindAllAsync()
+        {
+            throw new NotSupportedException();
+            //return Db.Set<TEntity>().AsEnumerable();
+        }
 
-            // Submit changes
+        /// <summary>
+        /// Insert an entity.
+        /// </summary>
+        /// <param name="entity">The entity instance.</param>
+        /// <returns></returns>
+        public virtual async Task InsertAsync(TEntity entity)
+        {
+            if (entity == null) throw new ArgumentNullException(nameof(entity));
+
+            await Db.Set<TEntity>().AddAsync(entity);
+
             await Db.SaveChangesAsync();
         }
 
         /// <summary>
-        /// Update an entity
+        /// Update an entity.
         /// </summary>
-        public virtual async Task UpdateAsync(TAggregate aggregate, IDbTransaction transaction = null)
+        /// <param name="entity">The entity instance.</param>
+        /// <returns></returns>
+        public virtual async Task UpdateAsync(TEntity entity)
         {
-            if (aggregate == null) throw new ArgumentNullException(nameof(aggregate));
+            if (entity == null) throw new ArgumentNullException(nameof(entity));
 
-            var entity = await Db.Set<TEntity>().FindAsync(aggregate.Id);
+            Db.Entry(entity).State = EntityState.Modified;
 
-            aggregate.CopyValueTo(entity);
-
-            // Submit changes
             await Db.SaveChangesAsync();
         }
 
         /// <summary>
-        /// Remove an entity by key
+        /// Delete an entity
         /// </summary>
-        public virtual async Task RemoveAsync(object id, IDbTransaction transaction = null)
+        /// <param name="entity">The entity instance.</param>
+        /// <returns></returns>
+        public virtual async Task DeleteAsync(TEntity entity)
         {
-            // Generate new entity
+            // Change entity state to delted
+            Db.Entry(entity).State = EntityState.Deleted;
+
+            await Db.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// Delete an entity.
+        /// </summary>
+        /// <param name="key">The key of the entity.</param>
+        /// <returns></returns>
+        public Task DeleteAsync(object key)
+        {
             var entity = new TEntity();
 
             // Find key property
             var keyProperty = typeof(TEntity).FindProperty<KeyAttribute>();
 
+            if(keyProperty == null)throw new NullReferenceException($"Cannot found an key of {entity.GetType().FullName}");
+
             // Set key property value
-            keyProperty.SetValue(entity, id);
+            keyProperty.SetValue(entity, key);
 
-            // Change entity state to delted
-            var entityEntry = Db.Entry(entity);
-            entityEntry.State = EntityState.Deleted;
-
-            // Submit changes
-            await Db.SaveChangesAsync();
-        }
-
-        protected virtual TEntity ConvertToEntity(TAggregate aggregate)
-        {
-            if (aggregate == null) return null;
-
-            var entity = new TEntity();
-
-            aggregate.CopyValueTo(entity);
-
-            return entity;
-        }
-
-        protected virtual TAggregate ConvertToAggregate(TEntity entity)
-        {
-            if (entity == null) return null;
-
-            var aggregate = Aggregates.BuildAggregate<TAggregate>();
-
-            entity.CopyValueTo(aggregate);
-
-            return aggregate;
+            return DeleteAsync(entity);
         }
     }
 }

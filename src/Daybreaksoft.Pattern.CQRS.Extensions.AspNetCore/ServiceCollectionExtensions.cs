@@ -3,6 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Daybreaksoft.Pattern.CQRS.Command;
+using Daybreaksoft.Pattern.CQRS.DomainModel;
 
 namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
 {
@@ -45,7 +47,10 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
             AddMultipleServices(services, options, typeof(IRepository<>));
 
             // Add an service that implemented IDynamicRepositoryFactory.
-            AddSignleService(services, options, typeof(IDynamicRepositoryFactory), typeof(DefaultDynamicRepositoryFactory));
+            AddSignleService(services, options, typeof(IRepositoryFactory), typeof(DefaultRepositoryFactory));
+
+            // Add an service that implemented IDomainAppServiceFactory.
+            AddSignleService(services, options, typeof(IDomainServiceFactory), typeof(DefaultDomainServiceFactory));
 
             // Add services that implemented ICommandExecutor<>
             AddMultipleServices(services, options, typeof(ICommandExecutor<>));
@@ -61,9 +66,6 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
 
             // Add services that implemented IPostCommitEventHandler<>
             AddMultipleServices(services, options, typeof(IPostCommitEventHandler<>));
-
-            // Add services that implemented IAggregateRoot
-            AddMultipleServices(services, options, typeof(IAggregateRoot), ServiceLifetime.Transient);
 
             // Add services that implemented IQuery
             AddMultipleServices(services, options, typeof(IQuery));

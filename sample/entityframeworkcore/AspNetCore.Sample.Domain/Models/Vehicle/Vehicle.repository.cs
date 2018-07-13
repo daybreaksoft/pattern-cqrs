@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AspNetCore.Sample.Domain.Models
 {
-    public class VehicleRepository : AbstractRepository<Vehicle, VehicleEntity>
-    {
-        public VehicleRepository(DbContext db, IAggregateBus aggregateBus) : base(db, aggregateBus)
-        {
-        }
-    }
+    //public class VehicleRepository : AbstractRepository<Vehicle, VehicleEntity>
+    //{
+    //    public VehicleRepository(DbContext db, IAggregateBus aggregateBus) : base(db, aggregateBus)
+    //    {
+    //    }
+    //}
 }

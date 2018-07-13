@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Daybreaksoft.Pattern.CQRS
+namespace Daybreaksoft.Pattern.CQRS.DomainModel
 {
     /// <summary>
-    /// Unit of work
+    /// UnitOfWork接口
     /// </summary>
     public interface IUnitOfWork : IDisposable
     {

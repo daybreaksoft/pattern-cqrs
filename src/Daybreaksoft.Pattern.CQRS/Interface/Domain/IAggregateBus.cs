@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Daybreaksoft.Pattern.CQRS.DomainModel;
 
 namespace Daybreaksoft.Pattern.CQRS
 {

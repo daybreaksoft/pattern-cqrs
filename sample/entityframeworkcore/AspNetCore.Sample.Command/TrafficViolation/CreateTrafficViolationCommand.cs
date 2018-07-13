@@ -1,4 +1,5 @@
 ﻿using Daybreaksoft.Pattern.CQRS;
+using Daybreaksoft.Pattern.CQRS.Command;
 
 namespace AspNetCore.Sample.Command
 {

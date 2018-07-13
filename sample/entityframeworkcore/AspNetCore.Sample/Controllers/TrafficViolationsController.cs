@@ -8,6 +8,7 @@ using Daybreaksoft.Extensions.Functions;
 using Daybreaksoft.Pattern.CQRS;
 using AspNetCore.Sample.Query.TrafficViolation;
 using AspNetCore.Sample.Query.Vehicle;
+using Daybreaksoft.Pattern.CQRS.Command;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace AspNetCore.Sample.Controllers

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using Daybreaksoft.Pattern.CQRS.DomainModel;
 
 namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
 {

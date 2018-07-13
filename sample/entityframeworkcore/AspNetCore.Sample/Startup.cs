@@ -2,6 +2,7 @@
 using AspNetCore.Sample.Command;
 using AspNetCore.Sample.Data;
 using AspNetCore.Sample.Domain.Models;
+using AspNetCore.Sample.Domain.Models.UserDomain;
 using AspNetCore.Sample.Query.User;
 using Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
@@ -34,7 +35,7 @@ namespace AspNetCore.Sample
                 builder.ForDbContext<SampleDbContext>();
                 builder.ForCommandExecutor(typeof(CreateUserCommandExecutor).GetTypeInfo().Assembly);
                 builder.ForRepository(domainAssembly, "AspNetCore.Sample.Domain.Models");
-                builder.ForAggregate(domainAssembly, "AspNetCore.Sample.Domain.Models");
+                //builder.ForAggregate(domainAssembly, "AspNetCore.Sample.Domain.Models");
                 builder.ForEventHandler(domainAssembly, "AspNetCore.Sample.Domain.Models");
                 builder.ForPostCommitEventHandler(domainAssembly, "AspNetCore.Sample.Domain.Models");
                 builder.ForQuery(typeof(UserQuery).GetTypeInfo().Assembly);

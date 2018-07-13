@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Threading.Tasks;
 using AspNetCore.Sample.Command;
+using AspNetCore.Sample.Data;
 using AspNetCore.Sample.Domain.Models;
+using AspNetCore.Sample.Domain.Models.UserDomain;
 using Microsoft.AspNetCore.Mvc;
 using Daybreaksoft.Extensions.Functions;
 using Daybreaksoft.Pattern.CQRS;
 using AspNetCore.Sample.Query.User;
+using Daybreaksoft.Pattern.CQRS.Command;
 
 namespace AspNetCore.Sample.Controllers
 {
@@ -18,18 +21,18 @@ namespace AspNetCore.Sample.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Edit([FromRoute]int? id, [FromServices] IAggregateBus aggregateBus)
+        public async Task<IActionResult> Edit([FromRoute]int? id, [FromServices] SampleDbContext db)
         {
             UserViewModel viewModel = null;
 
             if (id.HasValue)
             {
-                // Load user
-                var userModel = await aggregateBus.GetExsitsAggregate<User>(id);
+                //// Load user
+                //var userModel = await aggregateBus.GetExsitsAggregate<User>(id);
 
-                // Build view model
-                viewModel = new UserViewModel();
-                userModel.CopyValueTo(viewModel);
+                //// Build view model
+                //viewModel = new UserViewModel();
+                //userModel.CopyValueTo(viewModel);
             }
 
             ViewBag.IsCreate = !id.HasValue;

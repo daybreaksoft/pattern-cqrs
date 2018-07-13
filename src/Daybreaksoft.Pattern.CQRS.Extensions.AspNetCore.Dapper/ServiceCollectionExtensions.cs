@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+using Daybreaksoft.Pattern.CQRS.DomainModel;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore.Dapper

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Daybreaksoft.Pattern.CQRS.DomainModel;
 
 namespace Daybreaksoft.Pattern.CQRS
 {
@@ -11,9 +12,9 @@ namespace Daybreaksoft.Pattern.CQRS
     public class DefaultAggregateBus : IAggregateBus
     {
         protected readonly IDependencyInjection DI;
-        protected readonly IDynamicRepositoryFactory DynamicRepositoryFactory;
+        protected readonly IRepositoryFactory DynamicRepositoryFactory;
 
-        public DefaultAggregateBus(IDependencyInjection di, IDynamicRepositoryFactory dynamicRepositoryFactory)
+        public DefaultAggregateBus(IDependencyInjection di, IRepositoryFactory dynamicRepositoryFactory)
         {
             DI = di;
             DynamicRepositoryFactory = dynamicRepositoryFactory;
@@ -33,7 +34,7 @@ namespace Daybreaksoft.Pattern.CQRS
         public TAggregateRoot BuildAggregate<TAggregateRoot>(object id) where TAggregateRoot : IAggregateRoot
         {
             var aggregate = DI.GetService<TAggregateRoot>();
-            aggregate.Id = id;
+            //aggregate.Id = id;
 
             Aggregates.Add(aggregate);
 
@@ -42,18 +43,7 @@ namespace Daybreaksoft.Pattern.CQRS
 
         public async Task<TAggregateRoot> GetExsitsAggregate<TAggregateRoot>(object id) where TAggregateRoot : IAggregateRoot
         {
-            var existsAggregate = Aggregates.SingleOrDefault(p => p is TAggregateRoot && p != null && p.Id.ToString() == id.ToString());
-
-            if (existsAggregate == null)
-            {
-                var aggregate = await DynamicRepositoryFactory.InvokeFindAsync<TAggregateRoot>(id);
-
-                return aggregate;
-            }
-            else
-            {
-                return (TAggregateRoot)existsAggregate;
-            }
+          throw new NotSupportedException();
         }
     }
 }

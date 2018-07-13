@@ -1,13 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using Daybreaksoft.Pattern.CQRS.DomainModel;
 
 namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
 {
-    public class DefaultUnitOfWork : CQRS.DefaultUnitOfWork
+    public class DefaultUnitOfWork : DomainModel.DefaultUnitOfWork
     {
         protected readonly DbContext Db;
 
-        public DefaultUnitOfWork(DbContext db, IAggregateBus aggregateBus, IDynamicRepositoryFactory dynamicRepositoryFactory, IEventBus eventBus) : base(aggregateBus, dynamicRepositoryFactory, eventBus)
+        public DefaultUnitOfWork(DbContext db, IAggregateBus aggregateBus, IRepositoryFactory dynamicRepositoryFactory, IEventBus eventBus) : base(aggregateBus, dynamicRepositoryFactory, eventBus)
         {
             Db = db;
         }

@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using AspNetCore.Sample.Domain.Models;
 using Daybreaksoft.Pattern.CQRS;
+using Daybreaksoft.Pattern.CQRS.Command;
 
 namespace AspNetCore.Sample.Command
 {

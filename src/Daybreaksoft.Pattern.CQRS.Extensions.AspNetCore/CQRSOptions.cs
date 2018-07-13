@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Daybreaksoft.Pattern.CQRS.Command;
+using Daybreaksoft.Pattern.CQRS.DomainModel;
 
 namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
 {
@@ -64,6 +66,16 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
             if (action == null) throw new ArgumentNullException(nameof(action));
 
             RegisterImplementationActions.Add(typeof(IDependencyInjection).Name, action);
+        }
+
+        /// <summary>
+        /// Adds a method that registers the implementation of IDomainAppServiceFactory as a service
+        /// </summary>
+        public void ForDomainAppServiceFactory(Action<IServiceCollection> action)
+        {
+            if (action == null) throw new ArgumentNullException(nameof(action));
+
+            RegisterImplementationActions.Add(typeof(IDomainServiceFactory).Name, action);
         }
 
         /// <summary>
@@ -187,55 +199,13 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
         }
 
         /// <summary>
-        /// Adds a method that registers the implementation of IAggregateBuilder as a service
-        /// </summary>
-        public void ForAggregateBuilder(Action<IServiceCollection> action)
-        {
-            if (action == null) throw new ArgumentNullException(nameof(action));
-
-            RegisterImplementationActions.Add(typeof(IAggregateBus).Name, action);
-        }
-
-        /// <summary>
         /// Adds a method that registers the implementation of IDynamicRepositoryFactory as a service
         /// </summary>
         public void ForDynamicRepositoryFactory(Action<IServiceCollection> action)
         {
             if (action == null) throw new ArgumentNullException(nameof(action));
 
-            RegisterImplementationActions.Add(typeof(IDynamicRepositoryFactory).Name, action);
-        }
-
-        /// <summary>
-        /// Adds a method that registers the implementation of IAggregateRoot as a service
-        /// </summary>
-        public void ForAggregate(Action<IServiceCollection> action)
-        {
-            if (action == null) throw new ArgumentNullException(nameof(action));
-
-            var serviceName = typeof(IAggregateRoot).Name;
-
-            // Add action
-            RegisterImplementationActions.Add(serviceName, action);
-
-            // Remove implementation souce via service name
-            ImplementationSources.Remove(serviceName);
-        }
-
-        /// <summary>
-        /// Set the assemble where the implemented type of query is belong to
-        /// </summary>
-        public void ForAggregate(Assembly assembly, string underNamespace = null)
-        {
-            if (assembly == null) throw new ArgumentNullException(nameof(assembly));
-
-            var serviceName = typeof(IAggregateRoot).Name;
-
-            // Add implementation souce
-            ImplementationSources.Add(serviceName, new ImplementationSource(assembly, underNamespace));
-
-            // Remove action via service name
-            RegisterImplementationActions.Remove(serviceName);
+            RegisterImplementationActions.Add(typeof(IRepositoryFactory).Name, action);
         }
 
         /// <summary>

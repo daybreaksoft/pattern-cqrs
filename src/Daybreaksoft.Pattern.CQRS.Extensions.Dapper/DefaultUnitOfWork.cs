@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Daybreaksoft.Pattern.CQRS.Extensions.Dapper
 {
-    public class DefaultUnitOfWork : CQRS.DefaultUnitOfWork
+    public class DefaultUnitOfWork : DomainModel.DefaultUnitOfWork
     {
         protected readonly IDbConnection Connection;
 

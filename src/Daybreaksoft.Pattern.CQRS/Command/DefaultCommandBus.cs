@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
+using Daybreaksoft.Pattern.CQRS.DomainModel;
 
-namespace Daybreaksoft.Pattern.CQRS.Implementation
+namespace Daybreaksoft.Pattern.CQRS.Command
 {
     /// <summary>
     /// Defualt implemention of ICommandBus

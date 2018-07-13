@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Daybreaksoft.Pattern.CQRS;
+using Daybreaksoft.Pattern.CQRS.DomainModel;
 
 namespace AspNetCore.Sample.Data.Entities
 {

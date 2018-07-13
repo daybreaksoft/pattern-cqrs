@@ -2,6 +2,7 @@
 using AspNetCore.Sample.Domain.Models;
 using Daybreaksoft.Extensions.Functions;
 using Daybreaksoft.Pattern.CQRS;
+using Daybreaksoft.Pattern.CQRS.Command;
 
 namespace AspNetCore.Sample.Command
 {

@@ -3,6 +3,7 @@ using System.Data;
 using System.Threading.Tasks;
 using Dapper.Contrib.Extensions;
 using Daybreaksoft.Extensions.Functions;
+using Daybreaksoft.Pattern.CQRS.DomainModel;
 
 namespace Daybreaksoft.Pattern.CQRS.Extensions.Dapper
 {

@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace AspNetCore.Sample.Domain.Models
 {
-    public class TrafficViolationAddedEventCommittedHandler : IPostCommitEventHandler<TrafficViolationAddedEvent>
-    {
-        public Task HandleAsync(TrafficViolationAddedEvent evnt)
-        {
-            throw new NotImplementedException();
-        }
-    }
+    //public class TrafficViolationAddedEventCommittedHandler : IPostCommitEventHandler<TrafficViolationAddedEvent>
+    //{
+    //    public Task HandleAsync(TrafficViolationAddedEvent evnt)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+    //}
 }

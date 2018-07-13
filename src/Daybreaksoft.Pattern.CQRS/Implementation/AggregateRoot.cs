@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Daybreaksoft.Pattern.CQRS.DomainModel;
 
 namespace Daybreaksoft.Pattern.CQRS
 {
@@ -9,7 +10,7 @@ namespace Daybreaksoft.Pattern.CQRS
     {
         protected readonly IEventBus EventBus;
 
-        public AggregateRoot(IEventBus eventBus)
+        protected AggregateRoot(IEventBus eventBus)
         {
             EventBus = eventBus;
         }
@@ -19,7 +20,7 @@ namespace Daybreaksoft.Pattern.CQRS
         protected AggregateState _state;
         public virtual AggregateState State => _state;
 
-        protected async virtual Task PublishEventAsync(IEvent evnt)
+        protected virtual async Task PublishEventAsync(IEvent evnt)
         {
             await EventBus.PublishAsync(evnt);
         }
