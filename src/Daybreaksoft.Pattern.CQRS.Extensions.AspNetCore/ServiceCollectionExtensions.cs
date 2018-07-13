@@ -50,7 +50,11 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
             AddSignleService(services, options, typeof(IRepositoryFactory), typeof(DefaultRepositoryFactory));
 
             // Add an service that implemented IDomainAppServiceFactory.
-            AddSignleService(services, options, typeof(IDomainServiceFactory), typeof(DefaultDomainServiceFactory));
+            AddSignleService(services, options, typeof(IDomainAppServiceFactory), typeof(DefaultDomainAppServiceFactory));
+
+            // Add services that implemented IDomainAppService<>
+            AddSignleService(services, options, typeof(IDomainAppService<>), typeof(DefaultDomainAppService<>));
+            AddMultipleServices(services, options, typeof(IDomainAppService<>), forceHasImplementationSource: false);
 
             // Add services that implemented ICommandExecutor<>
             AddMultipleServices(services, options, typeof(ICommandExecutor<>));
@@ -101,7 +105,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
             }
         }
 
-        public static void AddMultipleServices(IServiceCollection services, CQRSOptions options, Type serviceType, ServiceLifetime lifetime = ServiceLifetime.Scoped)
+        public static void AddMultipleServices(IServiceCollection services, CQRSOptions options, Type serviceType, ServiceLifetime lifetime = ServiceLifetime.Scoped, bool forceHasImplementationSource = true)
         {
             var serviceTypeName = serviceType.Name;
 
@@ -111,45 +115,51 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
             }
             else
             {
-                if (!options.ImplementationSources.ContainsKey(serviceTypeName))
-                    throw new Exception($"Cannot found implementation souce via {serviceTypeName}");
-
-                var implementationSouce = options.ImplementationSources[serviceTypeName];
-
-                var exportedTypes = implementationSouce.Assembly.GetExportedTypes();
-
-                if (!string.IsNullOrEmpty(implementationSouce.UnderNamespace))
+                if (options.ImplementationSources.ContainsKey(serviceTypeName))
                 {
-                    exportedTypes = exportedTypes.Where(p => p.Namespace.Contains(implementationSouce.UnderNamespace)).ToArray();
-                }
+                    var implementationSouce = options.ImplementationSources[serviceTypeName];
 
-                foreach (var exportedType in exportedTypes)
-                {
-                    var registersService = exportedType.GetInterfaces().SingleOrDefault(p => p.Name == serviceTypeName);
+                    var exportedTypes = implementationSouce.Assembly.GetExportedTypes();
 
-                    if (registersService != null)
+                    if (!string.IsNullOrEmpty(implementationSouce.UnderNamespace))
                     {
-                        if (registersService.IsGenericType)
-                        {
-                            services.Add(new ServiceDescriptor(registersService, exportedType, lifetime));
-                        }
-                        else
-                        {
-                            if (lifetime == ServiceLifetime.Scoped)
-                            {
-                                services.AddScoped(exportedType);
-                            }
-                            else if (lifetime == ServiceLifetime.Transient)
-                            {
-                                services.AddTransient(exportedType);
-                            }
-                            else if (lifetime == ServiceLifetime.Singleton)
-                            {
-                                services.AddSingleton(exportedType);
-                            }
+                        exportedTypes = exportedTypes
+                            .Where(p => p.Namespace.Contains(implementationSouce.UnderNamespace)).ToArray();
+                    }
 
+                    foreach (var exportedType in exportedTypes)
+                    {
+                        var registersService =
+                            exportedType.GetInterfaces().SingleOrDefault(p => p.Name == serviceTypeName);
+
+                        if (registersService != null)
+                        {
+                            if (registersService.IsGenericType)
+                            {
+                                services.Add(new ServiceDescriptor(registersService, exportedType, lifetime));
+                            }
+                            else
+                            {
+                                if (lifetime == ServiceLifetime.Scoped)
+                                {
+                                    services.AddScoped(exportedType);
+                                }
+                                else if (lifetime == ServiceLifetime.Transient)
+                                {
+                                    services.AddTransient(exportedType);
+                                }
+                                else if (lifetime == ServiceLifetime.Singleton)
+                                {
+                                    services.AddSingleton(exportedType);
+                                }
+
+                            }
                         }
                     }
+                }
+                else
+                {
+                    if(forceHasImplementationSource) throw new Exception($"Cannot found implementation souce via {serviceTypeName}");
                 }
             }
         }

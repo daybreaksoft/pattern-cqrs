@@ -6,7 +6,7 @@ using Daybreaksoft.Pattern.CQRS.DomainModel;
 
 namespace AspNetCore.Sample.Domain.Models.UserDomain
 {
-    public class UserAppService : IDomainService<User>
+    public class UserAppService : IDomainAppService<User>
     {
         protected readonly IRepository<UserEntity> UserRepository;
 

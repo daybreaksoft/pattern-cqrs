@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Daybreaksoft.Pattern.CQRS.DomainModel
 {
-    public class DefaultDomainService<TAggregateRoot> : IDomainService<TAggregateRoot>
+    public class DefaultDomainAppService<TAggregateRoot> : IDomainAppService<TAggregateRoot>
         where TAggregateRoot : IAggregateRoot
     {
         protected readonly IRepositoryFactory RepositoryFactory;
 
-        public DefaultDomainService(IRepositoryFactory repositoryFactory)
+        public DefaultDomainAppService(IRepositoryFactory repositoryFactory)
         {
             RepositoryFactory = repositoryFactory;
         }

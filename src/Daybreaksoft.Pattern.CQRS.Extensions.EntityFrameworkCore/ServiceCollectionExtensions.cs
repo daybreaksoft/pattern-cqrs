@@ -16,8 +16,11 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
 
             optionsAction(options);
 
-            // Add an service that implemented ICommandBus.
+            // Add an service that implemented DbContext.
             AspNetCore.ServiceCollectionExtensions.AddSignleService(services, options, typeof(DbContext), options.DbContextType);
+
+            // Add an service that implemented IRepository.
+            AspNetCore.ServiceCollectionExtensions.AddSignleService(services, options, typeof(IRepository<>), typeof(DefaultRepository<>));
 
             if (!options.RegisterImplementationActions.ContainsKey(typeof(IUnitOfWork).Name))
             {

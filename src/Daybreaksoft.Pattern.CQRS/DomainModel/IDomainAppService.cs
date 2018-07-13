@@ -7,7 +7,7 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
     /// 
     /// </summary>
     /// <typeparam name="TAggregateRoot">聚合根类型，必须继承Daybreaksoft.Pattern.CQRS.IAggregateRoot</typeparam>
-    public interface IDomainService<TAggregateRoot> where TAggregateRoot : IAggregateRoot
+    public interface IDomainAppService<TAggregateRoot> where TAggregateRoot : IAggregateRoot
     {
         Task<TAggregateRoot> FindAsync(object id);
 
@@ -20,11 +20,5 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
         Task DeleteAsync(object id);
 
         Task DeleteAsync(TAggregateRoot aggregate);
-    }
-
-    public interface IEntitySameAsDomainService<TAggregateRoot, TEntity> : IDomainService<TAggregateRoot>
-        where TAggregateRoot : IAggregateRoot
-        where TEntity : IEntity
-    {
     }
 }

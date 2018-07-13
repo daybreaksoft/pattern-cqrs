@@ -13,12 +13,12 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
     /// <summary>
     /// Default implemention of IRepository with EntityFrameworkCore
     /// </summary>
-    public abstract class AbstractRepository<TEntity> : IRepository<TEntity>
+    public class DefaultRepository<TEntity> : IRepository<TEntity>
         where TEntity : class, IEntity, new()
     {
         protected readonly DbContext Db;
 
-        protected AbstractRepository(DbContext db)
+        public DefaultRepository(DbContext db)
         {
             Db = db;
         }
@@ -49,7 +49,6 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
         public Task<IEnumerable<TEntity>> FindAllAsync()
         {
             throw new NotSupportedException();
-            //return Db.Set<TEntity>().AsEnumerable();
         }
 
         /// <summary>

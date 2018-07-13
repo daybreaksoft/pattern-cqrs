@@ -10,18 +10,20 @@ namespace AspNetCore.Sample.Command
 {
     public class CreateUserCommandExecutor : ICommandExecutor<CreateUserCommand>
     {
-        protected readonly IDomainServiceFactory DomainServiceFactory;
+        protected readonly IDomainAppServiceFactory DomainAppServiceFactory;
 
-        public CreateUserCommandExecutor(IDomainServiceFactory domainServiceFactory)
+        public CreateUserCommandExecutor(IDomainAppServiceFactory domainAppServiceFactory)
         {
-            DomainServiceFactory = domainServiceFactory;
+            DomainAppServiceFactory = domainAppServiceFactory;
         }
 
         public async Task ExecuteAsync(CreateUserCommand command)
         {
-            var model = new User(command.Username, command.Point);
+            var user = new User(command.Username, command.Point);
 
-            //var userDomainAppService = DomainAppServiceFactory.GetDomainAppService<User>();
+            var userDomainAppService = DomainAppServiceFactory.GetDomainAppService<User>();
+
+            await userDomainAppService.InsertAsync(user);
         }
     }
 }

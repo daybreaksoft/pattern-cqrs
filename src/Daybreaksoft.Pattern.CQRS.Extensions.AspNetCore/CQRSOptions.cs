@@ -75,7 +75,33 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
         {
             if (action == null) throw new ArgumentNullException(nameof(action));
 
-            RegisterImplementationActions.Add(typeof(IDomainServiceFactory).Name, action);
+            RegisterImplementationActions.Add(typeof(IDomainAppServiceFactory).Name, action);
+        }
+
+        /// <summary>
+        /// Adds a method that registers the implementation of IDomainAppServiceFactory as a service
+        /// </summary>
+        public void ForDomainAppService(Action<IServiceCollection> action)
+        {
+            if (action == null) throw new ArgumentNullException(nameof(action));
+
+            RegisterImplementationActions.Add(typeof(IDomainAppService<>).Name, action);
+        }
+
+        /// <summary>
+        /// Adds a method that registers the implementation of IDomainAppServiceFactory as a service
+        /// </summary>
+        public void ForDomainAppService(Assembly assembly, string underNamespace = null)
+        {
+            if (assembly == null) throw new ArgumentNullException(nameof(assembly));
+
+            var serviceName = typeof(IDomainAppService<>).Name;
+
+            // Add implementation souce
+            ImplementationSources.Add(serviceName, new ImplementationSource(assembly, underNamespace));
+
+            // Remove action via service name
+            RegisterImplementationActions.Remove(serviceName);
         }
 
         /// <summary>

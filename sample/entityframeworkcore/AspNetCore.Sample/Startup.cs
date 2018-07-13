@@ -34,10 +34,10 @@ namespace AspNetCore.Sample
 
                 builder.ForDbContext<SampleDbContext>();
                 builder.ForCommandExecutor(typeof(CreateUserCommandExecutor).GetTypeInfo().Assembly);
-                builder.ForRepository(domainAssembly, "AspNetCore.Sample.Domain.Models");
-                //builder.ForAggregate(domainAssembly, "AspNetCore.Sample.Domain.Models");
-                builder.ForEventHandler(domainAssembly, "AspNetCore.Sample.Domain.Models");
-                builder.ForPostCommitEventHandler(domainAssembly, "AspNetCore.Sample.Domain.Models");
+                builder.ForRepository(domainAssembly);
+                builder.ForDomainAppService(domainAssembly);
+                builder.ForEventHandler(domainAssembly);
+                builder.ForPostCommitEventHandler(domainAssembly);
                 builder.ForQuery(typeof(UserQuery).GetTypeInfo().Assembly);
             });
 
