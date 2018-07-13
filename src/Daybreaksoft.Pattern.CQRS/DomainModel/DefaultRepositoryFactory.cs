@@ -39,6 +39,11 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
             return DI.GetService(entityType);
         }
 
+        public IRepository<TEntity> GetRepository<TEntity>() where TEntity : IEntity
+        {
+            return DI.GetService<IRepository<TEntity>>();
+        }
+
         #endregion
 
         #region Invoke Repository Methods

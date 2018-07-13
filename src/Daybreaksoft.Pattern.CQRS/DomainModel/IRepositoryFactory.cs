@@ -14,6 +14,8 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
 
         object GetRepository(Type entityType);
 
+        IRepository<TEntity> GetRepository<TEntity>() where TEntity:IEntity;
+
         Task<TEntity> InvokeFindAsync<TEntity>(object id) where TEntity : IEntity;
 
         Task<IEnumerable<TEntity>> InvokeFindAllAsync<TEntity>() where TEntity : IEntity;

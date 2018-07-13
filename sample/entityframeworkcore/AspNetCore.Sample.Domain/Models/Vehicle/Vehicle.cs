@@ -1,15 +1,24 @@
-﻿using Daybreaksoft.Pattern.CQRS;
+﻿using AspNetCore.Sample.Data.Entities;
+using Daybreaksoft.Pattern.CQRS;
+using Daybreaksoft.Pattern.CQRS.DomainModel;
 
 namespace AspNetCore.Sample.Domain.Models
 {
-    public class Vehicle : DefaultAggregateRoot
+    public class Vehicle : VehicleEntity, IAggregateRoot
     {
-        public Vehicle(IEventBus eventBus) : base(eventBus)
+        public Vehicle(int userId, string plateNumber)
         {
+            UserId = userId;
+            PlateNumber = plateNumber;
         }
 
-        public int UserId { get; set; }
+        public Vehicle(int id, int userId, string plateNumber)
+        {
+            Id = id;
+            UserId = userId;
+            PlateNumber = plateNumber;
+        }
 
-        public string PlateNumber { get; set; }
+        object IAggregateRoot.Id => Id;
     }
 }

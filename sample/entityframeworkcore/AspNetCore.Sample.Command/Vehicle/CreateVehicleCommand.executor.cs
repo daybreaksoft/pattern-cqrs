@@ -1,27 +1,29 @@
 ﻿using System.Threading.Tasks;
 using AspNetCore.Sample.Domain.Models;
+using AspNetCore.Sample.Domain.Models.UserDomain;
 using Daybreaksoft.Extensions.Functions;
 using Daybreaksoft.Pattern.CQRS;
 using Daybreaksoft.Pattern.CQRS.Command;
+using Daybreaksoft.Pattern.CQRS.DomainModel;
 
 namespace AspNetCore.Sample.Command
 {
     public class CreateVehicleCommandExecutor : ICommandExecutor<CreateVehicleCommand>
     {
-        protected readonly IAggregateBus AggregateBus;
+        protected readonly IDomainAppServiceFactory DomainAppServiceFactory;
 
-        public CreateVehicleCommandExecutor(IAggregateBus aggregateBus)
+        public CreateVehicleCommandExecutor(IDomainAppServiceFactory domainAppServiceFactory)
         {
-            AggregateBus = aggregateBus;
+            DomainAppServiceFactory = domainAppServiceFactory;
         }
 
         public async Task ExecuteAsync(CreateVehicleCommand command)
         {
-            var newModel = AggregateBus.BuildAggregate<Vehicle>();
+            var vehicle = new Vehicle(command.UserId, command.PlateNumber);
 
-            command.CopyValueTo(newModel);
+            var vehicleAppService = DomainAppServiceFactory.GetDomainAppService<Vehicle>();
 
-            await newModel.AddAsync();
+            await vehicleAppService.InsertAsync(vehicle);
         }
     }
 }

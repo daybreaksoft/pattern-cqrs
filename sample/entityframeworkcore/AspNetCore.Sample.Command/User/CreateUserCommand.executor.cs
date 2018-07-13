@@ -21,9 +21,9 @@ namespace AspNetCore.Sample.Command
         {
             var user = new User(command.Username, command.Point);
 
-            var userDomainAppService = DomainAppServiceFactory.GetDomainAppService<User>();
+            var userAppService = DomainAppServiceFactory.GetDomainAppService<User>();
 
-            await userDomainAppService.InsertAsync(user);
+            await userAppService.InsertAsync(user);
         }
     }
 }

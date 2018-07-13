@@ -30,7 +30,17 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
         {
             if (aggregate is IEntity)
             {
-                await RepositoryFactory.InvokeInsertAsync((IEntity) aggregate);
+                //await RepositoryFactory.InvokeInsertAsync((IEntity)aggregate);
+
+                var type = aggregate.GetType();
+
+
+#if !NetStandar13
+
+                var interfaces = type.GetInterfaces();
+
+                await RepositoryFactory.InvokeInsertAsync((IEntity)type.BaseType);
+#endif
             }
             else
             {
