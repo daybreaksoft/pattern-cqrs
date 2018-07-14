@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -34,11 +35,18 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
             {
                 var type = aggregate.GetType();
 
+#if !NetStandard13
                 if (type.BaseType != null && type.BaseType != typeof(Object))
                 {
                     type = type.BaseType;
                 }
-
+#else
+                var typeInfo = type.GetTypeInfo();
+                if (typeInfo.BaseType != null && typeInfo.BaseType != typeof(Object))
+                {
+                    type = typeInfo.BaseType;
+                }
+#endif
                 var repositoryType = RepositoryFactory.GetRepositoryType(type);
 
                 var repository = RepositoryFactory.GetRepository(repositoryType);
