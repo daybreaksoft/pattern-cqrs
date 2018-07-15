@@ -31,6 +31,36 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
 
         public virtual async Task InsertAsync(TAggregateRoot aggregate)
         {
+            var repositoryType = GetRepositoryType(aggregate);
+
+            var repository = RepositoryFactory.GetRepository(repositoryType);
+
+            await RepositoryInvoker.InsertAsync(repository, repositoryType, (IEntity)aggregate);
+        }
+
+        public virtual async Task UpdateAsync(TAggregateRoot aggregate)
+        {
+            var repositoryType = GetRepositoryType(aggregate);
+
+            var repository = RepositoryFactory.GetRepository(repositoryType);
+
+            await RepositoryInvoker.UpdateAsync(repository, repositoryType, (IEntity)aggregate);
+        }
+
+        public virtual Task DeleteAsync(object id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual Task DeleteAsync(TAggregateRoot aggregate)
+        {
+            throw new NotImplementedException();
+        }
+
+        #region Helper
+
+        protected virtual Type GetRepositoryType(TAggregateRoot aggregate)
+        {
             if (aggregate is IEntity)
             {
                 var type = aggregate.GetType();
@@ -47,11 +77,8 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
                     type = typeInfo.BaseType;
                 }
 #endif
-                var repositoryType = RepositoryFactory.GetRepositoryType(type);
 
-                var repository = RepositoryFactory.GetRepository(repositoryType);
-
-                await RepositoryInvoker.InsertAsync(repository, repositoryType, (IEntity)aggregate);
+                return type;
             }
             else
             {
@@ -59,19 +86,6 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
             }
         }
 
-        public virtual Task UpdateAsync(TAggregateRoot aggregate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public virtual Task DeleteAsync(object id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public virtual Task DeleteAsync(TAggregateRoot aggregate)
-        {
-            throw new NotImplementedException();
-        }
+        #endregion
     }
 }
