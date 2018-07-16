@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Daybreaksoft.Extensions.Functions;
@@ -13,24 +12,15 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
     /// <summary>
     /// Default implemention of IRepository with EntityFrameworkCore
     /// </summary>
-    public class DefaultRepository<TEntity> : IRepository<TEntity>
+    public class DefaultRepository<TEntity> : IRepository<TEntity>, IDbContext
         where TEntity : class, IEntity, new()
     {
-        protected readonly DbContext Db;
-
         public DefaultRepository(DbContext db)
         {
             Db = db;
         }
 
-        /// <summary>
-        /// Get the queryable of entity.
-        /// </summary>
-        /// <returns></returns>
-        public virtual IQueryable<TEntity> GetQueryable()
-        {
-            return Db.Set<TEntity>().AsQueryable();
-        }
+        public DbContext Db { get; }
 
         /// <summary>
         /// Find an entity via id
