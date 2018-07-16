@@ -1,34 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
-using Daybreaksoft.Extensions.Functions;
 
 namespace Daybreaksoft.Pattern.CQRS.DomainModel
 {
     public class SimpleDomainAppService<TAggregateRoot> : IDomainAppService<TAggregateRoot>
         where TAggregateRoot : IAggregateRoot, IEntity
     {
-        protected readonly IRepositoryFactory RepositoryFactory;
-        protected readonly IRepositoryInvoker RepositoryInvoker;
-        protected readonly Type RepositoryType;
-        protected readonly object Repository;
+        protected readonly IRepository<TAggregateRoot> Repository;
 
-        public SimpleDomainAppService(IRepositoryFactory repositoryFactory, IRepositoryInvoker repositoryInvoker)
+        public SimpleDomainAppService(IRepository<TAggregateRoot> repository)
         {
-            RepositoryFactory = repositoryFactory;
-            RepositoryInvoker = repositoryInvoker;
-
-            RepositoryType = GetRepositoryType();
-            Repository = RepositoryFactory.GetRepository(RepositoryType);
+            Repository = repository;
         }
 
-        public virtual async Task<TAggregateRoot> FindAsync(object id)
+        public virtual Task<TAggregateRoot> FindAsync(object id)
         {
-            var entity = await RepositoryInvoker.FindAsync<TAggregateRoot>(Repository, RepositoryType, id);
-
-            return entity;
+            return Repository.FindAsync(id);
         }
 
         public virtual Task<IEnumerable<TAggregateRoot>> FindAllAsync()
@@ -38,35 +26,17 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
 
         public virtual Task InsertAsync(TAggregateRoot aggregate)
         {
-            return RepositoryInvoker.InsertAsync(Repository, RepositoryType, aggregate);
+            return Repository.InsertAsync(aggregate);
         }
 
         public virtual async Task UpdateAsync(TAggregateRoot aggregate)
         {
-            await RepositoryInvoker.UpdateAsync(Repository, RepositoryType, aggregate);
+            await Repository.UpdateAsync(aggregate);
         }
 
         public virtual Task DeleteAsync(object id)
         {
-            return RepositoryInvoker.RemoveAsync(Repository, RepositoryType, id);
+            return Repository.DeleteAsync(id);
         }
-
-        #region Helper
-
-        protected Type GetRepositoryType()
-        {
-            var aggregateType = typeof(TAggregateRoot);
-
-            if (aggregateType.GetInterfaces().Any(p=>p == typeof(IEntity)))
-            {
-                return RepositoryFactory.GetRepositoryType(aggregateType);
-            }
-            else
-            {
-                throw new Exception("Allow to call this method when only the instance are both Aggregate and Entity.");
-            }
-        }
-
-        #endregion
     }
 }
