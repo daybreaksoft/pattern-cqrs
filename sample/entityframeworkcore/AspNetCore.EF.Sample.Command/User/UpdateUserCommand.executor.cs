@@ -1,27 +1,29 @@
 ﻿using System.Threading.Tasks;
 using AspNetCore.EF.Sample.Core.User;
 using Daybreaksoft.Extensions.Functions;
-using Daybreaksoft.Pattern.CQRS;
 using Daybreaksoft.Pattern.CQRS.Command;
+using Daybreaksoft.Pattern.CQRS.DomainModel;
 
 namespace AspNetCore.EF.Sample.Command.User
 {
     public class UpdateUserCommandExecutor : ICommandExecutor<UpdateUserCommand>
     {
-        protected readonly IAggregateBus AggregateBus;
+        protected readonly IDomainAppServiceFactory DomainAppServiceFactory;
 
-        public UpdateUserCommandExecutor(IAggregateBus aggregateBus)
+        public UpdateUserCommandExecutor(IDomainAppServiceFactory domainAppServiceFactory)
         {
-            AggregateBus = aggregateBus;
+            DomainAppServiceFactory = domainAppServiceFactory;
         }
 
         public async Task ExecuteAsync(UpdateUserCommand command)
         {
-            var model = await AggregateBus.GetExsitsAggregate<UserModel>(command.UserId);
+            var userAppService = DomainAppServiceFactory.GetDomainAppService<UserModel>();
 
-            command.CopyValueTo(model);
+            var userModel = await userAppService.FindAsync(command.UserId);
+            userModel.Username = command.Username;
+            userModel.Point = command.Point;
 
-            //await model.ModifyAsync();
+            await userAppService.UpdateAsync(userModel);
         }
     }
 }

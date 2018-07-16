@@ -1,4 +1,4 @@
-﻿using Daybreaksoft.Pattern.CQRS;
+﻿using Daybreaksoft.Pattern.CQRS.Event;
 
 namespace AspNetCore.EF.Sample.Core.TrafficViolation
 {

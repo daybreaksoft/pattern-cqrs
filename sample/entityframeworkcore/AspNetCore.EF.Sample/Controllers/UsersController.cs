@@ -16,7 +16,7 @@ namespace AspNetCore.EF.Sample.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Edit([FromRoute]int? id, [FromServices] SampleDbContext db)
+        public async Task<IActionResult> Edit([FromRoute]int? id)
         {
             UserViewModel viewModel = null;
 

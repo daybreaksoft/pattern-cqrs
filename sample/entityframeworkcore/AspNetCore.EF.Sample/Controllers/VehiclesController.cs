@@ -39,12 +39,12 @@ namespace AspNetCore.EF.Sample.Controllers
 
             if (id.HasValue)
             {
-                // Load vehicle
-                var vehicleModel = await aggregateBus.GetExsitsAggregate<VehicleModel>(id);
+                //// Load vehicle
+                //var vehicleModel = await aggregateBus.GetExsitsAggregate<VehicleModel>(id);
 
-                // Build view model
-                viewModel = new VehicleViewModel();
-                vehicleModel.CopyValueTo(viewModel);
+                //// Build view model
+                //viewModel = new VehicleViewModel();
+                //vehicleModel.CopyValueTo(viewModel);
             }
 
             ViewBag.IsCreate = !id.HasValue;

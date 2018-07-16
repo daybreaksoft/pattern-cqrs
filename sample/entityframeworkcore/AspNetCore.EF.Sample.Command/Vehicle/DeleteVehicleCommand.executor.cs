@@ -2,25 +2,24 @@
 using AspNetCore.EF.Sample.Core.Vehicle;
 using Daybreaksoft.Pattern.CQRS;
 using Daybreaksoft.Pattern.CQRS.Command;
+using Daybreaksoft.Pattern.CQRS.DomainModel;
 
 namespace AspNetCore.EF.Sample.Command.Vehicle
 {
     public class DeleteVehicleCommandExecutor : ICommandExecutor<DeleteVehicleCommand>
     {
-        protected readonly IAggregateBus AggregateBus;
+        protected readonly IDomainAppServiceFactory DomainAppServiceFactory;
 
-        public DeleteVehicleCommandExecutor(IAggregateBus aggregateBus)
+        public DeleteVehicleCommandExecutor(IDomainAppServiceFactory domainAppServiceFactory)
         {
-            AggregateBus = aggregateBus;
+            DomainAppServiceFactory = domainAppServiceFactory;
         }
 
         public async Task ExecuteAsync(DeleteVehicleCommand command)
         {
-            var model = AggregateBus.BuildAggregate<VehicleModel>(command.VehicleId);
+            var vehicleAppService = DomainAppServiceFactory.GetDomainAppService<VehicleModel>();
 
-            //await model.RemoveAsync();
-
-            await Task.CompletedTask;
+            await vehicleAppService.DeleteAsync(command.VehicleId);
         }
     }
 }

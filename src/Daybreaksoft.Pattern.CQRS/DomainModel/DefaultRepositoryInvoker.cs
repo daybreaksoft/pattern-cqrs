@@ -14,14 +14,14 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
             DI = di;
         }
 
-        public virtual Task<TEntity> FindAsync<TEntity>(object repository, object id) where TEntity : IEntity
+        public virtual Task<IEntity> FindAsync(object repository, object id)
         {
-            return FindAsync<TEntity>(repository, repository.GetType(), id);
+            return FindAsync(repository, repository.GetType(), id);
         }
 
-        public async Task<TEntity> FindAsync<TEntity>(object repository, Type repositoryType, object id) where TEntity : IEntity
+        public async Task<IEntity> FindAsync(object repository, Type repositoryType, object id)
         {
-            return await (Task<TEntity>)repositoryType.InvokeMethod("FindAsync", repository, id);
+            return await (Task<IEntity>)repositoryType.InvokeMethod("FindAsync", repository, id);
         }
 
         public virtual Task<IEnumerable<TEntity>> FindAllAsync<TEntity>(object repository) where TEntity : IEntity
@@ -54,14 +54,14 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
             await(Task)repositoryType.InvokeMethod("UpdateAsync", repository, entity);
         }
 
-        public virtual Task RemoveAsync<TEntity>(object repository, object id) where TEntity : IEntity
+        public virtual Task RemoveAsync(object repository, object id)
         {
-            return RemoveAsync<TEntity>(repository, repository.GetType(), id);
+            return RemoveAsync(repository, repository.GetType(), id);
         }
 
-        public async Task RemoveAsync<TEntity>(object repository, Type repositoryType, object id) where TEntity : IEntity
+        public async Task RemoveAsync(object repository, Type repositoryType, object id)
         {
-            await (Task)repositoryType.InvokeMethod("RemoveAsync", repository, id);
+            await (Task)repositoryType.InvokeMethod("DeleteAsync", repository, id);
         }
     }
 }

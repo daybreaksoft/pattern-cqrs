@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Daybreaksoft.Pattern.CQRS.Command;
 using Daybreaksoft.Pattern.CQRS.DomainModel;
+using Daybreaksoft.Pattern.CQRS.Event;
 
 namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
 {

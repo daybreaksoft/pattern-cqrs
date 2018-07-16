@@ -1,4 +1,6 @@
 ﻿using System.Threading.Tasks;
+using Daybreaksoft.Pattern.CQRS.Definition;
+using Daybreaksoft.Pattern.CQRS.Event;
 
 namespace Daybreaksoft.Pattern.CQRS
 {

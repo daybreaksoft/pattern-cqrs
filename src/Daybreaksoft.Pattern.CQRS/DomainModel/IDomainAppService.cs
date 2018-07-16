@@ -18,7 +18,5 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
         Task UpdateAsync(TAggregateRoot aggregate);
 
         Task DeleteAsync(object id);
-
-        Task DeleteAsync(TAggregateRoot aggregate);
     }
 }

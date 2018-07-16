@@ -9,64 +9,51 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AspNetCore.EF.Sample.Core.User
 {
-    public class UserAppService : IDomainAppService<UserModel>
+    public class UserAppService : AbstractDomainAppService<UserModel, UserEntity>
     {
-        protected readonly IRepository<UserEntity> UserRepository;
-
-        public UserAppService(IRepository<UserEntity> userRepository)
+        public UserAppService(IRepository<UserEntity> repository) : base(repository)
         {
-            UserRepository = userRepository;
         }
 
-        public Task<UserModel> FindAsync(object id)
+        public override async Task InsertAsync(UserModel aggregate)
         {
-            throw new System.NotImplementedException();
+            await CheckUsernameUnique(aggregate);
+
+            await base.InsertAsync(aggregate);
         }
 
-        public Task<IEnumerable<UserModel>> FindAllAsync()
+        public override async Task UpdateAsync(UserModel aggregate)
         {
-            throw new System.NotImplementedException();
+            await CheckUsernameUnique(aggregate);
+
+            await base.UpdateAsync(aggregate);
         }
 
-        public async Task InsertAsync(UserModel aggregate)
-        {
-            var queryable = UserRepository.GetQueryable();
+        #region Constraint
 
-            if (await queryable.Where(p => p.Username == aggregate.Username).AnyAsync())
+        private async Task CheckUsernameUnique(UserModel aggregate)
+        {
+            var queryable = Repository.GetQueryable();
+
+            var id = Convert.ToInt32(aggregate.Id);
+
+            if (await queryable.Where(p => p.Username == aggregate.Username && p.Id != id).AnyAsync())
             {
                 throw new Exception($"Username {aggregate.Username} already exists.");
             }
-
-            await UserRepository.InsertAsync(ConvetToEntity(aggregate));
         }
 
-        public Task UpdateAsync(UserModel aggregate)
+        #endregion 
+
+        protected override void CopyValueToEntity(UserEntity entity, UserModel aggregate)
         {
-            throw new System.NotImplementedException();
+            entity.Username = aggregate.Username;
+            entity.Point = aggregate.Point;
         }
 
-        public Task DeleteAsync(object id)
+        protected override UserModel ConvertToAggregate(UserEntity entity)
         {
-            throw new System.NotImplementedException();
+            return new UserModel(entity.Id, entity.Username, entity.Point);
         }
-
-        public Task DeleteAsync(UserModel aggregate)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        #region Data Transfer
-
-        public UserEntity ConvetToEntity(UserModel userModel)
-        {
-            return new UserEntity
-            {
-                Id = Convert.ToInt32(userModel.Id),
-                Username = userModel.Username,
-                Point = userModel.Point
-            };
-        }
-
-        #endregion
     }
 }

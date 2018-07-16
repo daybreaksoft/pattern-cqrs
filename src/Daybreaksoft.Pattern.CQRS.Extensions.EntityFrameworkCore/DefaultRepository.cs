@@ -27,9 +27,9 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Task<TEntity> FindAsync(object id)
+        public async Task<TEntity> FindAsync(object id)
         {
-            return Db.Set<TEntity>().FindAsync(id);
+            return await Db.Set<TEntity>().FindAsync(id);
         }
 
         /// <summary>
@@ -70,19 +70,6 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
         }
 
         /// <summary>
-        /// Delete an entity
-        /// </summary>
-        /// <param name="entity">The entity instance.</param>
-        /// <returns></returns>
-        public virtual async Task DeleteAsync(TEntity entity)
-        {
-            // Change entity state to delted
-            Db.Entry(entity).State = EntityState.Deleted;
-
-            await Db.SaveChangesAsync();
-        }
-
-        /// <summary>
         /// Delete an entity.
         /// </summary>
         /// <param name="key">The key of the entity.</param>
@@ -94,12 +81,15 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
             // Find key property
             var keyProperty = typeof(TEntity).FindProperty<KeyAttribute>();
 
-            if(keyProperty == null)throw new NullReferenceException($"Cannot found an key of {entity.GetType().FullName}");
+            if (keyProperty == null) throw new NullReferenceException($"Cannot found an key of {entity.GetType().FullName}");
 
             // Set key property value
             keyProperty.SetValue(entity, key);
 
-            return DeleteAsync(entity);
+            // Change entity state to delted
+            Db.Entry(entity).State = EntityState.Deleted;
+
+            return Db.SaveChangesAsync();
         }
     }
 }

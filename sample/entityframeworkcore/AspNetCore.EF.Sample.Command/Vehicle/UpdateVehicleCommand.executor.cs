@@ -1,27 +1,28 @@
 ﻿using System.Threading.Tasks;
 using AspNetCore.EF.Sample.Core.Vehicle;
-using Daybreaksoft.Extensions.Functions;
-using Daybreaksoft.Pattern.CQRS;
 using Daybreaksoft.Pattern.CQRS.Command;
+using Daybreaksoft.Pattern.CQRS.DomainModel;
 
 namespace AspNetCore.EF.Sample.Command.Vehicle
 {
     public class UpdateVehicleCommandExecutor : ICommandExecutor<UpdateVehicleCommand>
     {
-        protected readonly IAggregateBus AggregateBus;
+        protected readonly IDomainAppServiceFactory DomainAppServiceFactory;
 
-        public UpdateVehicleCommandExecutor(IAggregateBus aggregateBus)
+        public UpdateVehicleCommandExecutor(IDomainAppServiceFactory domainAppServiceFactory)
         {
-            AggregateBus = aggregateBus;
+            DomainAppServiceFactory = domainAppServiceFactory;
         }
 
         public async Task ExecuteAsync(UpdateVehicleCommand command)
         {
-            var model = await AggregateBus.GetExsitsAggregate<VehicleModel>(command.VehicleId);
+            var vehicleAppService = DomainAppServiceFactory.GetDomainAppService<VehicleModel>();
 
-            //await model.ModifyAsync();
+            var vehicleModel = await vehicleAppService.FindAsync(command.VehicleId);
+            vehicleModel.UserId = command.UserId;
+            vehicleModel.PlateNumber = command.PlateNumber;
 
-            command.CopyValueTo(model);
+            await vehicleAppService.UpdateAsync(vehicleModel);
         }
     }
 }

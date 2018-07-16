@@ -39,13 +39,6 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
         /// <summary>
         /// 删除一个已经存在的Entity
         /// </summary>
-        /// <param name="entity">Entity实例</param>
-        /// <returns></returns>
-        Task DeleteAsync(TEntity entity);
-
-        /// <summary>
-        /// 删除一个已经存在的Entity
-        /// </summary>
         /// <param name="key">Entity主键</param>
         /// <returns></returns>
         Task DeleteAsync(object key);

@@ -1,10 +1,10 @@
 ﻿using Daybreaksoft.Pattern.CQRS.Implementation;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Daybreaksoft.Pattern.CQRS.Command;
 using Daybreaksoft.Pattern.CQRS.DomainModel;
+using Daybreaksoft.Pattern.CQRS.Event;
 
 namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
 {
@@ -56,7 +56,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
             AddSignleService(services, options, typeof(IDomainAppServiceFactory), typeof(DefaultDomainAppServiceFactory));
 
             // Add services that implemented IDomainAppService<>
-            AddSignleService(services, options, typeof(IDomainAppService<>), typeof(DefaultDomainAppService<>));
+            AddSignleService(services, options, typeof(IDomainAppService<>), typeof(SimpleDomainAppService<>));
             AddMultipleServices(services, options, typeof(IDomainAppService<>), forceHasImplementationSource: false);
 
             // Add services that implemented ICommandExecutor<>

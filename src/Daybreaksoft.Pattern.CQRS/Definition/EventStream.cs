@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Daybreaksoft.Pattern.CQRS.Event;
 
-namespace Daybreaksoft.Pattern.CQRS
+namespace Daybreaksoft.Pattern.CQRS.Definition
 {
     public class EventStream : IEnumerable<IEvent>
     {

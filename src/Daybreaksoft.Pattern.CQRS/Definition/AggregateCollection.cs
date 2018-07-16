@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Daybreaksoft.Pattern.CQRS.DomainModel;
 
-namespace Daybreaksoft.Pattern.CQRS
+namespace Daybreaksoft.Pattern.CQRS.Definition
 {
     public class AggregateCollection : IEnumerable<IAggregateRoot>
     {

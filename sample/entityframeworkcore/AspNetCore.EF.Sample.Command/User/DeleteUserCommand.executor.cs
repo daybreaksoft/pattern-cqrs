@@ -1,23 +1,24 @@
 ﻿using System.Threading.Tasks;
-using Daybreaksoft.Pattern.CQRS;
+using AspNetCore.EF.Sample.Core.User;
 using Daybreaksoft.Pattern.CQRS.Command;
+using Daybreaksoft.Pattern.CQRS.DomainModel;
 
 namespace AspNetCore.EF.Sample.Command.User
 {
     public class DeleteUserCommandExecutor : ICommandExecutor<DeleteUserCommand>
     {
-        protected readonly IAggregateBus AggregateBus;
+        protected readonly IDomainAppServiceFactory DomainAppServiceFactory;
 
-        public DeleteUserCommandExecutor(IAggregateBus aggregateBus)
+        public DeleteUserCommandExecutor(IDomainAppServiceFactory domainAppServiceFactory)
         {
-            AggregateBus = aggregateBus;
+            DomainAppServiceFactory = domainAppServiceFactory;
         }
 
         public async Task ExecuteAsync(DeleteUserCommand command)
         {
-            //var model = AggregateBus.BuildAggregate<User>(command.UserId);
+            var userAppService = DomainAppServiceFactory.GetDomainAppService<UserModel>();
 
-            //await model.RemoveAsync();
+            await userAppService.DeleteAsync(command.UserId);
         }
     }
 }

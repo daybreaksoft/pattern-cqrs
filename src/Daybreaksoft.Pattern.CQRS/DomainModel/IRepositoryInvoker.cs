@@ -6,9 +6,9 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
 {
     public interface IRepositoryInvoker
     {
-        Task<TEntity> FindAsync<TEntity>(object repository, object id) where TEntity : IEntity;
+        Task<IEntity> FindAsync(object repository, object id);
 
-        Task<TEntity> FindAsync<TEntity>(object repository, Type repositoryType, object id) where TEntity : IEntity;
+        Task<IEntity> FindAsync(object repository, Type repositoryType, object id);
 
         Task<IEnumerable<TEntity>> FindAllAsync<TEntity>(object repository) where TEntity : IEntity;
 
@@ -22,8 +22,8 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
 
         Task UpdateAsync(object repository, Type repositoryType, IEntity entity);
 
-        Task RemoveAsync<TEntity>(object repository, object id) where TEntity : IEntity;
+        Task RemoveAsync(object repository, object id);
 
-        Task RemoveAsync<TEntity>(object repository, Type repositoryType, object id) where TEntity : IEntity;
+        Task RemoveAsync(object repository, Type repositoryType, object id);
     }
 }
