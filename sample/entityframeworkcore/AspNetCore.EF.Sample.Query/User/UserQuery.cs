@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AspNetCore.EF.Sample.Core;
 using AspNetCore.EF.Sample.Data;
 using AspNetCore.EF.Sample.Data.Entities;
 using Daybreaksoft.Extensions.Functions;

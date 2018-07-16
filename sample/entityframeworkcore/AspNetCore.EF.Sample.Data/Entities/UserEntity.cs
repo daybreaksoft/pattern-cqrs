@@ -17,7 +17,5 @@ namespace AspNetCore.EF.Sample.Data.Entities
 
         [Required]
         public int Point { get; set; }
-
-        public virtual ICollection<VehicleEntity> Vehicles { get; set; }
     }
 }

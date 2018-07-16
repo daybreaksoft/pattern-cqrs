@@ -13,7 +13,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
     /// Default implemention of IRepository with EntityFrameworkCore
     /// </summary>
     public class DefaultRepository<TEntity> : IRepository<TEntity>, IDbContext
-        where TEntity : class, IEntity, new()
+        where TEntity : class, IEntity
     {
         public DefaultRepository(DbContext db)
         {
@@ -74,22 +74,13 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
         /// </summary>
         /// <param name="key">The key of the entity.</param>
         /// <returns></returns>
-        public Task DeleteAsync(object key)
+        public async Task DeleteAsync(object key)
         {
-            var entity = new TEntity();
+            var entity = await FindAsync(key);
 
-            // Find key property
-            var keyProperty = typeof(TEntity).FindProperty<KeyAttribute>();
+            Db.Set<TEntity>().Remove(entity);
 
-            if (keyProperty == null) throw new NullReferenceException($"Cannot found an key of {entity.GetType().FullName}");
-
-            // Set key property value
-            keyProperty.SetValue(entity, key);
-
-            // Change entity state to delted
-            Db.Entry(entity).State = EntityState.Deleted;
-
-            return Db.SaveChangesAsync();
+            await Db.SaveChangesAsync();
         }
     }
 }

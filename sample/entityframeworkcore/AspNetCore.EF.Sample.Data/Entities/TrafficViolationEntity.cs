@@ -15,7 +15,5 @@ namespace AspNetCore.EF.Sample.Data.Entities
 
         [Required]
         public int DeductPoint { get; set; }
-
-        public virtual VehicleEntity Vehicle { get; set; }
     }
 }

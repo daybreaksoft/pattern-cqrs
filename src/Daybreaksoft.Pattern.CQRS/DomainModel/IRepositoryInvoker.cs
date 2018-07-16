@@ -6,9 +6,9 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
 {
     public interface IRepositoryInvoker
     {
-        Task<IEntity> FindAsync(object repository, object id);
+        Task<TEntity> FindAsync<TEntity>(object repository, object id) where TEntity : IEntity;
 
-        Task<IEntity> FindAsync(object repository, Type repositoryType, object id);
+        Task<TEntity> FindAsync<TEntity>(object repository, Type repositoryType, object id) where TEntity : IEntity;
 
         Task<IEnumerable<TEntity>> FindAllAsync<TEntity>(object repository) where TEntity : IEntity;
 

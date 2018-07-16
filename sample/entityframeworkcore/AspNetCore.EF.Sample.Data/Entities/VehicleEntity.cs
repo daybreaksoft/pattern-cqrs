@@ -17,9 +17,5 @@ namespace AspNetCore.EF.Sample.Data.Entities
         [Required]
         [StringLength(50)]
         public string PlateNumber { get; set; }
-
-        public virtual UserEntity User { get; set; }
-
-        public virtual ICollection<TrafficViolationEntity> TrafficViolations { get; set; }
     }
 }

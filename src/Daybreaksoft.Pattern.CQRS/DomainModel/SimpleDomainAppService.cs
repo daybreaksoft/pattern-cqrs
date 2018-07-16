@@ -8,7 +8,7 @@ using Daybreaksoft.Extensions.Functions;
 namespace Daybreaksoft.Pattern.CQRS.DomainModel
 {
     public class SimpleDomainAppService<TAggregateRoot> : IDomainAppService<TAggregateRoot>
-        where TAggregateRoot : IAggregateRoot
+        where TAggregateRoot : IAggregateRoot, IEntity
     {
         protected readonly IRepositoryFactory RepositoryFactory;
         protected readonly IRepositoryInvoker RepositoryInvoker;
@@ -26,10 +26,9 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
 
         public virtual async Task<TAggregateRoot> FindAsync(object id)
         {
+            var entity = await RepositoryInvoker.FindAsync<TAggregateRoot>(Repository, RepositoryType, id);
 
-            var entity = await RepositoryInvoker.FindAsync(Repository, RepositoryType, id);
-
-            return (TAggregateRoot) entity;
+            return entity;
         }
 
         public virtual Task<IEnumerable<TAggregateRoot>> FindAllAsync()
@@ -39,12 +38,12 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
 
         public virtual Task InsertAsync(TAggregateRoot aggregate)
         {
-            return RepositoryInvoker.InsertAsync(Repository, RepositoryType, (IEntity)aggregate);
+            return RepositoryInvoker.InsertAsync(Repository, RepositoryType, aggregate);
         }
 
         public virtual async Task UpdateAsync(TAggregateRoot aggregate)
         {
-            await RepositoryInvoker.UpdateAsync(Repository, RepositoryType, (IEntity)aggregate);
+            await RepositoryInvoker.UpdateAsync(Repository, RepositoryType, aggregate);
         }
 
         public virtual Task DeleteAsync(object id)
@@ -57,25 +56,10 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
         protected Type GetRepositoryType()
         {
             var aggregateType = typeof(TAggregateRoot);
-            var entityType = aggregateType;
 
             if (aggregateType.GetInterfaces().Any(p=>p == typeof(IEntity)))
             {
-
-#if !NetStandard13
-                if (aggregateType.BaseType != null && aggregateType.BaseType != typeof(Object))
-                {
-                    entityType = aggregateType.BaseType;
-                }
-#else
-                var typeInfo = aggregateType.GetTypeInfo();
-                if (typeInfo.BaseType != null && typeInfo.BaseType != typeof(Object))
-                {
-                    entityType = typeInfo.BaseType;
-                }
-#endif
-
-                return RepositoryFactory.GetRepositoryType(entityType);
+                return RepositoryFactory.GetRepositoryType(aggregateType);
             }
             else
             {

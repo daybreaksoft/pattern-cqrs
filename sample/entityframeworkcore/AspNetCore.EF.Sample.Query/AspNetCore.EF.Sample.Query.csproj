@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AspNetCore.EF.Sample.Core\AspNetCore.EF.Sample.Core.csproj" />
     <ProjectReference Include="..\AspNetCore.EF.Sample.Data\AspNetCore.EF.Sample.Data.csproj" />
   </ItemGroup>
 
