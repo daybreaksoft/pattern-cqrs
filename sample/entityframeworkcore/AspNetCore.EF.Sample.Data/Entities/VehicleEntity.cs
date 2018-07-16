@@ -1,0 +1,25 @@
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Daybreaksoft.Pattern.CQRS.DomainModel;
+
+namespace AspNetCore.EF.Sample.Data.Entities
+{
+    [Table("Vehicles")]
+    public class VehicleEntity : IEntity
+    {
+        [Key]
+        public int Id { get; set; }
+
+        [Required, ForeignKey("User")]
+        public int UserId { get; set; }
+
+        [Required]
+        [StringLength(50)]
+        public string PlateNumber { get; set; }
+
+        public virtual UserEntity User { get; set; }
+
+        public virtual ICollection<TrafficViolationEntity> TrafficViolations { get; set; }
+    }
+}

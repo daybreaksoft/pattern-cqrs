@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>AspNetCore.EF.Sample.Command</AssemblyName>
+    <RootNamespace>AspNetCore.EF.Sample.Command</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AspNetCore.EF.Sample.Core\AspNetCore.EF.Sample.Core.csproj" />
+  </ItemGroup>
+
+</Project>

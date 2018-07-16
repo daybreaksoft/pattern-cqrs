@@ -19,18 +19,18 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
         /// <param name="services">The Microsoft.Extensions.DependencyInjection.IServiceCollection to add services to.</param>
         /// <param name="optionsAction">An System.Action`1 to configure the provided CQRSOptions.</param>
         /// <returns>An Microsoft.Extensions.DependencyInjection.IMvcBuilder that can be used to further configure the CQRS services.</returns>
-        public static IServiceCollection AddCQRS(this IServiceCollection services, Action<CQRSOptions> optionsAction)
+        public static IServiceCollection AddCQRS(this IServiceCollection services, Action<CqrsOptions> optionsAction)
         {
             if (optionsAction == null) throw new ArgumentNullException(nameof(optionsAction));
 
-            var options = new CQRSOptions();
+            var options = new CqrsOptions();
 
             optionsAction.Invoke(options);
 
             return services.AddCQRS(options);
         }
 
-        public static IServiceCollection AddCQRS(this IServiceCollection services, CQRSOptions options)
+        public static IServiceCollection AddCQRS(this IServiceCollection services, CqrsOptions options)
         {
             if (options == null) throw new ArgumentNullException(nameof(options));
 
@@ -88,7 +88,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
         /// <param name="options">Provides programmatic configuration for the CQRS framework.</param>
         /// <param name="serviceType">The type of the service to register.</param>
         /// <param name="defaultImplementationType">The implementation type of the service.</param>
-        public static void AddSignleService(IServiceCollection services, CQRSOptions options, Type serviceType, Type defaultImplementationType, ServiceLifetime lifetime = ServiceLifetime.Scoped)
+        public static void AddSignleService(IServiceCollection services, CqrsOptions options, Type serviceType, Type defaultImplementationType, ServiceLifetime lifetime = ServiceLifetime.Scoped)
         {
             if (options == null) throw new ArgumentNullException(nameof(options));
 
@@ -108,7 +108,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
             }
         }
 
-        public static void AddMultipleServices(IServiceCollection services, CQRSOptions options, Type serviceType, ServiceLifetime lifetime = ServiceLifetime.Scoped, bool forceHasImplementationSource = true)
+        public static void AddMultipleServices(IServiceCollection services, CqrsOptions options, Type serviceType, ServiceLifetime lifetime = ServiceLifetime.Scoped, bool forceHasImplementationSource = true)
         {
             var serviceTypeName = serviceType.Name;
 

@@ -1,0 +1,17 @@
+﻿@model AspNetCore.EF.Sample.Query.User.UserViewModel
+@{
+    ViewData["Title"] = "Users";
+}
+<h2>@(ViewBag.IsCreate ? "Create" : "Update") User</h2>
+<hr />
+<form asp-action="@(ViewBag.IsCreate ? "CreateCommand" : $"UpdateCommand")"  asp-route-id="@ViewBag.UserId">
+    <div class="form-group">
+        <label>Username</label>
+        <input class="form-control" placeholder="Username" asp-for="Username" />
+    </div>
+    <div class="form-group">
+        <label>Point</label>
+        <input class="form-control" placeholder="Point" type="number" asp-for="Point" />
+    </div>
+    <button class="btn btn-default">Save</button>
+</form>

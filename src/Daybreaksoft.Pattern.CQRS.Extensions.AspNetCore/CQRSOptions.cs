@@ -10,12 +10,12 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
     /// <summary>
     /// Provides programmatic configuration for the CQRS framework.
     /// </summary>
-    public class CQRSOptions
+    public class CqrsOptions
     {
         /// <summary>
         /// Creates a new instance of CQRSOptions.
         /// </summary>
-        public CQRSOptions()
+        public CqrsOptions()
         {
             RegisterImplementationActions = new Dictionary<string, Action<IServiceCollection>>();
             ImplementationSources = new Dictionary<string, ImplementationSource>();

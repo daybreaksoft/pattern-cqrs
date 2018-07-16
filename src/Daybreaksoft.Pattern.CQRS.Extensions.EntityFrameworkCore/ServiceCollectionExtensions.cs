@@ -8,11 +8,11 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddCQRSWithEntityFramework(this IServiceCollection services, Action<CQRSEntityFrameworkOptions> optionsAction)
+        public static IServiceCollection AddCQRSWithEntityFramework(this IServiceCollection services, Action<CqrsEntityFrameworkOptions> optionsAction)
         {
             if (optionsAction == null) throw new ArgumentNullException(nameof(optionsAction));
 
-            var options = new CQRSEntityFrameworkOptions();
+            var options = new CqrsEntityFrameworkOptions();
 
             optionsAction(options);
 
