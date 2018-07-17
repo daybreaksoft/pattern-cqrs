@@ -7,6 +7,7 @@ using AspNetCore.EF.Sample.Query.Vehicle;
 using Daybreaksoft.Extensions.Functions;
 using Daybreaksoft.Pattern.CQRS;
 using Daybreaksoft.Pattern.CQRS.Command;
+using Daybreaksoft.Pattern.CQRS.DomainModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -28,29 +29,25 @@ namespace AspNetCore.EF.Sample.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Edit([FromRoute]int? id, [FromServices] UserQuery userQuery, [FromServices] IAggregateBus aggregateBus)
+        public async Task<IActionResult> Edit([FromRoute]int? id, [FromServices] UserQuery userQuery, [FromServices] IDomainAppService<VehicleModel> vehicleAppService)
         {
             // Get users as selectitem
             var users = await userQuery.GetUsers();
             ViewBag.UserListItems = users.Select(p => new SelectListItem(p.Username, p.Id.ToString()));
 
             // Load vehicle if edit
-            VehicleViewModel viewModel = null;
+            VehicleModel vehicleModel = null;
 
             if (id.HasValue)
             {
-                //// Load vehicle
-                //var vehicleModel = await aggregateBus.GetExsitsAggregate<VehicleModel>(id);
-
-                //// Build view model
-                //viewModel = new VehicleViewModel();
-                //vehicleModel.CopyValueTo(viewModel);
+                // Load vehicle
+                 vehicleModel = await vehicleAppService.FindAsync(id);
             }
 
             ViewBag.IsCreate = !id.HasValue;
             ViewBag.VehicleId = id;
 
-            return View(viewModel);
+            return View(vehicleModel);
         }
 
         public async Task<IActionResult> CreateCommand(CreateVehicleCommand command)

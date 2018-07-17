@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AspNetCore.EF.Sample.Data.Entities;
 using Daybreaksoft.Pattern.CQRS.DomainModel;
 using Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

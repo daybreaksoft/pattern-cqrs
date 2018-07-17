@@ -5,7 +5,7 @@ using Daybreaksoft.Pattern.CQRS.DomainModel;
 namespace AspNetCore.EF.Sample.Core.Vehicle
 {
     [Table("Vehicles")]
-    public class VehicleModel : IAggregateRoot, IEntity
+    public class VehicleModel : IAggregateRoot
     {
         public VehicleModel(int userId, string plateNumber) : this(0, userId, plateNumber)
         {
