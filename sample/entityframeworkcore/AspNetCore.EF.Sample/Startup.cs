@@ -3,6 +3,7 @@ using AspNetCore.EF.Sample.Command.User;
 using AspNetCore.EF.Sample.Core;
 using AspNetCore.EF.Sample.Core.User;
 using AspNetCore.EF.Sample.Data;
+using AspNetCore.EF.Sample.Data.Entities;
 using AspNetCore.EF.Sample.Query.User;
 using Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
@@ -30,7 +31,7 @@ namespace AspNetCore.EF.Sample
 
             services.AddCQRSWithEntityFramework(builder =>
             {
-                var domainAssembly = typeof(UserModel).GetTypeInfo().Assembly;
+                var domainAssembly = typeof(UserAppService).GetTypeInfo().Assembly;
 
                 builder.ForDbContext<SampleDbContext>();
                 builder.ForCommandExecutor(typeof(CreateUserCommandExecutor).GetTypeInfo().Assembly);

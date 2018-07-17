@@ -1,6 +1,6 @@
 ﻿using Daybreaksoft.Pattern.CQRS.DomainModel;
 
-namespace AspNetCore.EF.Sample.Core.Vehicle
+namespace AspNetCore.EF.Sample.Data.Entities
 {
     public class VehicleEntity : IEntity
     {

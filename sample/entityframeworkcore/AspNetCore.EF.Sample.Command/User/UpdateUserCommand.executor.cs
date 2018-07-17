@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
-using AspNetCore.EF.Sample.Core.User;
-using Daybreaksoft.Extensions.Functions;
+using AspNetCore.EF.Sample.Data.Entities;
 using Daybreaksoft.Pattern.CQRS.Command;
 using Daybreaksoft.Pattern.CQRS.DomainModel;
 
@@ -17,7 +16,7 @@ namespace AspNetCore.EF.Sample.Command.User
 
         public async Task ExecuteAsync(UpdateUserCommand command)
         {
-            var userAppService = DomainAppServiceFactory.GetDomainAppService<UserModel>();
+            var userAppService = DomainAppServiceFactory.GetDomainAppService<UserEntity>();
 
             var userModel = await userAppService.FindAsync(command.UserId);
             userModel.Username = command.Username;

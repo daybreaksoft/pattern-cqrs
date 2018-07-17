@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using AspNetCore.EF.Sample.Core.Vehicle;
-using Daybreaksoft.Pattern.CQRS;
 using Daybreaksoft.Pattern.CQRS.Command;
 using Daybreaksoft.Pattern.CQRS.DomainModel;
 

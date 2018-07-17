@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AspNetCore.EF.Sample.Core;
-using AspNetCore.EF.Sample.Core.User;
+using AspNetCore.EF.Sample.Data;
+using AspNetCore.EF.Sample.Data.Entities;
 using Daybreaksoft.Extensions.Functions;
 using Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +24,7 @@ namespace AspNetCore.EF.Sample.Query.User
 
         #region Private Helper
 
-        private T UserViewModelTransfer<T>(UserModel user) where T : new()
+        private T UserViewModelTransfer<T>(UserEntity user) where T : new()
         {
             var userViewModel = new T();
 

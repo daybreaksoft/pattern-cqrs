@@ -1,14 +1,11 @@
-﻿using AspNetCore.EF.Sample.Core.Const;
-using AspNetCore.EF.Sample.Core.User;
-using AspNetCore.EF.Sample.Core.Vehicle;
-using AspNetCore.EF.Sample.Data.Entities;
+﻿using AspNetCore.EF.Sample.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace AspNetCore.EF.Sample.Core
+namespace AspNetCore.EF.Sample.Data
 {
     public class SampleDbContext : DbContext
     {
-        public DbSet<UserModel> Users { get; set; }
+        public DbSet<UserEntity> Users { get; set; }
         public DbSet<VehicleEntity> Vehicles { get; set; }
         public DbSet<TrafficViolationEntity> TrafficViolations { get; set; }
         public DbSet<ConstEntity> Const { get; set; }

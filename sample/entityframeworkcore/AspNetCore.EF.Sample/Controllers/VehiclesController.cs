@@ -4,8 +4,6 @@ using AspNetCore.EF.Sample.Command.Vehicle;
 using AspNetCore.EF.Sample.Core.Vehicle;
 using AspNetCore.EF.Sample.Query.User;
 using AspNetCore.EF.Sample.Query.Vehicle;
-using Daybreaksoft.Extensions.Functions;
-using Daybreaksoft.Pattern.CQRS;
 using Daybreaksoft.Pattern.CQRS.Command;
 using Daybreaksoft.Pattern.CQRS.DomainModel;
 using Microsoft.AspNetCore.Mvc;

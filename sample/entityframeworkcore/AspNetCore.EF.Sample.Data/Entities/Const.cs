@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace AspNetCore.EF.Sample.Core.Const
+﻿namespace AspNetCore.EF.Sample.Data.Entities
 {
     public class ConstEntity
     {

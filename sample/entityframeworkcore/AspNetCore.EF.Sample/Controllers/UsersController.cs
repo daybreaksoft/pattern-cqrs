@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using AspNetCore.EF.Sample.Command.User;
-using AspNetCore.EF.Sample.Core.User;
-using AspNetCore.EF.Sample.Data;
+using AspNetCore.EF.Sample.Data.Entities;
 using AspNetCore.EF.Sample.Query.User;
 using Daybreaksoft.Pattern.CQRS.Command;
 using Daybreaksoft.Pattern.CQRS.DomainModel;
@@ -18,9 +17,9 @@ namespace AspNetCore.EF.Sample.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Edit([FromRoute]int? id, [FromServices]IDomainAppService<UserModel> userAppService)
+        public async Task<IActionResult> Edit([FromRoute]int? id, [FromServices]IDomainAppService<UserEntity> userAppService)
         {
-            UserModel userModel = null;
+            UserEntity userModel = null;
 
             if (id.HasValue)
             {

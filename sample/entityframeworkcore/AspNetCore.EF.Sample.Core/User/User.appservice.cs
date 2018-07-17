@@ -1,26 +1,27 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using AspNetCore.EF.Sample.Data.Entities;
 using Daybreaksoft.Pattern.CQRS.DomainModel;
 using Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace AspNetCore.EF.Sample.Core.User
 {
-    public class UserAppService : SimpleDomainAppService<UserModel>
+    public class UserAppService : SimpleDomainAppService<UserEntity>
     {
-        public UserAppService(IRepository<UserModel> repository) : base(repository)
+        public UserAppService(IRepository<UserEntity> repository) : base(repository)
         {
         }
 
-        public override async Task InsertAsync(UserModel aggregate)
+        public override async Task InsertAsync(UserEntity aggregate)
         {
             await CheckUsernameUnique(aggregate);
 
             await base.InsertAsync(aggregate);
         }
 
-        public override async Task UpdateAsync(UserModel aggregate)
+        public override async Task UpdateAsync(UserEntity aggregate)
         {
             await CheckUsernameUnique(aggregate);
 
@@ -29,7 +30,7 @@ namespace AspNetCore.EF.Sample.Core.User
 
         #region Constraint
 
-        private async Task CheckUsernameUnique(UserModel aggregate)
+        private async Task CheckUsernameUnique(UserEntity aggregate)
         {
             var queryable = Repository.GetQueryable();
 
