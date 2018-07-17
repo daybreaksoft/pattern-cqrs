@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AspNetCore.EF.Sample.Data;
 using AspNetCore.EF.Sample.Data.Entities;
+using AspNetCore.EF.Sample.Query.ViewModels;
 using Daybreaksoft.Extensions.Functions;
 using Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

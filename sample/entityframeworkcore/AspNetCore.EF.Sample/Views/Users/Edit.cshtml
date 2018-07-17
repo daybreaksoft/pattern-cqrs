@@ -1,4 +1,4 @@
-﻿@model AspNetCore.EF.Sample.Data.Entities.UserEntity
+﻿@model AspNetCore.EF.Sample.Query.ViewModels.UserViewModel
 @{
     ViewData["Title"] = "Users";
 }
@@ -12,6 +12,10 @@
     <div class="form-group">
         <label>Point</label>
         <input class="form-control" placeholder="Point" type="number" asp-for="Point" />
+    </div>
+    <div class="form-group">
+        <label>Roles</label>
+        <select class="form-control" asp-items="@ViewBag.Roles" multiple="multiple" asp-for="Roles"></select>
     </div>
     <button class="btn btn-default">Save</button>
 </form>

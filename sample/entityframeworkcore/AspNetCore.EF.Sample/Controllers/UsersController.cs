@@ -1,10 +1,15 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using AspNetCore.EF.Sample.Command.User;
+using AspNetCore.EF.Sample.Data.Const;
 using AspNetCore.EF.Sample.Data.Entities;
+using AspNetCore.EF.Sample.Query;
 using AspNetCore.EF.Sample.Query.User;
+using AspNetCore.EF.Sample.Query.ViewModels;
 using Daybreaksoft.Pattern.CQRS.Command;
 using Daybreaksoft.Pattern.CQRS.DomainModel;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace AspNetCore.EF.Sample.Controllers
 {
@@ -17,20 +22,32 @@ namespace AspNetCore.EF.Sample.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Edit([FromRoute]int? id, [FromServices]IDomainAppService<UserEntity> userAppService)
+        public async Task<IActionResult> Edit([FromRoute]int? id, [FromServices] ConstQuery constQuery, [FromServices]IDomainAppService<UserEntity> userAppService)
         {
-            UserEntity userModel = null;
+            var roles = await constQuery.GetSelectItems(ConstCategory.UserRole);
+
+            UserViewModel userViewModel = null;
 
             if (id.HasValue)
             {
                 // Load user
-                userModel = await userAppService.FindAsync(id);
+                var userModel = await userAppService.FindAsync(id);
+
+                userViewModel = new UserViewModel
+                {
+
+                    Id = userModel.Id,
+                    Username = userModel.Username,
+                    Point = userModel.Point,
+                    Roles = userModel.Roles.Select(p => (int)p.Role).ToArray()
+                };
             }
 
+            ViewBag.Roles = roles.Select(p => new SelectListItem(p.Text, p.Value));
             ViewBag.IsCreate = !id.HasValue;
             ViewBag.UserId = id;
 
-            return View(userModel);
+            return View(userViewModel);
         }
 
         public async Task<IActionResult> CreateCommand(CreateUserCommand command, [FromServices]ICommandBus commandBus)
