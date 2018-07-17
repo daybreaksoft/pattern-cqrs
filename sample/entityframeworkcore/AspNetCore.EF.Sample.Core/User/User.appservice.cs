@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AspNetCore.EF.Sample.Core.User
 {
-    public class UserAppService : AbstractDomainAppService<UserModel, UserEntity>
+    public class UserAppService : SimpleDomainAppService<UserModel>
     {
-        public UserAppService(IRepository<UserEntity> repository) : base(repository)
+        public UserAppService(IRepository<UserModel> repository) : base(repository)
         {
         }
 
@@ -41,17 +41,6 @@ namespace AspNetCore.EF.Sample.Core.User
             }
         }
 
-        #endregion 
-
-        protected override void CopyValueToEntity(UserEntity entity, UserModel aggregate)
-        {
-            entity.Username = aggregate.Username;
-            entity.Point = aggregate.Point;
-        }
-
-        protected override UserModel ConvertToAggregate(UserEntity entity)
-        {
-            return new UserModel(entity.Id, entity.Username, entity.Point);
-        }
+        #endregion
     }
 }

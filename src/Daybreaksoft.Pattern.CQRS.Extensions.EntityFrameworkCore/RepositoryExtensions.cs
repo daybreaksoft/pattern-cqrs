@@ -6,7 +6,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
 {
     public static class RepositoryExtensions
     {
-        public static IQueryable<TEntity> GetQueryable<TEntity>(this IRepository<TEntity> repository) where TEntity : class ,IEntity, new()
+        public static IQueryable<TEntity> GetQueryable<TEntity>(this IRepository<TEntity> repository) where TEntity : class ,IEntity
         {
             if (repository is IDbContext context)
             {

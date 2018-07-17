@@ -24,7 +24,7 @@ namespace AspNetCore.EF.Sample.Query.User
 
         #region Private Helper
 
-        private T UserViewModelTransfer<T>(UserEntity user) where T : new()
+        private T UserViewModelTransfer<T>(UserModel user) where T : new()
         {
             var userViewModel = new T();
 

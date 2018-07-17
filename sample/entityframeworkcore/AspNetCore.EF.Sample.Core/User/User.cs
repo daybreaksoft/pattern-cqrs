@@ -1,8 +1,11 @@
-﻿using Daybreaksoft.Pattern.CQRS.DomainModel;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Daybreaksoft.Pattern.CQRS.DomainModel;
 
 namespace AspNetCore.EF.Sample.Core.User
 {
-    public class UserModel : IAggregateRoot
+    [Table("Users")]
+    public class UserModel : IAggregateRoot, IEntity
     {
         public UserModel(string username, int point) : this(0, username, point)
         {
@@ -15,10 +18,16 @@ namespace AspNetCore.EF.Sample.Core.User
             Point = point;
         }
 
-        public object Id { get; private set; }
+        object IAggregateRoot.Id => Id;
 
+        [Key]
+        public int Id { get; set; }
+
+        [Required]
+        [StringLength(50)]
         public string Username { get; set; }
 
+        [Required]
         public int Point { get; set; }
     }
 }

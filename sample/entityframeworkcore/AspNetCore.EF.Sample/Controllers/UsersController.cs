@@ -1,8 +1,10 @@
 ﻿using System.Threading.Tasks;
 using AspNetCore.EF.Sample.Command.User;
+using AspNetCore.EF.Sample.Core.User;
 using AspNetCore.EF.Sample.Data;
 using AspNetCore.EF.Sample.Query.User;
 using Daybreaksoft.Pattern.CQRS.Command;
+using Daybreaksoft.Pattern.CQRS.DomainModel;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AspNetCore.EF.Sample.Controllers
@@ -16,24 +18,20 @@ namespace AspNetCore.EF.Sample.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Edit([FromRoute]int? id)
+        public async Task<IActionResult> Edit([FromRoute]int? id, [FromServices]IDomainAppService<UserModel> userAppService)
         {
-            UserViewModel viewModel = null;
+            UserModel userModel = null;
 
             if (id.HasValue)
             {
-                //// Load user
-                //var userModel = await aggregateBus.GetExsitsAggregate<User>(id);
-
-                //// Build view model
-                //viewModel = new UserViewModel();
-                //userModel.CopyValueTo(viewModel);
+                // Load user
+                userModel = await userAppService.FindAsync(id);
             }
 
             ViewBag.IsCreate = !id.HasValue;
             ViewBag.UserId = id;
 
-            return View(viewModel);
+            return View(userModel);
         }
 
         public async Task<IActionResult> CreateCommand(CreateUserCommand command, [FromServices]ICommandBus commandBus)
