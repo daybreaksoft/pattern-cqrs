@@ -65,28 +65,6 @@ namespace AspNetCore.EF.Sample
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-
-            // Verifies whether database exists
-            if (env.IsDevelopment())
-            {
-                EnsureDatabaseExists();
-            }
-        }
-
-        /// <summary>
-        /// Verifies whether database exists
-        /// Create new database if not exists
-        /// </summary>
-        private void EnsureDatabaseExists()
-        {
-            var builder = new DbContextOptionsBuilder();
-            builder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-
-            using (var sampleDbContext = new SampleDbContext(builder.Options))
-            {
-
-                sampleDbContext.Database.EnsureCreated();
-            }
         }
     }
 }
