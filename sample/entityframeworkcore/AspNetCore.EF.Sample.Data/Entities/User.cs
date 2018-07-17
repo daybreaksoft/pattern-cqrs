@@ -16,7 +16,6 @@ namespace AspNetCore.EF.Sample.Data.Entities
             Id = id;
             Username = username;
             Point = point;
-            Roles = new List<UserRoleEntity>();
         }
 
         object IAggregateRoot.Id => Id;
