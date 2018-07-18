@@ -18,7 +18,7 @@ namespace AspNetCore.EF.Sample.Core.User
             Point = point;
         }
 
-        public object Id { get; }
+        public object Id { get; private set; }
 
         public string Username { get; set; }
 

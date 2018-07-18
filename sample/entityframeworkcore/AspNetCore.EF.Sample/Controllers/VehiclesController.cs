@@ -13,11 +13,8 @@ namespace AspNetCore.EF.Sample.Controllers
 {
     public class VehiclesController : Controller
     {
-        protected readonly ICommandBus CommandBus;
-
-        public VehiclesController(ICommandBus commandBus)
+        public VehiclesController()
         {
-            CommandBus = commandBus;
         }
 
         public async Task<IActionResult> Index([FromServices]VehicleQuery vehicleQuery)
@@ -57,24 +54,24 @@ namespace AspNetCore.EF.Sample.Controllers
             return View(vehicleModel);
         }
 
-        public async Task<IActionResult> CreateCommand(CreateVehicleCommand command)
+        public async Task<IActionResult> CreateCommand(CreateVehicleCommand command, [FromServices] ICommandBus commandBus)
         {
-            await CommandBus.SendAsync(command);
+            await commandBus.SendAsync(command);
 
             return RedirectToAction("Index");
         }
 
-        public async Task<IActionResult> UpdateCommand([FromRoute]int id, UpdateVehicleCommand command)
+        public async Task<IActionResult> UpdateCommand([FromRoute]int id, UpdateVehicleCommand command, [FromServices] ICommandBus commandBus)
         {
             command.VehicleId = id;
-            await CommandBus.SendAsync(command);
+            await commandBus.SendAsync(command);
 
             return RedirectToAction("Index");
         }
 
-        public async Task<IActionResult> DeleteCommand([FromRoute]int id)
+        public async Task<IActionResult> DeleteCommand([FromRoute]int id, [FromServices] ICommandBus commandBus)
         {
-            await CommandBus.SendAsync(new DeleteVehicleCommand { VehicleId = id });
+            await commandBus.SendAsync(new DeleteVehicleCommand { VehicleId = id });
 
             return RedirectToAction("Index");
         }

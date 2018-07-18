@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Reflection;
 using System.Threading.Tasks;
 using Daybreaksoft.Extensions.Functions;
 
@@ -34,8 +36,15 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
 
             await Repository.InsertAsync(newEntity);
 
-            //var keyProperty = newEntity.GetType().FindProperty<KeyAttribute>();
-            //var id = keyProperty.GetValue(newEntity);
+            // Get id of entity after added
+            var keyProperty = newEntity.GetType().FindProperty<KeyAttribute>();
+            var id = keyProperty.GetValue(newEntity);
+
+            // Set id value for aggregate
+            var idProperty = aggregate.GetType().GetProperty("Id");
+            var idSetMethod = idProperty.GetSetMethod(true);
+            if (idSetMethod == null) throw new Exception($"Cannot found set method of Id property of {aggregate.GetType().FullName}. " + "Please consider to use the code like this public object Id { get; private set; }.");
+            idSetMethod.Invoke(aggregate, new[] { id });
         }
 
         public virtual async Task UpdateAsync(TAggregateRoot aggregate)

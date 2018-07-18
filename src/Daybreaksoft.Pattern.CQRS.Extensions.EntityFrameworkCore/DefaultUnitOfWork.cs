@@ -1,36 +1,54 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using Daybreaksoft.Pattern.CQRS.DomainModel;
 using Daybreaksoft.Pattern.CQRS.Event;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
 {
     public class DefaultUnitOfWork : DomainModel.DefaultUnitOfWork
     {
         protected readonly DbContext Db;
+        protected IDbContextTransaction Transaction;
 
         public DefaultUnitOfWork(DbContext db, IDomainServiceFactory domainServiceFactory, IEventBus eventBus) : base(domainServiceFactory, eventBus)
         {
             Db = db;
         }
 
+        public override async Task BeginAsync()
+        {
+            await base.BeginAsync();
+
+            Transaction = await Db.Database.BeginTransactionAsync();
+        }
+
         public override async Task CommitAsync()
         {
-            //using (var transaction = Db.Database.BeginTransaction())
-            //{
-            //    try
-            //    {
-            //        await base.CommitAsync();
+            try
+            {
+                await base.CommitAsync();
 
-            //        transaction.Commit();
-            //    }
-            //    catch
-            //    {
-            //        transaction.Rollback();
+                Transaction.Commit();
+            }
+            catch (Exception)
+            {
+                Transaction.Rollback();
 
-            //        throw;
-            //    }
-            //}
+                throw;
+            }
+        }
+
+        public override void Dispose()
+        {
+            if (Transaction != null)
+            {
+                Transaction.Dispose();
+                Transaction = null;
+            }
+
+            base.Dispose();
         }
     }
 }

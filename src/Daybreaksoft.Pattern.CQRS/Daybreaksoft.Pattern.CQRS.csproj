@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <PackageReference Include="Daybreaksoft.Extensions.Functions" Version="1.2.4" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
   </ItemGroup>
 
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net451' ">
