@@ -7,12 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Daybreaksoft.Extensions.Functions" Version="1.2.4" />
+    <Compile Remove="Interface\**" />
+    <EmbeddedResource Remove="Interface\**" />
+    <None Remove="Interface\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Interface\Command\" />
-    <Folder Include="Interface\DI\" />
+    <PackageReference Include="Daybreaksoft.Extensions.Functions" Version="1.2.4" />
   </ItemGroup>
 
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net451' ">
