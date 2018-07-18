@@ -24,6 +24,5 @@ namespace AspNetCore.EF.Sample.Data.Entities
         public int UserId { get; set; }
 
         public string PlateNumber { get; set; }
-
     }
 }

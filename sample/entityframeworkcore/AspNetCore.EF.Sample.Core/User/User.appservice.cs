@@ -8,40 +8,40 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AspNetCore.EF.Sample.Core.User
 {
-    public class UserAppService : SimpleDomainAppService<UserEntity>
-    {
-        public UserAppService(IRepository<UserEntity> repository) : base(repository)
-        {
-        }
+    //public class UserAppService : SimpleDomainService<UserEntity>
+    //{
+    //    public UserAppService(IRepository<UserEntity> repository) : base(repository)
+    //    {
+    //    }
 
-        public override async Task InsertAsync(UserEntity aggregate)
-        {
-            await CheckUsernameUnique(aggregate);
+    //    public override async Task InsertAsync(UserEntity aggregate)
+    //    {
+    //        await CheckUsernameUnique(aggregate);
 
-            await base.InsertAsync(aggregate);
-        }
+    //        await base.InsertAsync(aggregate);
+    //    }
 
-        public override async Task UpdateAsync(UserEntity aggregate)
-        {
-            await CheckUsernameUnique(aggregate);
+    //    public override async Task UpdateAsync(UserEntity aggregate)
+    //    {
+    //        await CheckUsernameUnique(aggregate);
 
-            await base.UpdateAsync(aggregate);
-        }
+    //        await base.UpdateAsync(aggregate);
+    //    }
 
-        #region Constraint
+    //    #region Constraint
 
-        private async Task CheckUsernameUnique(UserEntity aggregate)
-        {
-            var queryable = Repository.GetQueryable();
+    //    private async Task CheckUsernameUnique(UserEntity aggregate)
+    //    {
+    //        var queryable = Repository.GetQueryable();
 
-            var id = Convert.ToInt32(aggregate.Id);
+    //        var id = Convert.ToInt32(aggregate.Id);
 
-            if (await queryable.Where(p => p.Username == aggregate.Username && p.Id != id).AnyAsync())
-            {
-                throw new Exception($"Username {aggregate.Username} already exists.");
-            }
-        }
+    //        if (await queryable.Where(p => p.Username == aggregate.Username && p.Id != id).AnyAsync())
+    //        {
+    //            throw new Exception($"Username {aggregate.Username} already exists.");
+    //        }
+    //    }
 
-        #endregion
-    }
+    //    #endregion
+    //}
 }

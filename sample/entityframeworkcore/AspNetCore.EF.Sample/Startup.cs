@@ -31,7 +31,7 @@ namespace AspNetCore.EF.Sample
 
             services.AddCQRSWithEntityFramework(builder =>
             {
-                var domainAssembly = typeof(UserAppService).GetTypeInfo().Assembly;
+                var domainAssembly = typeof(UserModel).GetTypeInfo().Assembly;
 
                 builder.ForDbContext<SampleDbContext>();
                 builder.ForCommandExecutor(typeof(CreateUserCommandExecutor).GetTypeInfo().Assembly);

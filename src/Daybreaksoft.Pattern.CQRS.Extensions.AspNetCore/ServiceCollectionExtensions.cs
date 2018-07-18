@@ -53,11 +53,11 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
             AddSignleService(services, options, typeof(IRepositoryInvoker), typeof(DefaultRepositoryInvoker));
 
             // Add an service that implemented IDomainAppServiceFactory.
-            AddSignleService(services, options, typeof(IDomainAppServiceFactory), typeof(DefaultDomainAppServiceFactory));
+            AddSignleService(services, options, typeof(IDomainServiceFactory), typeof(DefaultDomainServiceFactory));
 
             // Add services that implemented IDomainAppService<>
-            AddSignleService(services, options, typeof(IDomainAppService<>), typeof(SimpleDomainAppService<>));
-            AddMultipleServices(services, options, typeof(IDomainAppService<>), forceHasImplementationSource: false);
+            AddSignleService(services, options, typeof(IDomainService<>), typeof(SimpleDomainService<>));
+            AddMultipleServices(services, options, typeof(IDomainService<>), forceHasImplementationSource: false);
 
             // Add services that implemented ICommandExecutor<>
             AddMultipleServices(services, options, typeof(ICommandExecutor<>));

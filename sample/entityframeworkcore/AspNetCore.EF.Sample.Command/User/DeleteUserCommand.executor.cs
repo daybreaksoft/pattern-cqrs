@@ -7,18 +7,18 @@ namespace AspNetCore.EF.Sample.Command.User
 {
     public class DeleteUserCommandExecutor : ICommandExecutor<DeleteUserCommand>
     {
-        protected readonly IDomainAppServiceFactory DomainAppServiceFactory;
+        protected readonly IDomainServiceFactory DomainAppServiceFactory;
 
-        public DeleteUserCommandExecutor(IDomainAppServiceFactory domainAppServiceFactory)
+        public DeleteUserCommandExecutor(IDomainServiceFactory domainAppServiceFactory)
         {
             DomainAppServiceFactory = domainAppServiceFactory;
         }
 
         public async Task ExecuteAsync(DeleteUserCommand command)
         {
-            var userAppService = DomainAppServiceFactory.GetDomainAppService<UserEntity>();
+            //var userAppService = DomainAppServiceFactory.GetDomainService<UserEntity>();
 
-            await userAppService.DeleteAsync(command.UserId);
+            //await userAppService.DeleteAsync(command.UserId);
         }
     }
 }

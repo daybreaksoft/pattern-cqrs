@@ -7,20 +7,20 @@ namespace AspNetCore.EF.Sample.Command.Vehicle
 {
     public class CreateVehicleCommandExecutor : ICommandExecutor<CreateVehicleCommand>
     {
-        protected readonly IDomainAppServiceFactory DomainAppServiceFactory;
+        protected readonly IUnitOfWork UnitOfWork;
 
-        public CreateVehicleCommandExecutor(IDomainAppServiceFactory domainAppServiceFactory)
+        public CreateVehicleCommandExecutor(IUnitOfWork unitOfWork)
         {
-            DomainAppServiceFactory = domainAppServiceFactory;
+            UnitOfWork = unitOfWork;
         }
 
         public async Task ExecuteAsync(CreateVehicleCommand command)
         {
             var vehicle = new VehicleEntity(command.UserId, command.PlateNumber);
 
-            var vehicleAppService = DomainAppServiceFactory.GetDomainAppService<VehicleEntity>();
+            UnitOfWork.ReadyToAdd(vehicle);
 
-            await vehicleAppService.InsertAsync(vehicle);
+            await Task.CompletedTask;
         }
     }
 }

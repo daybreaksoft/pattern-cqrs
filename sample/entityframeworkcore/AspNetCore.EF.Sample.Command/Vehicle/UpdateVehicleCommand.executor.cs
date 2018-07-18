@@ -7,16 +7,16 @@ namespace AspNetCore.EF.Sample.Command.Vehicle
 {
     public class UpdateVehicleCommandExecutor : ICommandExecutor<UpdateVehicleCommand>
     {
-        protected readonly IDomainAppServiceFactory DomainAppServiceFactory;
+        protected readonly IDomainServiceFactory DomainAppServiceFactory;
 
-        public UpdateVehicleCommandExecutor(IDomainAppServiceFactory domainAppServiceFactory)
+        public UpdateVehicleCommandExecutor(IDomainServiceFactory domainAppServiceFactory)
         {
             DomainAppServiceFactory = domainAppServiceFactory;
         }
 
         public async Task ExecuteAsync(UpdateVehicleCommand command)
         {
-            var vehicleAppService = DomainAppServiceFactory.GetDomainAppService<VehicleEntity>();
+            var vehicleAppService = DomainAppServiceFactory.GetDomainService<VehicleEntity>();
 
             var vehicleModel = await vehicleAppService.FindAsync(command.VehicleId);
             vehicleModel.UserId = command.UserId;

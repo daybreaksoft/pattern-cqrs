@@ -7,18 +7,20 @@ namespace AspNetCore.EF.Sample.Command.Vehicle
 {
     public class DeleteVehicleCommandExecutor : ICommandExecutor<DeleteVehicleCommand>
     {
-        protected readonly IDomainAppServiceFactory DomainAppServiceFactory;
+        protected readonly IUnitOfWork UnitOfWork;
+        protected readonly IDomainServiceFactory DomainServiceFactory;
 
-        public DeleteVehicleCommandExecutor(IDomainAppServiceFactory domainAppServiceFactory)
+        public DeleteVehicleCommandExecutor(IUnitOfWork unitOfWork, IDomainServiceFactory domainServiceFactory)
         {
-            DomainAppServiceFactory = domainAppServiceFactory;
+            UnitOfWork = unitOfWork;
+            DomainServiceFactory = domainServiceFactory;
         }
 
         public async Task ExecuteAsync(DeleteVehicleCommand command)
         {
-            var vehicleAppService = DomainAppServiceFactory.GetDomainAppService<VehicleEntity>();
+            var vehicle = await DomainServiceFactory.GetDomainService<VehicleEntity>().FindAsync(command.VehicleId);
 
-            await vehicleAppService.DeleteAsync(command.VehicleId);
+            UnitOfWork.ReadyToRemove(vehicle);
         }
     }
 }

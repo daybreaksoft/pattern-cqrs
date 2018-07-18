@@ -27,7 +27,7 @@ namespace AspNetCore.EF.Sample.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Edit([FromRoute]int? id, [FromServices] UserQuery userQuery, [FromServices] IDomainAppService<VehicleEntity> vehicleAppService)
+        public async Task<IActionResult> Edit([FromRoute]int? id, [FromServices] UserQuery userQuery, [FromServices] IDomainService<VehicleEntity> vehicleAppService)
         {
             // Get users as selectitem
             var users = await userQuery.GetUsers();

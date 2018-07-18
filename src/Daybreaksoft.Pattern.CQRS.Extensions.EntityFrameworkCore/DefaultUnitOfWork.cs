@@ -9,7 +9,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
     {
         protected readonly DbContext Db;
 
-        public DefaultUnitOfWork(DbContext db, IAggregateBus aggregateBus, IRepositoryFactory dynamicRepositoryFactory, IEventBus eventBus) : base(aggregateBus, dynamicRepositoryFactory, eventBus)
+        public DefaultUnitOfWork(DbContext db, IRepositoryFactory repositoryFactory, IRepositoryInvoker repositoryInvoker, IEventBus eventBus) : base(repositoryFactory, repositoryInvoker, eventBus)
         {
             Db = db;
         }

@@ -15,7 +15,7 @@ namespace Daybreaksoft.Pattern.CQRS
 
         public virtual async Task AddAsync()
         {
-            _state = AggregateState.Added;
+            //_state = AggregateAction.Added;
 
 #if !Net451
             await Task.CompletedTask;
@@ -27,7 +27,7 @@ namespace Daybreaksoft.Pattern.CQRS
 
         public virtual async Task ModifyAsync()
         {
-            _state = AggregateState.Modified;
+            //_state = AggregateAction.Modified;
 
 #if !Net451
             await Task.CompletedTask;
@@ -38,7 +38,7 @@ namespace Daybreaksoft.Pattern.CQRS
 
         public virtual async Task RemoveAsync()
         {
-            _state = AggregateState.Deleted;
+            //_state = AggregateAction.Deleted;
 
 #if !Net451
             await Task.CompletedTask;

@@ -7,22 +7,22 @@ namespace AspNetCore.EF.Sample.Command.User
 {
     public class UpdateUserCommandExecutor : ICommandExecutor<UpdateUserCommand>
     {
-        protected readonly IDomainAppServiceFactory DomainAppServiceFactory;
+        protected readonly IDomainServiceFactory DomainAppServiceFactory;
 
-        public UpdateUserCommandExecutor(IDomainAppServiceFactory domainAppServiceFactory)
+        public UpdateUserCommandExecutor(IDomainServiceFactory domainAppServiceFactory)
         {
             DomainAppServiceFactory = domainAppServiceFactory;
         }
 
         public async Task ExecuteAsync(UpdateUserCommand command)
         {
-            var userAppService = DomainAppServiceFactory.GetDomainAppService<UserEntity>();
+            //var userAppService = DomainAppServiceFactory.GetDomainService<UserEntity>();
 
-            var userModel = await userAppService.FindAsync(command.UserId);
-            userModel.Username = command.Username;
-            userModel.Point = command.Point;
+            //var userModel = await userAppService.FindAsync(command.UserId);
+            //userModel.Username = command.Username;
+            //userModel.Point = command.Point;
 
-            await userAppService.UpdateAsync(userModel);
+            //await userAppService.UpdateAsync(userModel);
         }
     }
 }

@@ -22,7 +22,7 @@ namespace Daybreaksoft.Pattern.CQRS.Command
         /// </summary>
         public virtual async Task SendAsync<TCommand>(TCommand command) where TCommand : ICommand
         {
-            await UnitOfWork.OpenAsync();
+            await UnitOfWork.BeginAsync();
 
             var executor = DI.GetService<ICommandExecutor<TCommand>>();
 

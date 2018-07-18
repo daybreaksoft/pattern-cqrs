@@ -1,22 +1,26 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Daybreaksoft.Pattern.CQRS.Definition;
 using Daybreaksoft.Pattern.CQRS.Event;
 
 namespace Daybreaksoft.Pattern.CQRS.DomainModel
 {
     public class DefaultUnitOfWork : IUnitOfWork
     {
-        protected readonly IAggregateBus AggregateBus;
-        protected readonly IRepositoryFactory DynamicRepositoryFactory;
+        protected readonly IRepositoryFactory RepositoryFactory;
+        protected readonly IRepositoryInvoker RepositoryInvoker;
         protected readonly IEventBus EventBus;
+        protected readonly List<AggregateOperator> AggregateOperators;
 
-        public DefaultUnitOfWork(IAggregateBus aggregateBus, IRepositoryFactory dynamicRepositoryFactory, IEventBus eventBus)
+        public DefaultUnitOfWork(IRepositoryFactory repositoryFactory, IRepositoryInvoker repositoryInvoker, IEventBus eventBus)
         {
-            AggregateBus = aggregateBus;
-            DynamicRepositoryFactory = dynamicRepositoryFactory;
+            RepositoryFactory = repositoryFactory;
+            RepositoryInvoker = repositoryInvoker;
             EventBus = eventBus;
+            AggregateOperators = new List<AggregateOperator>();
         }
 
-        public virtual async Task OpenAsync()
+        public virtual async Task BeginAsync()
         {
 #if !Net451
             await Task.CompletedTask;
@@ -27,44 +31,56 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
 
         public virtual async Task CommitAsync()
         {
-            await StoreAggreateAsync();
+            foreach (var aggregateOperator in AggregateOperators)
+            {
+                if (aggregateOperator.Action == AggregateAction.Add)
+                {
+                    await AddToStorageAsync(aggregateOperator.Aggregate);
+                }
+                else if (aggregateOperator.Action == AggregateAction.Delete)
+                {
+                    await RemoveFromStorageAsync(aggregateOperator.Aggregate);
+                }
+            }
+        }
+
+        public void ReadyToAdd(IAggregateRoot aggregate)
+        {
+            AggregateOperators.Add(new AggregateOperator(aggregate, AggregateAction.Add));
+        }
+
+        public void ReadyToRemove(IAggregateRoot aggregate)
+        {
+            AggregateOperators.Add(new AggregateOperator(aggregate, AggregateAction.Delete));
         }
 
         #region Store Aggreate
 
-        protected virtual async Task StoreAggreateAsync()
+        protected virtual async Task AddToStorageAsync(IAggregateRoot aggregate)
         {
-            //foreach (var aggregate in AggregateBus.Aggregates)
-            //{
-            //    if (aggregate.State == AggregateState.Added)
-            //    {
-            //        await InsertAggreateAsync(aggregate);
-            //    }
-            //    else if (aggregate.State == AggregateState.Modified)
-            //    {
-            //        await UpdateAggreateAsync(aggregate);
-            //    }
-            //    else if (aggregate.State == AggregateState.Deleted)
-            //    {
-            //        await RemoveAggreateAsync(aggregate);
-            //    }
-            //}
+            IEntity entity = null;
+            if (aggregate is IEntity)
+            {
+                entity = (IEntity)aggregate;
+            }
+
+            var repositoryType = RepositoryFactory.GetRepositoryType(entity);
+            var repository = RepositoryFactory.GetRepository(repositoryType);
+            await RepositoryInvoker.InsertAsync(repository, repositoryType, entity);
         }
 
-        //protected virtual async Task InsertAggreateAsync(IAggregateRoot aggregate)
-        //{
-        //    await DynamicRepositoryFactory.InvokeInsertAsync(aggregate);
-        //}
+        protected virtual async Task RemoveFromStorageAsync(IAggregateRoot aggregate)
+        {
+            IEntity entity = null;
+            if (aggregate is IEntity)
+            {
+                entity = (IEntity)aggregate;
+            }
 
-        //protected virtual async Task UpdateAggreateAsync(IAggregateRoot aggregate)
-        //{
-        //    await DynamicRepositoryFactory.InvokeUpdateAsync(aggregate);
-        //}
-
-        //protected virtual async Task RemoveAggreateAsync(IAggregateRoot aggregate)
-        //{
-        //    await DynamicRepositoryFactory.InvokeRemoveAsync(aggregate.GetType(), aggregate.Id);
-        //}
+            var repositoryType = RepositoryFactory.GetRepositoryType(entity);
+            var repository = RepositoryFactory.GetRepository(repositoryType);
+            await RepositoryInvoker.RemoveAsync(repository, repositoryType, aggregate.Id);
+        }
 
         #endregion
 

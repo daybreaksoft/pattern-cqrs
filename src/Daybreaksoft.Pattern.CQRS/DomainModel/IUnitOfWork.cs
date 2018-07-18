@@ -8,8 +8,12 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
     /// </summary>
     public interface IUnitOfWork : IDisposable
     {
-        Task OpenAsync();
+        Task BeginAsync();
 
         Task CommitAsync();
+
+        void ReadyToAdd(IAggregateRoot aggregate);
+
+        void ReadyToRemove(IAggregateRoot aggregate);
     }
 }

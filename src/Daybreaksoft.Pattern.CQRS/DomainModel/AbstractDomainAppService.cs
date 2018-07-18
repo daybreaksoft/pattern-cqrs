@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Daybreaksoft.Pattern.CQRS.DomainModel
 {
-    public abstract class AbstractDomainAppService<TAggregateRoot, TEntity> : IDomainAppService<TAggregateRoot>
+    public abstract class AbstractDomainAppService<TAggregateRoot, TEntity> : IDomainService<TAggregateRoot>
         where TAggregateRoot : IAggregateRoot
         where TEntity : class, IEntity, new()
     {
