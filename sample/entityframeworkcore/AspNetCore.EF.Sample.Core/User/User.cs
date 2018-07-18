@@ -23,5 +23,10 @@ namespace AspNetCore.EF.Sample.Core.User
         public string Username { get; set; }
 
         public int Point { get; set; }
+
+        public void Verify()
+        {
+        
+        }
     }
 }

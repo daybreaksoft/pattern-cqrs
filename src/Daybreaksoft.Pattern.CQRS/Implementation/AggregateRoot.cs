@@ -18,6 +18,7 @@ namespace Daybreaksoft.Pattern.CQRS
         }
 
         public object Id { get; set; }
+      
 
         protected Definition.AggregateAction _state;
         public virtual AggregateAction State => _state;
@@ -25,6 +26,11 @@ namespace Daybreaksoft.Pattern.CQRS
         protected virtual async Task PublishEventAsync(IEvent evnt)
         {
             await EventBus.PublishAsync(evnt);
+        }
+
+        public void Verify()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

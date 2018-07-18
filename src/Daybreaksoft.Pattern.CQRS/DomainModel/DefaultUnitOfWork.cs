@@ -33,6 +33,8 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
         {
             foreach (var aggregateOperator in AggregateOperators)
             {
+                aggregateOperator.Aggregate.Verify();
+
                 if (aggregateOperator.Action == AggregateAction.Add)
                 {
                     await AddToStorageAsync(aggregateOperator.Aggregate);
