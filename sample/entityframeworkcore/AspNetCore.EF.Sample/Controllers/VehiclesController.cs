@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using AspNetCore.EF.Sample.Command.Vehicle;
-using AspNetCore.EF.Sample.Core.Vehicle;
+using AspNetCore.EF.Sample.Data.Entities;
 using AspNetCore.EF.Sample.Query.User;
 using AspNetCore.EF.Sample.Query.Vehicle;
 using Daybreaksoft.Pattern.CQRS.Command;
@@ -27,14 +27,14 @@ namespace AspNetCore.EF.Sample.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Edit([FromRoute]int? id, [FromServices] UserQuery userQuery, [FromServices] IDomainAppService<VehicleModel> vehicleAppService)
+        public async Task<IActionResult> Edit([FromRoute]int? id, [FromServices] UserQuery userQuery, [FromServices] IDomainAppService<VehicleEntity> vehicleAppService)
         {
             // Get users as selectitem
             var users = await userQuery.GetUsers();
             ViewBag.UserListItems = users.Select(p => new SelectListItem(p.Username, p.Id.ToString()));
 
             // Load vehicle if edit
-            VehicleModel vehicleModel = null;
+            VehicleEntity vehicleModel = null;
 
             if (id.HasValue)
             {

@@ -8,55 +8,55 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AspNetCore.EF.Sample.Core.Vehicle
 {
-    public class VehicleAppService : AbstractDomainAppService<VehicleModel, VehicleEntity>
-    {
-        public VehicleAppService(IRepository<VehicleEntity> repository) : base(repository)
-        {
-        }
+    //public class VehicleAppService : AbstractDomainAppService<VehicleModel, VehicleEntity>
+    //{
+    //    public VehicleAppService(IRepository<VehicleEntity> repository) : base(repository)
+    //    {
+    //    }
 
-        public override async Task InsertAsync(VehicleModel aggregate)
-        {
-            await CheckPlateNumberUnique(aggregate);
+    //    public override async Task InsertAsync(VehicleModel aggregate)
+    //    {
+    //        await CheckPlateNumberUnique(aggregate);
 
-            await base.InsertAsync(aggregate);
-        }
+    //        await base.InsertAsync(aggregate);
+    //    }
 
-        public override async Task UpdateAsync(VehicleModel aggregate)
-        {
-            await CheckPlateNumberUnique(aggregate);
+    //    public override async Task UpdateAsync(VehicleModel aggregate)
+    //    {
+    //        await CheckPlateNumberUnique(aggregate);
 
-            await base.UpdateAsync(aggregate);
-        }
+    //        await base.UpdateAsync(aggregate);
+    //    }
 
-        #region Constraint
+    //    #region Constraint
 
-        private async Task CheckPlateNumberUnique(VehicleModel aggregate)
-        {
-            var queryable = Repository.GetQueryable();
+    //    private async Task CheckPlateNumberUnique(VehicleModel aggregate)
+    //    {
+    //        var queryable = Repository.GetQueryable();
 
-            var id = Convert.ToInt32(aggregate.Id);
+    //        var id = Convert.ToInt32(aggregate.Id);
 
-            if (await queryable.Where(p => p.PlateNumber == aggregate.PlateNumber && p.Id != id).AnyAsync())
-            {
-                throw new Exception($"Vehicle {aggregate.PlateNumber} already exists.");
-            }
-        }
+    //        if (await queryable.Where(p => p.PlateNumber == aggregate.PlateNumber && p.Id != id).AnyAsync())
+    //        {
+    //            throw new Exception($"Vehicle {aggregate.PlateNumber} already exists.");
+    //        }
+    //    }
 
-        #endregion
+    //    #endregion
 
-        #region Data Transfer
+    //    #region Data Transfer
 
-        protected override void CopyValueToEntity(VehicleEntity entity, VehicleModel aggregate)
-        {
-            entity.UserId = aggregate.UserId;
-            entity.PlateNumber = aggregate.PlateNumber;
-        }
+    //    protected override void CopyValueToEntity(VehicleEntity entity, VehicleModel aggregate)
+    //    {
+    //        entity.UserId = aggregate.UserId;
+    //        entity.PlateNumber = aggregate.PlateNumber;
+    //    }
 
-        protected override VehicleModel ConvertToAggregate(VehicleEntity entity)
-        {
-            return new VehicleModel(entity.Id, entity.UserId, entity.PlateNumber);
-        }
+    //    protected override VehicleModel ConvertToAggregate(VehicleEntity entity)
+    //    {
+    //        return new VehicleModel(entity.Id, entity.UserId, entity.PlateNumber);
+    //    }
 
-        #endregion
-    }
+    //    #endregion
+    //}
 }
