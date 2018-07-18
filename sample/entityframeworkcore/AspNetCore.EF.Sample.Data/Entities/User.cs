@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using AspNetCore.EF.Sample.Data.Const;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using Daybreaksoft.Pattern.CQRS.DomainModel;
 
 namespace AspNetCore.EF.Sample.Data.Entities
@@ -20,6 +19,7 @@ namespace AspNetCore.EF.Sample.Data.Entities
 
         object IAggregateRoot.Id => Id;
 
+        [Key]
         public int Id { get; set; }
 
         public string Username { get; set; }

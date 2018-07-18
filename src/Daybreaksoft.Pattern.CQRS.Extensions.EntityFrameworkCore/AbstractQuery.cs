@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
+﻿namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
 {
     /// <summary>
     /// The base type of IQuery
@@ -11,7 +7,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
     {
         protected readonly TDbContext Db;
 
-        public AbstractQuery(TDbContext db)
+        protected AbstractQuery(TDbContext db)
         {
             Db = db;
         }

@@ -15,9 +15,7 @@ namespace AspNetCore.EF.Sample.Core.Vehicle
             PlateNumber = plateNumber;
         }
 
-        object IAggregateRoot.Id => Id;
-
-        public int Id { get; set; }
+        public object Id { get; }
 
         public int UserId { get; set; }
 

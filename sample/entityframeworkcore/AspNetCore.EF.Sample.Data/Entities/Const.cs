@@ -1,7 +1,11 @@
-﻿namespace AspNetCore.EF.Sample.Data.Entities
+﻿using System.ComponentModel.DataAnnotations;
+using Daybreaksoft.Pattern.CQRS.DomainModel;
+
+namespace AspNetCore.EF.Sample.Data.Entities
 {
-    public class ConstEntity
+    public class ConstEntity : IEntity
     {
+        [Key]
         public int Id { get; set; }
 
         public int CategoryId { get; set; }
