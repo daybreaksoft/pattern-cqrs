@@ -3,25 +3,26 @@ using AspNetCore.EF.Sample.Core.TrafficViolation;
 using Daybreaksoft.Extensions.Functions;
 using Daybreaksoft.Pattern.CQRS;
 using Daybreaksoft.Pattern.CQRS.Command;
+using Daybreaksoft.Pattern.CQRS.DomainModel;
 
 namespace AspNetCore.EF.Sample.Command.TrafficViolation
 {
     public class UpdateTrafficViolationCommandExecutor : ICommandExecutor<UpdateTrafficViolationCommand>
     {
-        protected readonly IAggregateBus AggregateBus;
+        protected readonly IUnitOfWork UnitOfWork;
 
-        public UpdateTrafficViolationCommandExecutor(IAggregateBus aggregateBus)
+        public UpdateTrafficViolationCommandExecutor(IUnitOfWork unitOfWork)
         {
-            AggregateBus = aggregateBus;
+            UnitOfWork = unitOfWork;
         }
 
         public async Task ExecuteAsync(UpdateTrafficViolationCommand command)
         {
-            var model = await AggregateBus.GetExsitsAggregate<TrafficViolationModel>(command.TrafficViolationId);
+            //var model = await AggregateBus.GetExsitsAggregate<TrafficViolationModel>(command.TrafficViolationId);
 
-            command.CopyValueTo(model);
+            //command.CopyValueTo(model);
 
-            await model.ModifyAsync();
+            //await model.ModifyAsync();
         }
     }
 }

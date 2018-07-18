@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using AspNetCore.EF.Sample.Command.Vehicle;
 using AspNetCore.EF.Sample.Data.Entities;
 using AspNetCore.EF.Sample.Query;
+using AspNetCore.EF.Sample.Query.ViewModels;
 using Daybreaksoft.Pattern.CQRS.Command;
 using Daybreaksoft.Pattern.CQRS.DomainModel;
 using Microsoft.AspNetCore.Mvc;
@@ -26,18 +27,24 @@ namespace AspNetCore.EF.Sample.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Edit([FromRoute]int? id, [FromServices] UserQuery userQuery, [FromServices] IDomainService<VehicleEntity> vehicleAppService)
+        public async Task<IActionResult> Edit([FromRoute]int? id, [FromServices] UserQuery userQuery, [FromServices] IDomainService<VehicleEntity> vehicleService)
         {
             // Get users as selectitem
             var users = await userQuery.GetUsers();
 
             // Load vehicle if edit
-            VehicleEntity vehicleModel = null;
+            VehicleViewModel vehicleModel = null;
 
             if (id.HasValue)
             {
                 // Load vehicle
-                 vehicleModel = await vehicleAppService.FindAsync(id);
+                var vehicle = await vehicleService.FindAsync(id);
+
+                vehicleModel = new VehicleViewModel
+                {
+                    PlateNumber = vehicle.PlateNumber,
+                    UserId = vehicle.UserId,
+                };
             }
 
             ViewBag.IsCreate = !id.HasValue;
@@ -67,7 +74,7 @@ namespace AspNetCore.EF.Sample.Controllers
 
         public async Task<IActionResult> DeleteCommand([FromRoute]int id)
         {
-            await CommandBus.SendAsync(new DeleteVehicleCommand { VehicleId = id});
+            await CommandBus.SendAsync(new DeleteVehicleCommand { VehicleId = id });
 
             return RedirectToAction("Index");
         }

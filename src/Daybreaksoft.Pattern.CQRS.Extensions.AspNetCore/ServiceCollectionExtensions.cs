@@ -1,5 +1,4 @@
-﻿using Daybreaksoft.Pattern.CQRS.Implementation;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 using Daybreaksoft.Pattern.CQRS.Command;
@@ -36,9 +35,6 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
 
             // Add an service that implemented IDependencyInjection.
             AddSignleService(services, options, typeof(IDependencyInjection), typeof(DefaultDependencyInjection));
-
-            // Add an service that implemented IAggregateBus.
-            AddSignleService(services, options, typeof(IAggregateBus), typeof(DefaultAggregateBus));
 
             // Add an service that implemented IUnitOfWork.
             AddSignleService(services, options, typeof(IUnitOfWork), typeof(DefaultUnitOfWork));

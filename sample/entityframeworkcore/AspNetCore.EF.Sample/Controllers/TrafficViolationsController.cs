@@ -28,7 +28,7 @@ namespace AspNetCore.EF.Sample.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Edit([FromRoute]int? id, [FromServices] VehicleQuery vehicleQuery, [FromServices] IAggregateBus aggregateBus)
+        public async Task<IActionResult> Edit([FromRoute]int? id, [FromServices] VehicleQuery vehicleQuery)
         {
             // Get vehicles as selectitem
             var vehicles = await vehicleQuery.GetVehiclesAsSelectListItem();
@@ -40,11 +40,11 @@ namespace AspNetCore.EF.Sample.Controllers
             if (id.HasValue)
             {
                 // Load traffic violation
-                var trafficViolationModel = await aggregateBus.GetExsitsAggregate<TrafficViolationModel>(id);
+                //var trafficViolationModel = await aggregateBus.GetExsitsAggregate<TrafficViolationModel>(id);
 
-                // Build view model
-                viewModel = new TrafficViolationViewModel();
-                trafficViolationModel.CopyValueTo(viewModel);
+                //// Build view model
+                //viewModel = new TrafficViolationViewModel();
+                //trafficViolationModel.CopyValueTo(viewModel);
             }
 
             ViewBag.IsCreate = !id.HasValue;

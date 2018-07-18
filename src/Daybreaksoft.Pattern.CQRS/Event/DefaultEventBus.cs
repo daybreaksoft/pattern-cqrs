@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Daybreaksoft.Pattern.CQRS.Definition;
 using Daybreaksoft.Pattern.CQRS.Event;
 
-namespace Daybreaksoft.Pattern.CQRS.Implementation
+namespace Daybreaksoft.Pattern.CQRS.Event
 {
     /// <summary>
     /// Defualt implemention of ICommandBus

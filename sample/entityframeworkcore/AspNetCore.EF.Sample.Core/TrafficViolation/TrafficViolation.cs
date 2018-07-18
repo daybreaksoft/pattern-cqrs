@@ -4,26 +4,26 @@ using Daybreaksoft.Pattern.CQRS.Event;
 
 namespace AspNetCore.EF.Sample.Core.TrafficViolation
 {
-    public class TrafficViolationModel : DefaultAggregateRoot
-    {
-        public TrafficViolationModel(IEventBus eventBus) : base(eventBus)
-        {
-        }
+    //public class TrafficViolationModel : DefaultAggregateRoot
+    //{
+    //    public TrafficViolationModel(IEventBus eventBus) : base(eventBus)
+    //    {
+    //    }
 
-        public int VehicleId { get; set; }
+    //    public int VehicleId { get; set; }
 
-        public int DeductPoint { get; set; }
+    //    public int DeductPoint { get; set; }
 
-        public override async Task AddAsync()
-        {
-            await base.AddAsync();
+    //    public override async Task AddAsync()
+    //    {
+    //        await base.AddAsync();
 
-            // Append traffice violation added event
-            await PublishEventAsync(new TrafficViolationAddedEvent
-            {
-                VehicleId = this.VehicleId,
-                DeductPoint = this.DeductPoint
-            });
-        }
-    }
+    //        // Append traffice violation added event
+    //        await PublishEventAsync(new TrafficViolationAddedEvent
+    //        {
+    //            VehicleId = this.VehicleId,
+    //            DeductPoint = this.DeductPoint
+    //        });
+    //    }
+    //}
 }

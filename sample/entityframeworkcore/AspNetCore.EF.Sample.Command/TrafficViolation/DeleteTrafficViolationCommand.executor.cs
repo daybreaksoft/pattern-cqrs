@@ -2,23 +2,24 @@
 using AspNetCore.EF.Sample.Core.TrafficViolation;
 using Daybreaksoft.Pattern.CQRS;
 using Daybreaksoft.Pattern.CQRS.Command;
+using Daybreaksoft.Pattern.CQRS.DomainModel;
 
 namespace AspNetCore.EF.Sample.Command.TrafficViolation
 {
     public class DeleteTrafficViolationCommandExecutor : ICommandExecutor<DeleteTrafficViolationCommand>
     {
-        protected readonly IAggregateBus AggregateBus;
+        protected readonly IUnitOfWork UnitOfWork;
 
-        public DeleteTrafficViolationCommandExecutor(IAggregateBus aggregateBus)
+        public DeleteTrafficViolationCommandExecutor(IUnitOfWork unitOfWork)
         {
-            AggregateBus = aggregateBus;
+            UnitOfWork = unitOfWork;
         }
 
         public async Task ExecuteAsync(DeleteTrafficViolationCommand command)
         {
-            var model = AggregateBus.BuildAggregate<TrafficViolationModel>(command.TrafficViolationId);
+            //var model = AggregateBus.BuildAggregate<TrafficViolationModel>(command.TrafficViolationId);
 
-            await model.RemoveAsync();
+            //await model.RemoveAsync();
         }
     }
 }
