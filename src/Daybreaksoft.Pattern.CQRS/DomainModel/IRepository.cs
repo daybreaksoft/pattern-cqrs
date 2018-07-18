@@ -20,7 +20,7 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
         /// 获取所有的Entity实例
         /// </summary>
         /// <returns></returns>
-        Task<IEnumerable<TEntity>> FindAllAsync();
+        Task<List<TEntity>> FindAllAsync();
 
         /// <summary>
         /// 插入一个新的Entity

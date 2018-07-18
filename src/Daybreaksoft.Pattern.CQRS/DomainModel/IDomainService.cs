@@ -11,7 +11,7 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
     {
         Task<TAggregateRoot> FindAsync(object id);
 
-        Task<IEnumerable<TAggregateRoot>> FindAllAsync();
+        Task<List<TAggregateRoot>> FindAllAsync();
 
         Task InsertAsync(TAggregateRoot aggregate);
 

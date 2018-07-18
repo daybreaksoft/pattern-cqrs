@@ -34,9 +34,9 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
         /// Find all entities
         /// </summary>
         /// <returns></returns>
-        public Task<IEnumerable<TEntity>> FindAllAsync()
+        public Task<List<TEntity>> FindAllAsync()
         {
-            throw new NotSupportedException();
+            return Db.Set<TEntity>().ToListAsync();
         }
 
         /// <summary>

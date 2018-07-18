@@ -23,9 +23,15 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
             return ConvertToAggregate(await Repository.FindAsync(id));
         }
 
-        public virtual Task<IEnumerable<TAggregateRoot>> FindAllAsync()
+        public virtual async Task<List<TAggregateRoot>> FindAllAsync()
         {
-            throw new NotImplementedException();
+            var collection = await Repository.FindAllAsync();
+
+            var result = new List<TAggregateRoot>();
+
+            collection.ForEach(p => result.Add(ConvertToAggregate(p)));
+
+            return result;
         }
 
         public virtual async Task InsertAsync(TAggregateRoot aggregate)
