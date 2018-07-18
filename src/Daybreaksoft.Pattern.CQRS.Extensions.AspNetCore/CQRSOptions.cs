@@ -90,9 +90,9 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
         }
 
         /// <summary>
-        /// Adds a method that registers the implementation of IDomainAppServiceFactory as a service
+        /// Adds a method that registers the implementation of IDomainServiceFactory as a service
         /// </summary>
-        public void ForDomainAppServiceFactory(Action<IServiceCollection> action)
+        public void ForDomainServiceFactory(Action<IServiceCollection> action)
         {
             if (action == null) throw new ArgumentNullException(nameof(action));
 
@@ -100,9 +100,9 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
         }
 
         /// <summary>
-        /// Adds a method that registers the implementation of IDomainAppServiceFactory as a service
+        /// Adds a method that registers the implementation of IDomainService as a service
         /// </summary>
-        public void ForDomainAppService(Action<IServiceCollection> action)
+        public void ForDomainService(Action<IServiceCollection> action)
         {
             if (action == null) throw new ArgumentNullException(nameof(action));
 
@@ -110,9 +110,9 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
         }
 
         /// <summary>
-        /// Adds a method that registers the implementation of IDomainAppServiceFactory as a service
+        /// Adds a method that registers the implementation of IDomainService as a service
         /// </summary>
-        public void ForDomainAppService(Assembly assembly, string underNamespace = null)
+        public void ForDomainService(Assembly assembly, string underNamespace = null)
         {
             if (assembly == null) throw new ArgumentNullException(nameof(assembly));
 

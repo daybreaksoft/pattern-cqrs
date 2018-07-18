@@ -4,7 +4,7 @@ using AspNetCore.EF.Sample.Core;
 using AspNetCore.EF.Sample.Core.User;
 using AspNetCore.EF.Sample.Data;
 using AspNetCore.EF.Sample.Data.Entities;
-using AspNetCore.EF.Sample.Query.User;
+using AspNetCore.EF.Sample.Query;
 using Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -36,7 +36,7 @@ namespace AspNetCore.EF.Sample
                 builder.ForDbContext<SampleDbContext>();
                 builder.ForCommandExecutor(typeof(CreateUserCommandExecutor).GetTypeInfo().Assembly);
                 builder.ForRepository(domainAssembly);
-                builder.ForDomainAppService(domainAssembly);
+                builder.ForDomainService(domainAssembly);
                 builder.ForEventHandler(domainAssembly);
                 builder.ForPostCommitEventHandler(domainAssembly);
                 builder.ForQuery(typeof(UserQuery).GetTypeInfo().Assembly);

@@ -2,10 +2,11 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AspNetCore.EF.Sample.Data;
+using AspNetCore.EF.Sample.Query.ViewModels;
 using Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace AspNetCore.EF.Sample.Query.Vehicle
+namespace AspNetCore.EF.Sample.Query
 {
     public class VehicleQuery : AbstractQuery<SampleDbContext>
     {

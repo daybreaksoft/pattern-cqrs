@@ -4,7 +4,9 @@ namespace AspNetCore.EF.Sample.Command.Vehicle
 {
     public class CreateVehicleCommand : ICommand
     {
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
+
+        public string Username { get; set; }
 
         public string PlateNumber { get; set; }
     }

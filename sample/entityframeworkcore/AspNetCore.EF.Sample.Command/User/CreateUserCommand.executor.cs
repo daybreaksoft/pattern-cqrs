@@ -19,9 +19,7 @@ namespace AspNetCore.EF.Sample.Command.User
         {
             var user = new UserModel(command.Username, command.Point);
 
-            UnitOfWork.ReadyToAdd(user);
-
-            await Task.CompletedTask;
+            await UnitOfWork.AddToStorageAsync(user);
         }
     }
 }

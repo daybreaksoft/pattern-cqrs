@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Daybreaksoft.Extensions.Functions;
 
 namespace Daybreaksoft.Pattern.CQRS.DomainModel
 {
-    public abstract class AbstractDomainAppService<TAggregateRoot, TEntity> : IDomainService<TAggregateRoot>
+    public abstract class AbstractDomainService<TAggregateRoot, TEntity> : IDomainService<TAggregateRoot>
         where TAggregateRoot : IAggregateRoot
         where TEntity : class, IEntity, new()
     {
         protected readonly IRepository<TEntity> Repository;
 
-        protected AbstractDomainAppService(IRepository<TEntity> repository)
+        protected AbstractDomainService(IRepository<TEntity> repository)
         {
             Repository = repository;
         }
@@ -25,13 +26,16 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
             throw new NotImplementedException();
         }
 
-        public virtual Task InsertAsync(TAggregateRoot aggregate)
+        public virtual async Task InsertAsync(TAggregateRoot aggregate)
         {
             var newEntity = new TEntity();
 
             CopyValueToEntity(newEntity, aggregate);
 
-            return Repository.InsertAsync(newEntity);
+            await Repository.InsertAsync(newEntity);
+
+            //var keyProperty = newEntity.GetType().FindProperty<KeyAttribute>();
+            //var id = keyProperty.GetValue(newEntity);
         }
 
         public virtual async Task UpdateAsync(TAggregateRoot aggregate)

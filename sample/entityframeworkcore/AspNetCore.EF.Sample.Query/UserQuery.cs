@@ -8,7 +8,7 @@ using Daybreaksoft.Extensions.Functions;
 using Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace AspNetCore.EF.Sample.Query.User
+namespace AspNetCore.EF.Sample.Query
 {
     public class UserQuery : AbstractQuery<SampleDbContext>
     {

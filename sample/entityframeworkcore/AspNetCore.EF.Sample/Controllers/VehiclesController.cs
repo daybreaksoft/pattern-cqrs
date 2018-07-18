@@ -2,8 +2,7 @@
 using System.Threading.Tasks;
 using AspNetCore.EF.Sample.Command.Vehicle;
 using AspNetCore.EF.Sample.Data.Entities;
-using AspNetCore.EF.Sample.Query.User;
-using AspNetCore.EF.Sample.Query.Vehicle;
+using AspNetCore.EF.Sample.Query;
 using Daybreaksoft.Pattern.CQRS.Command;
 using Daybreaksoft.Pattern.CQRS.DomainModel;
 using Microsoft.AspNetCore.Mvc;
@@ -31,7 +30,6 @@ namespace AspNetCore.EF.Sample.Controllers
         {
             // Get users as selectitem
             var users = await userQuery.GetUsers();
-            ViewBag.UserListItems = users.Select(p => new SelectListItem(p.Username, p.Id.ToString()));
 
             // Load vehicle if edit
             VehicleEntity vehicleModel = null;
@@ -44,6 +42,10 @@ namespace AspNetCore.EF.Sample.Controllers
 
             ViewBag.IsCreate = !id.HasValue;
             ViewBag.VehicleId = id;
+
+            var userListItems = users.Select(p => new SelectListItem(p.Username, p.Id.ToString())).ToList();
+            userListItems.Insert(0, new SelectListItem("Please Select", ""));
+            ViewBag.UserListItems = userListItems;
 
             return View(vehicleModel);
         }

@@ -12,8 +12,12 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
 
         Task CommitAsync();
 
-        void ReadyToAdd(IAggregateRoot aggregate);
+        IDomainService<TAggregate> DomainService<TAggregate>() where TAggregate : IAggregateRoot;
 
-        void ReadyToRemove(IAggregateRoot aggregate);
+        Task AddToStorageAsync<TAggregate>(TAggregate aggregate) where TAggregate : IAggregateRoot;
+
+        Task ModifyWithinStorageAsync<TAggregate>(TAggregate aggregate) where TAggregate : IAggregateRoot;
+
+        Task RemoveFromStorageAsync<TAggregate>(object id) where TAggregate : IAggregateRoot;
     }
 }

@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using AspNetCore.EF.Sample.Command.TrafficViolation;
 using AspNetCore.EF.Sample.Core.TrafficViolation;
+using AspNetCore.EF.Sample.Query;
 using AspNetCore.EF.Sample.Query.TrafficViolation;
-using AspNetCore.EF.Sample.Query.Vehicle;
 using Daybreaksoft.Extensions.Functions;
 using Daybreaksoft.Pattern.CQRS;
 using Daybreaksoft.Pattern.CQRS.Command;

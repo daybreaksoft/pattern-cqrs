@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using AspNetCore.EF.Sample.Core.User;
 using AspNetCore.EF.Sample.Data.Entities;
 using Daybreaksoft.Pattern.CQRS.Command;
 using Daybreaksoft.Pattern.CQRS.DomainModel;
@@ -7,18 +8,16 @@ namespace AspNetCore.EF.Sample.Command.User
 {
     public class DeleteUserCommandExecutor : ICommandExecutor<DeleteUserCommand>
     {
-        protected readonly IDomainServiceFactory DomainAppServiceFactory;
+        protected readonly IUnitOfWork UnitOfWork;
 
-        public DeleteUserCommandExecutor(IDomainServiceFactory domainAppServiceFactory)
+        public DeleteUserCommandExecutor(IUnitOfWork unitOfWork)
         {
-            DomainAppServiceFactory = domainAppServiceFactory;
+            UnitOfWork = unitOfWork;
         }
 
         public async Task ExecuteAsync(DeleteUserCommand command)
         {
-            //var userAppService = DomainAppServiceFactory.GetDomainService<UserEntity>();
-
-            //await userAppService.DeleteAsync(command.UserId);
+            await UnitOfWork.RemoveFromStorageAsync<UserModel>(command.UserId);
         }
     }
 }

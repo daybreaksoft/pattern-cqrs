@@ -4,7 +4,6 @@ using AspNetCore.EF.Sample.Command.User;
 using AspNetCore.EF.Sample.Data.Const;
 using AspNetCore.EF.Sample.Data.Entities;
 using AspNetCore.EF.Sample.Query;
-using AspNetCore.EF.Sample.Query.User;
 using AspNetCore.EF.Sample.Query.ViewModels;
 using Daybreaksoft.Pattern.CQRS.Command;
 using Daybreaksoft.Pattern.CQRS.DomainModel;

@@ -9,28 +9,28 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
     {
         protected readonly DbContext Db;
 
-        public DefaultUnitOfWork(DbContext db, IRepositoryFactory repositoryFactory, IRepositoryInvoker repositoryInvoker, IEventBus eventBus) : base(repositoryFactory, repositoryInvoker, eventBus)
+        public DefaultUnitOfWork(DbContext db, IDomainServiceFactory domainServiceFactory, IEventBus eventBus) : base(domainServiceFactory, eventBus)
         {
             Db = db;
         }
 
         public override async Task CommitAsync()
         {
-            using (var transaction = Db.Database.BeginTransaction())
-            {
-                try
-                {
-                    await base.CommitAsync();
+            //using (var transaction = Db.Database.BeginTransaction())
+            //{
+            //    try
+            //    {
+            //        await base.CommitAsync();
 
-                    transaction.Commit();
-                }
-                catch
-                {
-                    transaction.Rollback();
+            //        transaction.Commit();
+            //    }
+            //    catch
+            //    {
+            //        transaction.Rollback();
 
-                    throw;
-                }
-            }
+            //        throw;
+            //    }
+            //}
         }
     }
 }
