@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using AspNetCore.EF.Sample.Command.User;
+using AspNetCore.EF.Sample.Core.User;
 using AspNetCore.EF.Sample.Data.Const;
 using AspNetCore.EF.Sample.Data.Entities;
 using AspNetCore.EF.Sample.Query;
@@ -21,7 +23,7 @@ namespace AspNetCore.EF.Sample.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Edit([FromRoute]int? id, [FromServices] ConstQuery constQuery)
+        public async Task<IActionResult> Edit([FromRoute]int? id, [FromServices] ConstQuery constQuery, [FromServices]IDomainService<UserModel> userService)
         {
             var roles = await constQuery.GetSelectItems(ConstCategory.UserRole);
 
@@ -30,16 +32,15 @@ namespace AspNetCore.EF.Sample.Controllers
             if (id.HasValue)
             {
                 // Load user
-                //var userModel = await userAppService.FindAsync(id);
+                var userModel = await userService.FindAsync(id);
 
-                //userViewModel = new UserViewModel
-                //{
-
-                //    Id = userModel.Id,
-                //    Username = userModel.Username,
-                //    Point = userModel.Point,
-                //    Roles = userModel.Roles.Select(p => (int)p.Role).ToArray()
-                //};
+                userViewModel = new UserViewModel
+                {
+                    Id = Convert.ToInt32(userModel.Id),
+                    Username = userModel.Username,
+                    Point = userModel.Point,
+                    //Roles = userModel.Roles.Select(p => (int)p.Role).ToArray()
+                };
             }
 
             ViewBag.Roles = roles.Select(p => new SelectListItem(p.Text, p.Value));

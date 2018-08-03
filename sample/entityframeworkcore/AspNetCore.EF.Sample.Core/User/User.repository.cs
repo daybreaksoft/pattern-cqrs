@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AspNetCore.EF.Sample.Core.User
 {
-    public class UserRepository:DefaultRepository<UserEntity>
+    public class UserRepository : DefaultRepository<UserEntity>
     {
         public UserRepository(DbContext db) : base(db)
         {

@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using AspNetCore.EF.Sample.Core.User;
 using AspNetCore.EF.Sample.Data.Entities;
 using Daybreaksoft.Pattern.CQRS.Command;
 using Daybreaksoft.Pattern.CQRS.DomainModel;
@@ -7,22 +8,18 @@ namespace AspNetCore.EF.Sample.Command.User
 {
     public class UpdateUserCommandExecutor : ICommandExecutor<UpdateUserCommand>
     {
-        protected readonly IDomainServiceFactory DomainAppServiceFactory;
+        protected readonly IUnitOfWork UnitOfWork;
 
-        public UpdateUserCommandExecutor(IDomainServiceFactory domainAppServiceFactory)
+        public UpdateUserCommandExecutor(IUnitOfWork unitOfWork)
         {
-            DomainAppServiceFactory = domainAppServiceFactory;
+            UnitOfWork = unitOfWork;
         }
 
         public async Task ExecuteAsync(UpdateUserCommand command)
         {
-            //var userAppService = DomainAppServiceFactory.GetDomainService<UserEntity>();
+            var userModel = new UserModel(command.UserId, command.Username, command.Point);
 
-            //var userModel = await userAppService.FindAsync(command.UserId);
-            //userModel.Username = command.Username;
-            //userModel.Point = command.Point;
-
-            //await userAppService.UpdateAsync(userModel);
+            await UnitOfWork.ModifyWithinStorageAsync(userModel);
         }
     }
 }

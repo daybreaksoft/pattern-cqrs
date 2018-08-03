@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using AspNetCore.EF.Sample.Data.Entities;
+using AspNetCore.EF.Sample.Core.Vehicle;
 using Daybreaksoft.Pattern.CQRS.Command;
 using Daybreaksoft.Pattern.CQRS.DomainModel;
 
@@ -16,9 +16,7 @@ namespace AspNetCore.EF.Sample.Command.Vehicle
 
         public async Task ExecuteAsync(UpdateVehicleCommand command)
         {
-            var vehicle = await UnitOfWork.DomainService<VehicleEntity>().FindAsync(command.VehicleId);
-            vehicle.UserId = command.UserId;
-            vehicle.PlateNumber = command.PlateNumber;
+            var vehicle = new VehicleModel(command.VehicleId, command.UserId, command.PlateNumber);
 
             await UnitOfWork.ModifyWithinStorageAsync(vehicle);
         }

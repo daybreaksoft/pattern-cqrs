@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Daybreaksoft.Extensions.Functions;
 using Daybreaksoft.Pattern.CQRS.DomainModel;
 using Microsoft.EntityFrameworkCore;
 
@@ -34,9 +36,9 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
         /// Find all entities
         /// </summary>
         /// <returns></returns>
-        public Task<List<TEntity>> FindAllAsync()
+        public async Task<IEnumerable<TEntity>> FindAllAsync()
         {
-            return Db.Set<TEntity>().ToListAsync();
+            return await Task.FromResult(Db.Set<TEntity>().AsEnumerable());
         }
 
         /// <summary>
@@ -62,7 +64,15 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
         {
             if (entity == null) throw new ArgumentNullException(nameof(entity));
 
-            Db.Entry(entity).State = EntityState.Modified;
+            // Try to find key property
+            var keyProperty = entity.GetType().FindProperty<KeyAttribute>();
+            if (keyProperty == null)throw new Exception($"Cannot found key property in the {entity.GetType().FullName}.");
+
+            // Get unmodified entity from database
+            var unmodifiedEntity = await FindAsync(keyProperty.GetValue(entity));
+
+            // Copy values from entity to unmodified entity
+            entity.CopyValueTo(unmodifiedEntity);
 
             await Db.SaveChangesAsync();
         }
@@ -79,6 +89,26 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
             Db.Set<TEntity>().Remove(entity);
 
             await Db.SaveChangesAsync();
+        }
+
+        async Task<object> IRepository.FindAsync(object id)
+        {
+            return await this.FindAsync(id);
+        }
+
+        async Task<object> IRepository.FindAllAsync()
+        {
+            return await this.FindAllAsync();
+        }
+
+        async Task IRepository.InsertAsync(object entity)
+        {
+            await InsertAsync((TEntity)entity);
+        }
+
+        async Task IRepository.UpdateAsync(object entity)
+        {
+            await this.UpdateAsync((TEntity)entity);
         }
     }
 }

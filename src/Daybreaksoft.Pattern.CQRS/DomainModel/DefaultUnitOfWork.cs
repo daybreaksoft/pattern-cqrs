@@ -43,14 +43,20 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
 
         public async Task AddToStorageAsync<TAggregate>(TAggregate aggregate) where TAggregate : IAggregateRoot
         {
-            aggregate.Verify();
-            
+            if (aggregate is IAggregateRootVerification verificationAggregate)
+            {
+                verificationAggregate.Verify();
+            }
+
             await DomainService<TAggregate>().InsertAsync(aggregate);
         }
 
         public async Task ModifyWithinStorageAsync<TAggregate>(TAggregate aggregate) where TAggregate : IAggregateRoot
         {
-            aggregate.Verify();
+            if (aggregate is IAggregateRootVerification verificationAggregate)
+            {
+                verificationAggregate.Verify();
+            }
 
             await DomainService<TAggregate>().UpdateAsync(aggregate);
         }

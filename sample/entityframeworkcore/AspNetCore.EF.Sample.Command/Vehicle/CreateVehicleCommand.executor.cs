@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using AspNetCore.EF.Sample.Core.User;
-using AspNetCore.EF.Sample.Data.Entities;
+using AspNetCore.EF.Sample.Core.Vehicle;
 using Daybreaksoft.Pattern.CQRS.Command;
 using Daybreaksoft.Pattern.CQRS.DomainModel;
 
@@ -18,6 +18,7 @@ namespace AspNetCore.EF.Sample.Command.Vehicle
 
         public async Task ExecuteAsync(CreateVehicleCommand command)
         {
+            // Insert user
             int userId;
 
             if (!command.UserId.HasValue)
@@ -33,7 +34,8 @@ namespace AspNetCore.EF.Sample.Command.Vehicle
                 userId = command.UserId.Value;
             }
 
-            var vehicle = new VehicleEntity(userId, command.PlateNumber);
+            // Insert vehicle
+            var vehicle = new VehicleModel(userId, command.PlateNumber);
 
             await UnitOfWork.AddToStorageAsync(vehicle);
         }

@@ -8,30 +8,22 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AspNetCore.EF.Sample.Core.Vehicle
 {
-
-    public class VehicleService : SimpleDomainService<VehicleEntity>
+    public class VehicleService : SimpleDomainService<VehicleModel, VehicleEntity>
     {
         public VehicleService(IRepository<VehicleEntity> repository) : base(repository)
         {
         }
 
-        public override async Task InsertAsync(VehicleEntity aggregate)
+        public override async Task InsertAsync(VehicleModel aggregate)
         {
             await CheckPlateNumberUnique(aggregate);
 
             await base.InsertAsync(aggregate);
         }
 
-        public override async Task UpdateAsync(VehicleEntity aggregate)
-        {
-            await CheckPlateNumberUnique(aggregate);
-
-            await base.UpdateAsync(aggregate);
-        }
-
         #region Constraint
 
-        private async Task CheckPlateNumberUnique(VehicleEntity aggregate)
+        private async Task CheckPlateNumberUnique(VehicleModel aggregate)
         {
             var queryable = Repository.GetQueryable();
 

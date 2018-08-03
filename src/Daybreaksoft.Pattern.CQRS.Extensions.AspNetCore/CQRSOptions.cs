@@ -70,16 +70,6 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
         }
 
         /// <summary>
-        /// Adds a method that registers the implementation of IRepositoryInvoker as a service
-        /// </summary>
-        public void ForRepositoryInvoker(Action<IServiceCollection> action)
-        {
-            if (action == null) throw new ArgumentNullException(nameof(action));
-
-            RegisterImplementationActions.Add(typeof(IRepositoryInvoker).Name, action);
-        }
-
-        /// <summary>
         /// Adds a method that registers the implementation of IDependencyInjection as a service
         /// </summary>
         public void ForDependencyInjection(Action<IServiceCollection> action)

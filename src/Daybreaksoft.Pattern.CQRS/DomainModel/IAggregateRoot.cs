@@ -9,7 +9,5 @@
         /// The key of Aggregate Root
         /// </summary>
         object Id { get; }
-
-        void Verify();
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using AspNetCore.EF.Sample.Command.Vehicle;
-using AspNetCore.EF.Sample.Data.Entities;
+using AspNetCore.EF.Sample.Core.Vehicle;
 using AspNetCore.EF.Sample.Query;
 using AspNetCore.EF.Sample.Query.ViewModels;
 using Daybreaksoft.Pattern.CQRS.Command;
@@ -13,10 +13,6 @@ namespace AspNetCore.EF.Sample.Controllers
 {
     public class VehiclesController : Controller
     {
-        public VehiclesController()
-        {
-        }
-
         public async Task<IActionResult> Index([FromServices]VehicleQuery vehicleQuery)
         {
             ViewBag.Vehicles = await vehicleQuery.GetVehicles();
@@ -24,7 +20,7 @@ namespace AspNetCore.EF.Sample.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Edit([FromRoute]int? id, [FromServices] UserQuery userQuery, [FromServices] IDomainService<VehicleEntity> vehicleService)
+        public async Task<IActionResult> Edit([FromRoute]int? id, [FromServices] UserQuery userQuery, [FromServices]IDomainService<VehicleModel> vehicleService)
         {
             // Get users as selectitem
             var users = await userQuery.GetUsers();

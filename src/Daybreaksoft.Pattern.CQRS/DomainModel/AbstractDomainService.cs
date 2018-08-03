@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Reflection;
+using System.Linq;
 using System.Threading.Tasks;
 using Daybreaksoft.Extensions.Functions;
 
@@ -23,15 +23,11 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
             return ConvertToAggregate(await Repository.FindAsync(id));
         }
 
-        public virtual async Task<List<TAggregateRoot>> FindAllAsync()
+        public virtual async Task<IEnumerable<TAggregateRoot>> FindAllAsync()
         {
             var collection = await Repository.FindAllAsync();
 
-            var result = new List<TAggregateRoot>();
-
-            collection.ForEach(p => result.Add(ConvertToAggregate(p)));
-
-            return result;
+            return collection.Select(ConvertToAggregate);
         }
 
         public virtual async Task InsertAsync(TAggregateRoot aggregate)
@@ -47,10 +43,14 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
             var id = keyProperty.GetValue(newEntity);
 
             // Set id value for aggregate
-            var idProperty = aggregate.GetType().GetProperty("Id");
-            var idSetMethod = idProperty.GetSetMethod(true);
-            if (idSetMethod == null) throw new Exception($"Cannot found set method of Id property of {aggregate.GetType().FullName}. " + "Please consider to use the code like this public object Id { get; private set; }.");
-            idSetMethod.Invoke(aggregate, new[] { id });
+            if (aggregate is IAggregateRootSetKey key)
+            {
+                key.SetKey(id);
+            }
+            else
+            {
+                throw  new Exception($"The {aggregate.GetType().FullName} does not inherit {typeof(IAggregateRootSetKey).FullName}.");
+            }
         }
 
         public virtual async Task UpdateAsync(TAggregateRoot aggregate)

@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using AspNetCore.EF.Sample.Core.Vehicle;
 using AspNetCore.EF.Sample.Data.Entities;
 using Daybreaksoft.Pattern.CQRS.Command;
 using Daybreaksoft.Pattern.CQRS.DomainModel;
@@ -16,7 +17,7 @@ namespace AspNetCore.EF.Sample.Command.Vehicle
 
         public async Task ExecuteAsync(DeleteVehicleCommand command)
         {
-            await UnitOfWork.RemoveFromStorageAsync<VehicleEntity>(command.VehicleId);
+            await UnitOfWork.RemoveFromStorageAsync<VehicleModel>(command.VehicleId);
         }
     }
 }
