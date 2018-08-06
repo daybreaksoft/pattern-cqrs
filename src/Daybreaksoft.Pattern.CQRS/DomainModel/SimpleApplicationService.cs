@@ -12,7 +12,7 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
         where TAggregateRoot : IAggregateRoot, IEntity
         where TEntity : class, IEntity, new()
     {
-        public SimpleApplicationService(IRepository<TEntity> repository) : base(repository)
+        public SimpleApplicationService(IUnitOfWork unitOfWork, IRepository<TEntity> repository) : base(unitOfWork, repository)
         {
         }
 
@@ -36,10 +36,12 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
     public class SimpleApplicationService<TAggregateRoot> : IApplicationService<TAggregateRoot>
         where TAggregateRoot : IAggregateRoot, IEntity
     {
+        protected readonly IUnitOfWork UnitOfWork;
         protected readonly IRepository Repository;
 
-        public SimpleApplicationService(IRepositoryFactory repositoryFactory)
+        public SimpleApplicationService(IUnitOfWork unitOfWork, IRepositoryFactory repositoryFactory)
         {
+            UnitOfWork = unitOfWork;
             Repository = GetRepository(repositoryFactory);
         }
 
@@ -84,20 +86,50 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
             return aggregates;
         }
 
-        public virtual Task InsertAsync(TAggregateRoot aggregate)
+        public virtual async Task InsertAsync(TAggregateRoot aggregate, bool immediate = false)
+        {
+            UnitOfWork.RegisterdModels.Add(new RegisterdModel
+            {
+                Model = aggregate,
+                Action = RegisterAction.Add
+            });
+
+            if (immediate)
+            {
+                await UnitOfWork.CommitAsync();
+            }
+        }
+
+        public virtual void Update(TAggregateRoot aggregate)
+        {
+            UnitOfWork.RegisterdModels.Add(new RegisterdModel
+            {
+                Model = aggregate,
+                Action = RegisterAction.Modify
+            });
+        }
+
+        public virtual void Delete(object id)
+        {
+            throw new NotSupportedException();
+            //return Repository.DeleteAsync(id);
+        }
+
+        public virtual Task PersistInsertAsync(object aggregate)
         {
             return Repository.InsertAsync(aggregate);
         }
 
-        public virtual Task UpdateAsync(TAggregateRoot aggregate)
+        public virtual Task PersistUpdateAsync(object aggregate)
         {
             return Repository.UpdateAsync(aggregate);
         }
 
-        public virtual Task DeleteAsync(object id)
+        public virtual Task PersistDeleteAsync(object aggregate)
         {
-            return Repository.DeleteAsync(id);
+            return Repository.DeleteAsync(0);
         }
+
 
         #region Data Transfer
 

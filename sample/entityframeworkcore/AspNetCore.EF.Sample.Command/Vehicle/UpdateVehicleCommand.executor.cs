@@ -18,7 +18,9 @@ namespace AspNetCore.EF.Sample.Command.Vehicle
         {
             var vehicle = new VehicleModel(command.VehicleId, command.UserId, command.PlateNumber);
 
-            await _vehicleService.UpdateAsync(vehicle);
+            _vehicleService.Update(vehicle);
+
+            await Task.CompletedTask;
         }
     }
 }

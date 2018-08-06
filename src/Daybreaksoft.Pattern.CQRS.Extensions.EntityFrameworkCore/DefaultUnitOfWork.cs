@@ -19,25 +19,42 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
 
         public override async Task BeginAsync()
         {
-            await base.BeginAsync();
+            //await base.BeginAsync();
 
-            Transaction = await Db.Database.BeginTransactionAsync();
+            //Transaction = await Db.Database.BeginTransactionAsync();
         }
 
         public override async Task CommitAsync()
         {
-            try
+            foreach (var model in RegisterdModels)
             {
-                await base.CommitAsync();
+                if (model is IAggregateRootVerification verification)
+                {
+                    verification.Verify();
+                }
 
-                Transaction.Commit();
+                if (model.Action == RegisterAction.Add)
+                {
+                    await model.PersistService.PersistInsertAsync(model.Model);
+                }
             }
-            catch (Exception)
-            {
-                Transaction.Rollback();
 
-                throw;
-            }
+            await Db.SaveChangesAsync();
+
+            RegisterdModels.Clear();
+
+            //try
+            //{
+            //    await base.CommitAsync();
+
+            //    Transaction.Commit();
+            //}
+            //catch (Exception)
+            //{
+            //    Transaction.Rollback();
+
+            //    throw;
+            //}
         }
 
         public override void Dispose()

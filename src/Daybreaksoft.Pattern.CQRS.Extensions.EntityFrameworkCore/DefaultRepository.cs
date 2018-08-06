@@ -52,7 +52,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
 
             await Db.Set<TEntity>().AddAsync(entity);
 
-            await Db.SaveChangesAsync();
+            //await Db.SaveChangesAsync();
         }
 
         /// <summary>

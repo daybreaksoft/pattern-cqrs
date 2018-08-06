@@ -17,9 +17,9 @@ namespace AspNetCore.EF.Sample.Command.User
 
         public async Task ExecuteAsync(UpdateUserCommand command)
         {
-            var userModel = new UserModel(command.UserId, command.Username, command.Point);
+            //var userModel = new UserModel(command.UserId, command.Username, command.Point);
 
-            await _userService.UpdateAsync(userModel);
+            //await _userService.UpdateAsync(userModel);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Daybreaksoft.Pattern.CQRS.Event;
 
 namespace Daybreaksoft.Pattern.CQRS.DomainModel
@@ -10,7 +11,10 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
         public DefaultUnitOfWork(IEventBus eventBus)
         {
             EventBus = eventBus;
+            RegisterdModels = new List<RegisterdModel>();
         }
+
+        public ICollection<RegisterdModel> RegisterdModels { get; }
 
         public virtual async Task BeginAsync()
         {
@@ -23,11 +27,7 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
 
         public virtual async Task CommitAsync()
         {
-#if !Net451
-            await Task.CompletedTask;
-#else
-            await Task.FromResult(0);
-#endif
+         
         }
 
         public virtual void Dispose()

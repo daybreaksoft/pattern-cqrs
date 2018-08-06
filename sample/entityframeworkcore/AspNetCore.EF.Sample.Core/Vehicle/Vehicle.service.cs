@@ -10,15 +10,18 @@ namespace AspNetCore.EF.Sample.Core.Vehicle
 {
     public class VehicleService : SimpleApplicationService<VehicleModel, VehicleEntity>
     {
-        public VehicleService(IRepository<VehicleEntity> repository) : base(repository)
+        public VehicleService(IUnitOfWork unitOfWork, IRepository<VehicleEntity> repository) : base(unitOfWork, repository)
         {
         }
 
-        public override async Task InsertAsync(VehicleModel aggregate)
+        protected override Task BeforeInsertAsync(VehicleModel aggregate)
         {
-            await CheckPlateNumberUnique(aggregate);
+            return CheckPlateNumberUnique(aggregate);
+        }
 
-            await base.InsertAsync(aggregate);
+        protected override Task BeforeUpdateAsync(VehicleModel aggregate)
+        {
+            return CheckPlateNumberUnique(aggregate);
         }
 
         #region Constraint

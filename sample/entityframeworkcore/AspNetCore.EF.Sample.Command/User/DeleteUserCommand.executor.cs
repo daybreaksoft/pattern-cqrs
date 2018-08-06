@@ -16,7 +16,7 @@ namespace AspNetCore.EF.Sample.Command.User
 
         public async Task ExecuteAsync(DeleteUserCommand command)
         {
-            await _userService.DeleteAsync(command.UserId);
+            //await _userService.DeleteAsync(command.UserId);
         }
     }
 }

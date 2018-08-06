@@ -10,22 +10,18 @@ namespace AspNetCore.EF.Sample.Core.User
 {
     public class UserService : AbstractApplicationService<UserModel, UserEntity>
     {
-        public UserService(IRepository<UserEntity> repository) : base(repository)
+        public UserService(IUnitOfWork unitOfWork, IRepository<UserEntity> repository) : base(unitOfWork, repository)
         {
         }
 
-        public override async Task InsertAsync(UserModel aggregate)
+        protected override Task BeforeInsertAsync(UserModel aggregate)
         {
-            await CheckUsernameUnique(aggregate);
-
-            await base.InsertAsync(aggregate);
+            return CheckUsernameUnique(aggregate);
         }
 
-        public override async Task UpdateAsync(UserModel aggregate)
+        protected override Task BeforeUpdateAsync(UserModel aggregate)
         {
-            await CheckUsernameUnique(aggregate);
-
-            await base.UpdateAsync(aggregate);
+            return CheckUsernameUnique(aggregate);
         }
 
         #region Constraint

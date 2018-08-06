@@ -16,7 +16,7 @@ namespace AspNetCore.EF.Sample.Command.Vehicle
 
         public async Task ExecuteAsync(DeleteVehicleCommand command)
         {
-            await _vehicleService.DeleteAsync(command.VehicleId);
+            //await _vehicleService.DeleteAsync(command.VehicleId);
         }
     }
 }

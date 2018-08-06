@@ -11,10 +11,12 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
         where TAggregateRoot : IAggregateRoot
         where TEntity : class, IEntity, new()
     {
+        protected readonly IUnitOfWork UnitOfWork;
         protected readonly IRepository<TEntity> Repository;
 
-        protected AbstractApplicationService(IRepository<TEntity> repository)
+        protected AbstractApplicationService(IUnitOfWork unitOfWork, IRepository<TEntity> repository)
         {
+            UnitOfWork = unitOfWork;
             Repository = repository;
         }
 
@@ -30,8 +32,43 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
             return collection.Select(ConvertToAggregate);
         }
 
-        public virtual async Task InsertAsync(TAggregateRoot aggregate)
+        public virtual async Task InsertAsync(TAggregateRoot aggregate, bool immediate)
         {
+            UnitOfWork.RegisterdModels.Add(new RegisterdModel
+            {
+                Model = aggregate,
+                Action = RegisterAction.Add,
+                PersistService = this
+            });
+
+            if (immediate)
+            {
+                await UnitOfWork.CommitAsync();
+            }
+        }
+
+        public virtual void Update(TAggregateRoot aggregate)
+        {
+            UnitOfWork.RegisterdModels.Add(new RegisterdModel
+            {
+                Model = aggregate,
+                Action = RegisterAction.Modify,
+                PersistService = this
+            });
+        }
+
+        public virtual void Delete(object id)
+        {
+            throw new NotSupportedException();
+            //return Repository.DeleteAsync(id);
+        }
+
+        public virtual async Task PersistInsertAsync(object obj)
+        {
+            var aggregate = (TAggregateRoot)obj;
+
+            await BeforeInsertAsync(aggregate);
+
             var newEntity = new TEntity();
 
             CopyValueToEntity(newEntity, aggregate);
@@ -49,12 +86,16 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
             }
             else
             {
-                throw  new Exception($"The {aggregate.GetType().FullName} does not inherit {typeof(IAggregateRootSetKey).FullName}.");
+                throw new Exception($"The {aggregate.GetType().FullName} does not inherit {typeof(IAggregateRootSetKey).FullName}.");
             }
         }
 
-        public virtual async Task UpdateAsync(TAggregateRoot aggregate)
+        public virtual async Task PersistUpdateAsync(object obj)
         {
+            var aggregate = (TAggregateRoot) obj;
+
+            await BeforeUpdateAsync(aggregate);
+
             var unModifiedEntity = await Repository.FindAsync(aggregate.Id);
 
             CopyValueToEntity(unModifiedEntity, aggregate);
@@ -62,9 +103,19 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
             await Repository.UpdateAsync(unModifiedEntity);
         }
 
-        public virtual Task DeleteAsync(object id)
+        public virtual Task PersistDeleteAsync(TAggregateRoot aggregate)
         {
-            return Repository.DeleteAsync(id);
+            return Repository.DeleteAsync(aggregate.Id);
+        }
+
+        protected virtual async Task BeforeInsertAsync(TAggregateRoot aggregate)
+        {
+            await Task.FromResult(0);
+        }
+
+        protected virtual async Task BeforeUpdateAsync(TAggregateRoot aggregate)
+        {
+            await Task.FromResult(0);
         }
 
         #region Data Transfer
