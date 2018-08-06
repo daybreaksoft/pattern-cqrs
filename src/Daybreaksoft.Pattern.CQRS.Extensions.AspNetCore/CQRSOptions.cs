@@ -80,16 +80,6 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
         }
 
         /// <summary>
-        /// Adds a method that registers the implementation of IDomainServiceFactory as a service
-        /// </summary>
-        public void ForDomainServiceFactory(Action<IServiceCollection> action)
-        {
-            if (action == null) throw new ArgumentNullException(nameof(action));
-
-            RegisterImplementationActions.Add(typeof(IApplicationServiceFactory).Name, action);
-        }
-
-        /// <summary>
         /// Adds a method that registers the implementation of IDomainService as a service
         /// </summary>
         public void ForDomainService(Action<IServiceCollection> action)

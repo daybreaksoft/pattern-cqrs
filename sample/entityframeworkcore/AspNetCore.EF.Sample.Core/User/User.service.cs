@@ -14,18 +14,14 @@ namespace AspNetCore.EF.Sample.Core.User
         {
         }
 
-        public override async Task InsertAsync(UserModel aggregate)
+        protected override async Task BeforeInsertAsync(UserModel aggregate)
         {
             await CheckUsernameUnique(aggregate);
-
-            await base.InsertAsync(aggregate);
         }
 
-        public override async Task UpdateAsync(UserModel aggregate)
+        protected override async Task BeforeUpdateAsync(UserModel aggregate)
         {
             await CheckUsernameUnique(aggregate);
-
-            await base.UpdateAsync(aggregate);
         }
 
         #region Constraint

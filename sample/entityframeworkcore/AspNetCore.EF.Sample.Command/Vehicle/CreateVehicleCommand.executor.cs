@@ -27,7 +27,7 @@ namespace AspNetCore.EF.Sample.Command.Vehicle
             {
                 var user = new UserModel(command.Username, 0);
 
-                await _userService.InsertAsync(user);
+                await _userService.InsertAsync(user, true);
 
                 userId = Convert.ToInt32(user.Id);
             }

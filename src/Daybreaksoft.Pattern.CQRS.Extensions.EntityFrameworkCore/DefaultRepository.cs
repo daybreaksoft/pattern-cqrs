@@ -12,15 +12,26 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
     /// <summary>
     /// Default implemention of IRepository with EntityFrameworkCore
     /// </summary>
-    public class DefaultRepository<TEntity> : IRepository<TEntity>, IDbContext
-        where TEntity : class, IEntity
+    public class DefaultRepository<TEntity> : IRepository<TEntity>, IEfRepository
+        where TEntity : class, IEntity, new()
     {
-        public DefaultRepository(DbContext db)
+        protected readonly IUnitOfWork UnitOfWork;
+
+        public DefaultRepository(IUnitOfWork unitOfWork)
         {
-            Db = db;
+            UnitOfWork = unitOfWork;
+
+            if (UnitOfWork is IEfUnitOfWork efUnitOfWork)
+            {
+                Db = efUnitOfWork.DbContext;
+            }
+            else
+            {
+                throw new Exception($"The {unitOfWork.GetType().FullName} is not inherited from {typeof(IEfUnitOfWork).FullName}.");
+            }
         }
 
-        public DbContext Db { get; }
+        public DbContext Db { get; private set; }
 
         /// <summary>
         /// Find an entity via id
@@ -46,13 +57,16 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
         /// </summary>
         /// <param name="entity">The entity instance.</param>
         /// <returns></returns>
-        public virtual async Task InsertAsync(TEntity entity)
+        public virtual async Task InsertAsync(TEntity entity, Action<IEntity> setKeyAction, bool immediate = false)
         {
             if (entity == null) throw new ArgumentNullException(nameof(entity));
 
-            await Db.Set<TEntity>().AddAsync(entity);
+            await UnitOfWork.RegisterAddedAsync(entity, this, setKeyAction);
 
-            await Db.SaveChangesAsync();
+            if (immediate)
+            {
+                await UnitOfWork.SaveChangesAsync();
+            }
         }
 
         /// <summary>
@@ -60,21 +74,16 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
         /// </summary>
         /// <param name="entity">The entity instance.</param>
         /// <returns></returns>
-        public virtual async Task UpdateAsync(TEntity entity)
+        public virtual async Task UpdateAsync(TEntity entity, bool immediate = false)
         {
             if (entity == null) throw new ArgumentNullException(nameof(entity));
 
-            // Try to find key property
-            var keyProperty = entity.GetType().FindProperty<KeyAttribute>();
-            if (keyProperty == null)throw new Exception($"Cannot found key property in the {entity.GetType().FullName}.");
+            await UnitOfWork.RegisterChangedAsync(entity, this);
 
-            // Get unmodified entity from database
-            var unmodifiedEntity = await FindAsync(keyProperty.GetValue(entity));
-
-            // Copy values from entity to unmodified entity
-            entity.CopyValueTo(unmodifiedEntity);
-
-            await Db.SaveChangesAsync();
+            if (immediate)
+            {
+                await UnitOfWork.SaveChangesAsync();
+            }
         }
 
         /// <summary>
@@ -82,13 +91,25 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
         /// </summary>
         /// <param name="key">The key of the entity.</param>
         /// <returns></returns>
-        public async Task DeleteAsync(object key)
+        public async Task DeleteAsync(object key, bool immediate = false)
         {
-            var entity = await FindAsync(key);
+            if (key == null) throw new ArgumentNullException(nameof(key));
 
-            Db.Set<TEntity>().Remove(entity);
+            var entity = new TEntity();
 
-            await Db.SaveChangesAsync();
+            // Try to find key property
+            var keyProperty = entity.GetType().FindProperty<KeyAttribute>();
+            if (keyProperty == null) throw new Exception($"Cannot found key property in the {entity.GetType().FullName}.");
+
+            // Set id
+            keyProperty.SetValue(entity, key);
+
+            await UnitOfWork.RegisterRemovedAsync(entity, this);
+
+            if (immediate)
+            {
+                await UnitOfWork.SaveChangesAsync();
+            }
         }
 
         async Task<object> IRepository.FindAsync(object id)
@@ -101,14 +122,45 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
             return await this.FindAllAsync();
         }
 
-        async Task IRepository.InsertAsync(object entity)
+        async Task IRepository.InsertAsync(object entity, Action<IEntity> setKeyAction, bool immediate)
         {
-            await InsertAsync((TEntity)entity);
+            await InsertAsync((TEntity)entity, setKeyAction, immediate);
         }
 
-        async Task IRepository.UpdateAsync(object entity)
+        async Task IRepository.UpdateAsync(object entity, bool immediate)
         {
-            await this.UpdateAsync((TEntity)entity);
+            await this.UpdateAsync((TEntity)entity, immediate);
+        }
+
+        public Task PersistInsertOf(object entity)
+        {
+            if (entity == null) throw new ArgumentNullException(nameof(entity));
+
+            return Db.Set<TEntity>().AddAsync((TEntity)entity);
+        }
+
+        public async Task PersistUpdateOf(object entity)
+        {
+            if (entity == null) throw new ArgumentNullException(nameof(entity));
+
+            // Try to find key property
+            var keyProperty = entity.GetType().FindProperty<KeyAttribute>();
+            if (keyProperty == null) throw new Exception($"Cannot found key property in the {entity.GetType().FullName}.");
+
+            // Get unmodified entity from database
+            var unmodifiedEntity = await FindAsync(keyProperty.GetValue(entity));
+
+            // Copy values from entity to unmodified entity
+            entity.CopyValueTo(unmodifiedEntity);
+        }
+
+        public async Task PersistDeleteOf(object entity)
+        {
+            if (entity == null) throw new ArgumentNullException(nameof(entity));
+
+            Db.Set<TEntity>().Remove((TEntity)entity);
+
+            await Task.CompletedTask;
         }
     }
 }

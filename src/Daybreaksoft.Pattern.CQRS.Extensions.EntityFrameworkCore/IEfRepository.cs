@@ -2,7 +2,7 @@
 
 namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
 {
-    public interface IDbContext
+    public interface IEfRepository
     {
         DbContext Db { get; }
     }

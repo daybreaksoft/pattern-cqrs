@@ -30,41 +30,75 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
             return collection.Select(ConvertToAggregate);
         }
 
-        public virtual async Task InsertAsync(TAggregateRoot aggregate)
+        public virtual async Task InsertAsync(TAggregateRoot aggregate, bool immediate = false)
         {
+            await BeforeInsertAsync(aggregate);
+
             var newEntity = new TEntity();
 
             CopyValueToEntity(newEntity, aggregate);
 
-            await Repository.InsertAsync(newEntity);
-
-            // Get id of entity after added
-            var keyProperty = newEntity.GetType().FindProperty<KeyAttribute>();
-            var id = keyProperty.GetValue(newEntity);
-
-            // Set id value for aggregate
-            if (aggregate is IAggregateRootSetKey key)
+            await Repository.InsertAsync(newEntity, (entity) =>
             {
-                key.SetKey(id);
-            }
-            else
-            {
-                throw  new Exception($"The {aggregate.GetType().FullName} does not inherit {typeof(IAggregateRootSetKey).FullName}.");
-            }
+
+                // Get id of entity after added
+                var keyProperty = entity.GetType().FindProperty<KeyAttribute>();
+
+                // Set id value for aggregate
+                if (aggregate is IAggregateRootSetKey key)
+                {
+                    key.SetKey(keyProperty.GetValue(entity));
+                }
+                else
+                {
+                    throw new Exception($"The {aggregate.GetType().FullName} is not inherited from {typeof(IAggregateRootSetKey).FullName}.");
+                }
+            }, immediate);
         }
 
-        public virtual async Task UpdateAsync(TAggregateRoot aggregate)
+        public virtual async Task UpdateAsync(TAggregateRoot aggregate, bool immediate = false)
         {
+            await BeforeUpdateAsync(aggregate);
+
             var unModifiedEntity = await Repository.FindAsync(aggregate.Id);
 
             CopyValueToEntity(unModifiedEntity, aggregate);
 
-            await Repository.UpdateAsync(unModifiedEntity);
+            await Repository.UpdateAsync(unModifiedEntity, immediate);
         }
 
-        public virtual Task DeleteAsync(object id)
+        public virtual async Task DeleteAsync(object id, bool immediate = false)
         {
-            return Repository.DeleteAsync(id);
+            await BeforeDeleteAsync(id);
+
+            await Repository.DeleteAsync(id, immediate);
+        }
+
+        protected virtual async Task BeforeInsertAsync(TAggregateRoot aggregate)
+        {
+#if !Net451
+            await Task.CompletedTask;
+#else
+            await Task.FromResult(0);
+#endif
+        }
+
+        protected virtual async Task BeforeUpdateAsync(TAggregateRoot aggregate)
+        {
+#if !Net451
+            await Task.CompletedTask;
+#else
+            await Task.FromResult(0);
+#endif
+        }
+
+        protected virtual async Task BeforeDeleteAsync(object id)
+        {
+#if !Net451
+            await Task.CompletedTask;
+#else
+            await Task.FromResult(0);
+#endif
         }
 
         #region Data Transfer

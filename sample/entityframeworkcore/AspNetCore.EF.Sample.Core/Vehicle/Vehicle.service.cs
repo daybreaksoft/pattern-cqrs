@@ -14,11 +14,14 @@ namespace AspNetCore.EF.Sample.Core.Vehicle
         {
         }
 
-        public override async Task InsertAsync(VehicleModel aggregate)
+        protected override async Task BeforeInsertAsync(VehicleModel aggregate)
         {
             await CheckPlateNumberUnique(aggregate);
+        }
 
-            await base.InsertAsync(aggregate);
+        protected override async Task BeforeUpdateAsync(VehicleModel aggregate)
+        {
+            await CheckPlateNumberUnique(aggregate);
         }
 
         #region Constraint

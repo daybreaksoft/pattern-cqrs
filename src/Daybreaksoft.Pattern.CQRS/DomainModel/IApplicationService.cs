@@ -13,10 +13,10 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
 
         Task<IEnumerable<TAggregateRoot>> FindAllAsync();
 
-        Task InsertAsync(TAggregateRoot aggregate);
+        Task InsertAsync(TAggregateRoot aggregate, bool immediate = false);
 
-        Task UpdateAsync(TAggregateRoot aggregate);
+        Task UpdateAsync(TAggregateRoot aggregate, bool immediate = false);
 
-        Task DeleteAsync(object id);
+        Task DeleteAsync(object id, bool immediate = false);
     }
 }

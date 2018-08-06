@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Daybreaksoft.Pattern.CQRS.DomainModel
@@ -9,16 +10,17 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
 
         Task<object> FindAllAsync();
 
-        Task InsertAsync(object entity);
+        Task InsertAsync(object entity, Action<IEntity> setKeyAction, bool immediate);
 
-        Task UpdateAsync(object entity);
+        Task UpdateAsync(object entity, bool immediate);
 
-        /// <summary>
-        /// 删除一个已经存在的Entity
-        /// </summary>
-        /// <param name="key">Entity主键</param>
-        /// <returns></returns>
-        Task DeleteAsync(object key);
+        Task DeleteAsync(object key, bool immediate = false);
+
+        Task PersistInsertOf(object entity);
+
+        Task PersistUpdateOf(object entity);
+
+        Task PersistDeleteOf(object entity);
     }
 
     /// <summary>
@@ -45,15 +47,13 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
         /// </summary>
         /// <param name="entity">Entity实例</param>
         /// <returns></returns>
-        Task InsertAsync(TEntity entity);
+        Task InsertAsync(TEntity entity, Action<IEntity> setKeyAction, bool immediate = false);
 
         /// <summary>
         /// 修改一个已经存在的Entity
         /// </summary>
         /// <param name="entity">Entity实例</param>
         /// <returns></returns>
-        Task UpdateAsync(TEntity entity);
-
-        
+        Task UpdateAsync(TEntity entity, bool immediate = false);
     }
 }

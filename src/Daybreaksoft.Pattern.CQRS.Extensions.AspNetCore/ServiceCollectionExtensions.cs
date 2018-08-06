@@ -36,17 +36,11 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
             // Add an service that implemented IDependencyInjection.
             AddSignleService(services, options, typeof(IDependencyInjection), typeof(DefaultDependencyInjection));
 
-            // Add an service that implemented IUnitOfWork.
-            AddSignleService(services, options, typeof(IUnitOfWork), typeof(DefaultUnitOfWork));
-
             // Add services that implemented IRepository<>
             AddMultipleServices(services, options, typeof(IRepository<>));
 
             // Add an service that implemented IRepositoryFactory.
             AddSignleService(services, options, typeof(IRepositoryFactory), typeof(DefaultRepositoryFactory));
-
-            // Add an service that implemented IDomainServiceFactory.
-            AddSignleService(services, options, typeof(IApplicationServiceFactory), typeof(DefaultApplicationServiceFactory));
 
             // Add services that implemented IDomainService<>
             AddSignleService(services, options, typeof(IApplicationService<>), typeof(SimpleApplicationService<>));

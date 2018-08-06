@@ -25,9 +25,6 @@ namespace Daybreaksoft.Pattern.CQRS.Command
             // Get command executor via DI.
             var executor = DI.GetService<ICommandExecutor<TCommand>>();
 
-            // Start to execute command.
-            await UnitOfWork.BeginAsync();
-
             await executor.ExecuteAsync(command);
 
             await UnitOfWork.CommitAsync();

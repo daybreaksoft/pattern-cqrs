@@ -84,19 +84,19 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
             return aggregates;
         }
 
-        public virtual Task InsertAsync(TAggregateRoot aggregate)
+        public virtual Task InsertAsync(TAggregateRoot aggregate, bool immediate = false)
         {
-            return Repository.InsertAsync(aggregate);
+            return Repository.InsertAsync(aggregate, null, immediate);
         }
 
-        public virtual Task UpdateAsync(TAggregateRoot aggregate)
+        public virtual Task UpdateAsync(TAggregateRoot aggregate, bool immediate = false)
         {
-            return Repository.UpdateAsync(aggregate);
+            return Repository.UpdateAsync(aggregate, immediate);
         }
 
-        public virtual Task DeleteAsync(object id)
+        public virtual Task DeleteAsync(object id, bool immediate = false)
         {
-            return Repository.DeleteAsync(id);
+            return Repository.DeleteAsync(id, immediate);
         }
 
         #region Data Transfer
