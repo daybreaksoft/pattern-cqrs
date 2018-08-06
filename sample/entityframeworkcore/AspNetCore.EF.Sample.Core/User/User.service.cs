@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AspNetCore.EF.Sample.Core.User
 {
-    public class UserService : AbstractDomainService<UserModel, UserEntity>
+    public class UserService : AbstractApplicationService<UserModel, UserEntity>
     {
         public UserService(IRepository<UserEntity> repository) : base(repository)
         {

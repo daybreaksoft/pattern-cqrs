@@ -1,5 +1,5 @@
-﻿using System.Threading.Tasks;
-using Daybreaksoft.Pattern.CQRS.DomainModel;
+﻿using Daybreaksoft.Pattern.CQRS.DomainModel;
+using System.Threading.Tasks;
 
 namespace Daybreaksoft.Pattern.CQRS.Command
 {
@@ -22,9 +22,11 @@ namespace Daybreaksoft.Pattern.CQRS.Command
         /// </summary>
         public virtual async Task SendAsync<TCommand>(TCommand command) where TCommand : ICommand
         {
-            await UnitOfWork.BeginAsync();
-
+            // Get command executor via DI.
             var executor = DI.GetService<ICommandExecutor<TCommand>>();
+
+            // Start to execute command.
+            await UnitOfWork.BeginAsync();
 
             await executor.ExecuteAsync(command);
 

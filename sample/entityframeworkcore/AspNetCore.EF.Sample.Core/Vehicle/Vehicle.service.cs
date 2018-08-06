@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AspNetCore.EF.Sample.Core.Vehicle
 {
-    public class VehicleService : SimpleDomainService<VehicleModel, VehicleEntity>
+    public class VehicleService : SimpleApplicationService<VehicleModel, VehicleEntity>
     {
         public VehicleService(IRepository<VehicleEntity> repository) : base(repository)
         {

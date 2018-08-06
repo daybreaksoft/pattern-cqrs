@@ -23,7 +23,7 @@ namespace AspNetCore.EF.Sample.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Edit([FromRoute]int? id, [FromServices] ConstQuery constQuery, [FromServices]IDomainService<UserModel> userService)
+        public async Task<IActionResult> Edit([FromRoute]int? id, [FromServices] ConstQuery constQuery, [FromServices]IApplicationService<UserModel> userService)
         {
             var roles = await constQuery.GetSelectItems(ConstCategory.UserRole);
 

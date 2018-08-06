@@ -7,13 +7,13 @@ using Daybreaksoft.Extensions.Functions;
 
 namespace Daybreaksoft.Pattern.CQRS.DomainModel
 {
-    public abstract class AbstractDomainService<TAggregateRoot, TEntity> : IDomainService<TAggregateRoot>
+    public abstract class AbstractApplicationService<TAggregateRoot, TEntity> : IApplicationService<TAggregateRoot>
         where TAggregateRoot : IAggregateRoot
         where TEntity : class, IEntity, new()
     {
         protected readonly IRepository<TEntity> Repository;
 
-        protected AbstractDomainService(IRepository<TEntity> repository)
+        protected AbstractApplicationService(IRepository<TEntity> repository)
         {
             Repository = repository;
         }

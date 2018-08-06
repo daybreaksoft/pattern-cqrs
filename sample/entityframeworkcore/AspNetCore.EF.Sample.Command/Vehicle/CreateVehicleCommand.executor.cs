@@ -9,23 +9,25 @@ namespace AspNetCore.EF.Sample.Command.Vehicle
 {
     public class CreateVehicleCommandExecutor : ICommandExecutor<CreateVehicleCommand>
     {
-        protected readonly IUnitOfWork UnitOfWork;
+        private readonly IApplicationService<VehicleModel> _vehicleService;
+        private readonly IApplicationService<UserModel> _userService;
 
-        public CreateVehicleCommandExecutor(IUnitOfWork unitOfWork)
+        public CreateVehicleCommandExecutor(IApplicationService<VehicleModel> vehicleService, IApplicationService<UserModel> userService)
         {
-            UnitOfWork = unitOfWork;
+            _vehicleService = vehicleService;
+            _userService = userService;
         }
 
         public async Task ExecuteAsync(CreateVehicleCommand command)
         {
-            // Insert user
+            // Insert new user if not selected exist user.
             int userId;
 
             if (!command.UserId.HasValue)
             {
                 var user = new UserModel(command.Username, 0);
 
-                await UnitOfWork.AddToStorageAsync(user);
+                await _userService.InsertAsync(user);
 
                 userId = Convert.ToInt32(user.Id);
             }
@@ -34,10 +36,10 @@ namespace AspNetCore.EF.Sample.Command.Vehicle
                 userId = command.UserId.Value;
             }
 
-            // Insert vehicle
+            // Insert vehicle.
             var vehicle = new VehicleModel(userId, command.PlateNumber);
 
-            await UnitOfWork.AddToStorageAsync(vehicle);
+            await _vehicleService.InsertAsync(vehicle);
         }
     }
 }

@@ -86,7 +86,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
         {
             if (action == null) throw new ArgumentNullException(nameof(action));
 
-            RegisterImplementationActions.Add(typeof(IDomainServiceFactory).Name, action);
+            RegisterImplementationActions.Add(typeof(IApplicationServiceFactory).Name, action);
         }
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
         {
             if (action == null) throw new ArgumentNullException(nameof(action));
 
-            RegisterImplementationActions.Add(typeof(IDomainService<>).Name, action);
+            RegisterImplementationActions.Add(typeof(IApplicationService<>).Name, action);
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.AspNetCore
         {
             if (assembly == null) throw new ArgumentNullException(nameof(assembly));
 
-            var serviceName = typeof(IDomainService<>).Name;
+            var serviceName = typeof(IApplicationService<>).Name;
 
             // Add implementation souce
             ImplementationSources.Add(serviceName, new ImplementationSource(assembly, underNamespace));

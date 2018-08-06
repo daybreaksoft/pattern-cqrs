@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
+using System.Reflection; // Cannot be deleted since it used for NetStandard13
 using System.Threading.Tasks;
 using Daybreaksoft.Extensions.Functions;
 using Daybreaksoft.Pattern.CQRS.Extensions;
 
 namespace Daybreaksoft.Pattern.CQRS.DomainModel
 {
-    public class SimpleDomainService<TAggregateRoot, TEntity> : AbstractDomainService<TAggregateRoot, TEntity>
+    public class SimpleApplicationService<TAggregateRoot, TEntity> : AbstractApplicationService<TAggregateRoot, TEntity>
         where TAggregateRoot : IAggregateRoot, IEntity
         where TEntity : class, IEntity, new()
     {
-        public SimpleDomainService(IRepository<TEntity> repository) : base(repository)
+        public SimpleApplicationService(IRepository<TEntity> repository) : base(repository)
         {
         }
 
@@ -33,12 +33,12 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
         }
     }
 
-    public class SimpleDomainService<TAggregateRoot> : IDomainService<TAggregateRoot>
+    public class SimpleApplicationService<TAggregateRoot> : IApplicationService<TAggregateRoot>
         where TAggregateRoot : IAggregateRoot, IEntity
     {
         protected readonly IRepository Repository;
 
-        public SimpleDomainService(IRepositoryFactory repositoryFactory)
+        public SimpleApplicationService(IRepositoryFactory repositoryFactory)
         {
             Repository = GetRepository(repositoryFactory);
         }

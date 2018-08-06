@@ -20,7 +20,7 @@ namespace AspNetCore.EF.Sample.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Edit([FromRoute]int? id, [FromServices] UserQuery userQuery, [FromServices]IDomainService<VehicleModel> vehicleService)
+        public async Task<IActionResult> Edit([FromRoute]int? id, [FromServices] UserQuery userQuery, [FromServices]IApplicationService<VehicleModel> vehicleService)
         {
             // Get users as selectitem
             var users = await userQuery.GetUsers();

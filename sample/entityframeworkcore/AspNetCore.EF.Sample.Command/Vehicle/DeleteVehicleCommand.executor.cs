@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using AspNetCore.EF.Sample.Core.Vehicle;
-using AspNetCore.EF.Sample.Data.Entities;
 using Daybreaksoft.Pattern.CQRS.Command;
 using Daybreaksoft.Pattern.CQRS.DomainModel;
 
@@ -8,16 +7,16 @@ namespace AspNetCore.EF.Sample.Command.Vehicle
 {
     public class DeleteVehicleCommandExecutor : ICommandExecutor<DeleteVehicleCommand>
     {
-        protected readonly IUnitOfWork UnitOfWork;
+        private readonly IApplicationService<VehicleModel> _vehicleService;
 
-        public DeleteVehicleCommandExecutor(IUnitOfWork unitOfWork)
+        public DeleteVehicleCommandExecutor(IApplicationService<VehicleModel> vehicleService)
         {
-            UnitOfWork = unitOfWork;
+            _vehicleService = vehicleService;
         }
 
         public async Task ExecuteAsync(DeleteVehicleCommand command)
         {
-            await UnitOfWork.RemoveFromStorageAsync<VehicleModel>(command.VehicleId);
+            await _vehicleService.DeleteAsync(command.VehicleId);
         }
     }
 }

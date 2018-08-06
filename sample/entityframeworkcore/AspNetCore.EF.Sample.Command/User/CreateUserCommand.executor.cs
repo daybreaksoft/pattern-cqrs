@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using AspNetCore.EF.Sample.Core.User;
-using AspNetCore.EF.Sample.Data.Entities;
 using Daybreaksoft.Pattern.CQRS.Command;
 using Daybreaksoft.Pattern.CQRS.DomainModel;
 
@@ -8,18 +7,18 @@ namespace AspNetCore.EF.Sample.Command.User
 {
     public class CreateUserCommandExecutor : ICommandExecutor<CreateUserCommand>
     {
-        protected readonly IUnitOfWork UnitOfWork;
+        private readonly IApplicationService<UserModel> _userService;
 
-        public CreateUserCommandExecutor(IUnitOfWork unitOfWork)
+        public CreateUserCommandExecutor(IApplicationService<UserModel> userService)
         {
-            UnitOfWork = unitOfWork;
+            _userService = userService;
         }
 
         public async Task ExecuteAsync(CreateUserCommand command)
         {
             var user = new UserModel(command.Username, command.Point);
 
-            await UnitOfWork.AddToStorageAsync(user);
+            await _userService.InsertAsync(user);
         }
     }
 }

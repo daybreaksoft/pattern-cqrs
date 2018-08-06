@@ -7,18 +7,18 @@ namespace AspNetCore.EF.Sample.Command.Vehicle
 {
     public class UpdateVehicleCommandExecutor : ICommandExecutor<UpdateVehicleCommand>
     {
-        protected readonly IUnitOfWork UnitOfWork;
+        private readonly IApplicationService<VehicleModel> _vehicleService;
 
-        public UpdateVehicleCommandExecutor(IUnitOfWork unitOfWork)
+        public UpdateVehicleCommandExecutor(IApplicationService<VehicleModel> vehicleService)
         {
-            UnitOfWork = unitOfWork;
+            _vehicleService = vehicleService;
         }
 
         public async Task ExecuteAsync(UpdateVehicleCommand command)
         {
             var vehicle = new VehicleModel(command.VehicleId, command.UserId, command.PlateNumber);
 
-            await UnitOfWork.ModifyWithinStorageAsync(vehicle);
+            await _vehicleService.UpdateAsync(vehicle);
         }
     }
 }

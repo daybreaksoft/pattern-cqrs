@@ -8,18 +8,18 @@ namespace AspNetCore.EF.Sample.Command.User
 {
     public class UpdateUserCommandExecutor : ICommandExecutor<UpdateUserCommand>
     {
-        protected readonly IUnitOfWork UnitOfWork;
+        private readonly IApplicationService<UserModel> _userService;
 
-        public UpdateUserCommandExecutor(IUnitOfWork unitOfWork)
+        public UpdateUserCommandExecutor(IApplicationService<UserModel> userService)
         {
-            UnitOfWork = unitOfWork;
+            _userService = userService;
         }
 
         public async Task ExecuteAsync(UpdateUserCommand command)
         {
             var userModel = new UserModel(command.UserId, command.Username, command.Point);
 
-            await UnitOfWork.ModifyWithinStorageAsync(userModel);
+            await _userService.UpdateAsync(userModel);
         }
     }
 }

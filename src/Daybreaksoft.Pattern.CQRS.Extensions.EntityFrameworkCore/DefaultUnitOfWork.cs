@@ -12,7 +12,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
         protected readonly DbContext Db;
         protected IDbContextTransaction Transaction;
 
-        public DefaultUnitOfWork(DbContext db, IDomainServiceFactory domainServiceFactory, IEventBus eventBus) : base(domainServiceFactory, eventBus)
+        public DefaultUnitOfWork(DbContext db, IEventBus eventBus) : base(eventBus)
         {
             Db = db;
         }
