@@ -60,11 +60,11 @@ namespace Daybreaksoft.Pattern.CQRS.DomainModel
         {
             await BeforeUpdateAsync(aggregate);
 
-            var unModifiedEntity = await Repository.FindAsync(aggregate.Id);
+            var entity = new TEntity();
 
-            CopyValueToEntity(unModifiedEntity, aggregate);
+            CopyValueToEntity(entity, aggregate);
 
-            await Repository.UpdateAsync(unModifiedEntity, immediate);
+            await Repository.UpdateAsync(entity, immediate);
         }
 
         public virtual async Task DeleteAsync(object id, bool immediate = false)

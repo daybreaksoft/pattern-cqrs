@@ -3,12 +3,12 @@ using Daybreaksoft.Pattern.CQRS.DomainModel;
 
 namespace AspNetCore.EF.Sample.Data.Entities
 {
-    public class ConstEntity : IEntity
+    public class DefinedValueEntity : IEntity
     {
         [Key]
         public int Id { get; set; }
 
-        public int CategoryId { get; set; }
+        public int ParentId { get; set; }
 
         public string DisplayText { get; set; }
 

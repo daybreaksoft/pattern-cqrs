@@ -1,4 +1,5 @@
-﻿using Daybreaksoft.Pattern.CQRS.Command;
+﻿using AspNetCore.EF.Sample.Data.Const;
+using Daybreaksoft.Pattern.CQRS.Command;
 
 namespace AspNetCore.EF.Sample.Command.User
 {
@@ -7,5 +8,7 @@ namespace AspNetCore.EF.Sample.Command.User
         public string Username { get; set; }
 
         public int Point { get; set; }
+
+        public UserRoleConst[] Roles { get; set; }
     }
 }

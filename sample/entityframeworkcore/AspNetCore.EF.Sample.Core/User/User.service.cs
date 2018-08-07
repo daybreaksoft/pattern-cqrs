@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using AspNetCore.EF.Sample.Data.Const;
 using AspNetCore.EF.Sample.Data.Entities;
 using Daybreaksoft.Pattern.CQRS.DomainModel;
 using Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore;
@@ -44,13 +45,18 @@ namespace AspNetCore.EF.Sample.Core.User
 
         protected override void CopyValueToEntity(UserEntity entity, UserModel aggregate)
         {
+            entity.Id = Convert.ToInt32(aggregate.Id);
             entity.Username = aggregate.Username;
             entity.Point = aggregate.Point;
+            entity.Roles = aggregate.Roles?.Select(p => new UserRoleEntity
+            {
+                Role = p
+            }).ToList();
         }
 
         protected override UserModel ConvertToAggregate(UserEntity entity)
         {
-            return new UserModel(entity.Id, entity.Username, entity.Point);
+            return new UserModel(entity.Id, entity.Username, entity.Point, entity.Roles?.Select(p => p.Role).ToList());
         }
 
         #endregion

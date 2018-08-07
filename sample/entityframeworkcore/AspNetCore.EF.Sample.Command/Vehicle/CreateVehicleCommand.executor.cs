@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AspNetCore.EF.Sample.Core.User;
 using AspNetCore.EF.Sample.Core.Vehicle;
+using AspNetCore.EF.Sample.Data.Const;
 using Daybreaksoft.Pattern.CQRS.Command;
 using Daybreaksoft.Pattern.CQRS.DomainModel;
 
@@ -25,7 +27,7 @@ namespace AspNetCore.EF.Sample.Command.Vehicle
 
             if (!command.UserId.HasValue)
             {
-                var user = new UserModel(command.Username, 0);
+                var user = new UserModel(command.Username, 0, new List<UserRoleConst> { UserRoleConst.SystemAdmin });
 
                 await _userService.InsertAsync(user, true);
 

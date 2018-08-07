@@ -11,6 +11,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
     public class DefaultUnitOfWork : IEfUnitOfWork
     {
         private bool _isCommitted = false;
+        private bool _isRollback = false;
 
         protected readonly DbContext Db;
         protected IDbContextTransaction Transaction;
@@ -69,6 +70,8 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
                 {
                     Transaction.Rollback();
 
+                    _isRollback = true;
+
                     throw;
                 }
 
@@ -101,6 +104,8 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
                 {
                     Transaction.Rollback();
 
+                    _isRollback = true;
+
                     throw;
                 }
             }
@@ -131,7 +136,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
         {
             if (Transaction != null)
             {
-                if (!_isCommitted)
+                if (!_isCommitted && !_isRollback)
                 {
                     Transaction.Rollback();
                 }

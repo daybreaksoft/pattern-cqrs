@@ -38,7 +38,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<TEntity> FindAsync(object id)
+        public virtual async Task<TEntity> FindAsync(object id)
         {
             return await Db.Set<TEntity>().FindAsync(id);
         }
@@ -47,7 +47,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
         /// Find all entities
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<TEntity>> FindAllAsync()
+        public virtual async Task<IEnumerable<TEntity>> FindAllAsync()
         {
             return await Task.FromResult(Db.Set<TEntity>().AsEnumerable());
         }
@@ -132,14 +132,14 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
             await this.UpdateAsync((TEntity)entity, immediate);
         }
 
-        public Task PersistInsertOf(object entity)
+        public virtual Task PersistInsertOf(object entity)
         {
             if (entity == null) throw new ArgumentNullException(nameof(entity));
 
             return Db.Set<TEntity>().AddAsync((TEntity)entity);
         }
 
-        public async Task PersistUpdateOf(object entity)
+        public virtual async Task PersistUpdateOf(object entity)
         {
             if (entity == null) throw new ArgumentNullException(nameof(entity));
 
@@ -154,7 +154,7 @@ namespace Daybreaksoft.Pattern.CQRS.Extensions.EntityFrameworkCore
             entity.CopyValueTo(unmodifiedEntity);
         }
 
-        public async Task PersistDeleteOf(object entity)
+        public virtual async Task PersistDeleteOf(object entity)
         {
             if (entity == null) throw new ArgumentNullException(nameof(entity));
 

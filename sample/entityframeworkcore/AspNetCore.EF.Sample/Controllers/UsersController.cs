@@ -25,7 +25,7 @@ namespace AspNetCore.EF.Sample.Controllers
 
         public async Task<IActionResult> Edit([FromRoute]int? id, [FromServices] ConstQuery constQuery, [FromServices]IApplicationService<UserModel> userService)
         {
-            var roles = await constQuery.GetSelectItems(ConstCategory.UserRole);
+            var roles = await constQuery.GetSelectItems(DefinedRootCategory.UserRole);
 
             UserViewModel userViewModel = null;
 
@@ -39,7 +39,7 @@ namespace AspNetCore.EF.Sample.Controllers
                     Id = Convert.ToInt32(userModel.Id),
                     Username = userModel.Username,
                     Point = userModel.Point,
-                    //Roles = userModel.Roles.Select(p => (int)p.Role).ToArray()
+                    Roles = userModel.Roles.Select(p => (int)p).ToArray()
                 };
             }
 

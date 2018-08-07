@@ -16,7 +16,7 @@ namespace AspNetCore.EF.Sample.Command.User
 
         public async Task ExecuteAsync(CreateUserCommand command)
         {
-            var user = new UserModel(command.Username, command.Point);
+            var user = new UserModel(command.Username, command.Point, command.Roles);
 
             await _userService.InsertAsync(user);
         }

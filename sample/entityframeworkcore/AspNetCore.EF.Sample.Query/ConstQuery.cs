@@ -16,10 +16,10 @@ namespace AspNetCore.EF.Sample.Query
         {
         }
 
-        public async Task<IEnumerable<SelectItemViewModel>> GetSelectItems(ConstCategory category)
+        public async Task<IEnumerable<SelectItemViewModel>> GetSelectItems(DefinedRootCategory category)
         {
-            var queryable = from c in Db.Const
-                    where c.CategoryId == (int)category && c.Enabled
+            var queryable = from c in Db.DefinedValues
+                    where c.ParentId == (int)category && c.Enabled
                     select new SelectItemViewModel
                     {
                         Text = c.DisplayText,

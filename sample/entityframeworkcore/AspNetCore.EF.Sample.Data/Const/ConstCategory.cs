@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AspNetCore.EF.Sample.Data.Const
 {
-    public enum ConstCategory
+    public enum DefinedRootCategory
     {
         UserRole = 1
     }
